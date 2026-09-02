@@ -229,12 +229,39 @@
 
     var send = document.getElementById('sendBtn');
     if (send) send.addEventListener('click', function(){
-      var cust = (document.getElementById('custEmail')||{}).value || '';
-      if (!board().length){ toast('Save a few designs first 🎨'); return; }
+      var cust = ((document.getElementById('custEmail')||{}).value || '').trim();
+      var inst = ((document.getElementById('installerEmail')||{}).value || '').trim();
+      var b = board();
+      if (!b.length){ toast('Save a few designs first 🎨'); return; }
       if (!/.+@.+\..+/.test(cust)){ toast('Add your customer’s email to send'); return; }
-      toast('Sent to both inboxes ✓');
+
+      // build the board summary
+      var lines = [];
+      var bl = blend(), bp = pcts(bl.length);
+      lines.push('— CUSTOM BLEND —');
+      lines.push(bl.map(function(c,i){ return c.n + ' ' + bp[i] + '%'; }).join('  ·  '));
+      lines.push('');
+      function group(type){ return b.filter(function(x){ return x.type===type; }).map(function(x){ return '• ' + x.title; }); }
+      var vibes = group('vibe'), photos = group('gallery'), inlays = group('inlay'), coping = b.filter(function(x){ return x.type==='coping'||x.type==='cut'; }).map(function(x){ return '• ' + x.title; });
+      if (vibes.length){ lines.push('— THE VIBE —'); lines = lines.concat(vibes, ['']); }
+      if (photos.length){ lines.push('— SAVED LOOKS ('+photos.length+') —'); lines = lines.concat(photos, ['']); }
+      if (inlays.length){ lines.push('— INLAYS —'); lines = lines.concat(inlays, ['']); }
+      if (coping.length){ lines.push('— COPING & EDGES —'); lines = lines.concat(coping, ['']); }
+      lines.push('Built in the FLOCO Certified Design Studio.');
+      lines.push('Questions? Just reply here or call (239) 426-8045.');
+
+      var subject = 'Your FLOCO Design Board 🎨';
+      var body = 'Hi! Here’s the design board we put together for your FLOCO rubber surfacing project.\n\n' + lines.join('\n');
+      var url = 'mailto:' + encodeURIComponent(cust)
+        + '?cc=' + encodeURIComponent(inst)
+        + '&bcc=' + encodeURIComponent('studio@flocodeckingsystems.com')
+        + '&subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+
+      toast('Opening your email to send ✓');
       send.querySelector('span').textContent = 'Sent ✓';
-      setTimeout(function(){ send.querySelector('span').textContent = 'Send to Both'; }, 2200);
+      setTimeout(function(){ send.querySelector('span').textContent = 'Send to Both'; }, 2600);
+      window.location.href = url;
     });
   });
 })();
