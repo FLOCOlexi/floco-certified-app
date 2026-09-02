@@ -17,12 +17,12 @@
   document.addEventListener('DOMContentLoaded', function () {
     var p = profile();
 
-    // personalize the greeting to the signed-in company
-    if (p) {
+    // personalize the greeting only if a company profile is set (universal login leaves it generic)
+    if (p && p.company) {
       var co = document.querySelector('.greet .co');
       if (co) co.textContent = p.company;
       var chip = document.querySelector('.greet .chip');
-      if (chip) chip.innerHTML = 'FLOCO Certified <b>·</b> ' + p.location;
+      if (chip && p.location) chip.innerHTML = 'FLOCO Certified <b>·</b> ' + p.location;
     }
 
     // bottom nav
@@ -55,7 +55,7 @@
     if (greet && !document.querySelector('.floco-signout')) {
       var a = document.createElement('div');
       a.className = 'floco-signout';
-      a.textContent = (p && p.role === 'admin') ? 'FLOCO Team View · Switch' : 'Sign out';
+      a.textContent = 'Sign out';
       a.style.cssText = 'display:inline-block;margin-top:10px;margin-left:8px;font-family:Inter,sans-serif;font-weight:600;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#8DA2B5;border:1px solid rgba(255,255,255,.14);border-radius:30px;padding:5px 12px;cursor:pointer;';
       a.addEventListener('click', function () { if (window.FLOCOauth) FLOCOauth.logout(); });
       greet.appendChild(a);

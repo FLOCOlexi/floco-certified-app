@@ -13,75 +13,97 @@
 body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .screen{width:390px;height:844px;position:relative;overflow:hidden;border-radius:46px;
   background:linear-gradient(170deg,#0B2036,#0A1B2E 60%,#081625);}
-.glow{position:absolute;top:-100px;right:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(58,191,184,.14),transparent 70%);}
+.glow{position:absolute;top:-100px;right:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(58,191,184,.14),transparent 70%);pointer-events:none;}
 .status{position:relative;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 6px;z-index:2;}
 .status .t{font-family:'Inter';font-weight:600;font-size:14px;color:#fff;}
-.status .r{display:flex;gap:6px;align-items:center;}
-.status i{display:block;width:17px;height:11px;border:1.4px solid rgba(255,255,255,.85);border-radius:3px;}
-.status .b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.85);}
-
-.top{position:relative;display:flex;align-items:center;gap:14px;padding:6px 22px 4px;}
-.top .back{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;}
+.status .r{display:flex;gap:6px;align-items:center;}.status i{display:block;width:17px;height:11px;border:1.4px solid rgba(255,255,255,.85);border-radius:3px;}.status .b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.85);}
+.top{position:relative;display:flex;align-items:center;gap:14px;padding:6px 22px 4px;z-index:3;}
+.top .back{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .top .back svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none;}
-.top .ti{font-family:'Nunito';font-weight:900;font-size:19px;color:#fff;}
-.top .ti span{color:var(--gold-lt);}
-.top .step{margin-left:auto;font-family:'Inter';font-weight:600;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
-
-.wrap{padding:6px 20px 0;}
-.preview{position:relative;height:132px;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 26px rgba(0,0,0,.4);}
-.preview img{width:100%;height:100%;object-fit:cover;}
-.preview .ov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,20,34,.82),rgba(8,20,34,.15));}
-.preview .lab{position:absolute;left:16px;top:14px;}
-.preview .lab .k{font-family:'Caveat';font-size:17px;color:var(--teal);line-height:.8;}
-.preview .lab .h{font-family:'Didot';font-style:italic;font-size:17px;color:#fff;margin-top:3px;}
-.preview .lab .p{font-family:'Inter';font-size:9px;color:#C7D2DC;margin-top:5px;}
-.preview .live{position:absolute;right:14px;top:14px;font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);border-radius:20px;padding:4px 9px;}
-
-.sec{margin-top:18px;}
-.sec .lb{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
-.sec .lb .t{font-family:'Nunito';font-weight:800;font-size:13px;color:#fff;letter-spacing:.2px;}
-.sec .lb .e{font-family:'Inter';font-weight:600;font-size:10px;color:var(--teal);}
-.blend{display:flex;gap:10px;}
-.blend .c{flex:1;border-radius:13px;padding:10px 8px 9px;text-align:center;border:1px solid rgba(255,255,255,.08);}
-.blend .c .sw{width:34px;height:34px;border-radius:50%;margin:0 auto 7px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15);}
-.blend .c .nm{font-family:'Inter';font-weight:600;font-size:9px;color:#fff;}
-.blend .c .pct{font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);margin-top:2px;}
-
-.inlays{display:flex;gap:10px;}
-.inlays .i{width:62px;height:62px;border-radius:14px;background-size:cover;background-position:center;border:2px solid transparent;position:relative;}
-.inlays .i.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,166,98,.2);}
-.inlays .i.sel:after{content:"\2713";position:absolute;right:-6px;top:-6px;width:20px;height:20px;background:var(--gold);color:#0A1F35;
-  border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;}
-.inlays .more{width:62px;height:62px;border-radius:14px;border:1px dashed rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;
-  font-family:'Nunito';font-weight:900;color:var(--muted);font-size:22px;}
-
-/* SEND CARD — the star */
-.send{margin:20px 20px 0;border-radius:20px;padding:18px 18px 20px;position:relative;overflow:hidden;
+.top .ti{font-family:'Nunito';font-weight:900;font-size:19px;color:#fff;}.top .ti span{color:var(--gold-lt);}
+.scroll{position:relative;padding:4px 20px 0;}
+/* section header pattern (Caveat kicker + Nunito head) */
+.sh{margin:20px 0 12px;}
+.sh .k{font-family:'Caveat';font-size:19px;color:var(--teal);line-height:.7;}
+.sh .h{font-family:'Nunito';font-weight:900;font-size:20px;color:#fff;letter-spacing:-.3px;margin-top:4px;}
+.sh .h span{color:var(--gold-lt);}
+.sh.row{display:flex;justify-content:space-between;align-items:flex-end;}
+.sh .e{font-family:'Inter';font-weight:600;font-size:10px;color:var(--teal);cursor:pointer;}
+/* hero intro */
+.intro{position:relative;margin-top:6px;}
+.intro .k{font-family:'Caveat';font-size:24px;color:var(--teal);line-height:.7;}
+.intro .h{font-family:'Nunito';font-weight:900;font-size:30px;color:#fff;letter-spacing:-.5px;margin-top:6px;line-height:1.02;}
+.intro .h span{color:var(--gold-lt);}
+.intro .p{font-family:'Inter';font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;max-width:280px;}
+/* board preview */
+.board{margin-top:16px;border-radius:20px;overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(135deg,#123A5C,#0E2A47);box-shadow:0 12px 30px rgba(0,0,0,.35);}
+.board .bh{display:flex;align-items:center;justify-content:space-between;padding:15px 16px 12px;}
+.board .bh .l .s{font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.board .bh .l .t{font-family:'Didot';font-style:italic;font-size:19px;color:#fff;margin-top:2px;}
+.board .bh .meta{font-family:'Inter';font-size:9px;color:var(--muted);text-align:right;}
+.board .bh .meta b{color:var(--teal);}
+.board .strip{display:flex;gap:6px;padding:0 12px 14px;overflow-x:auto;}
+.board .strip::-webkit-scrollbar{display:none;}
+.board .strip .th{width:66px;height:52px;border-radius:10px;background-size:cover;background-position:center;flex:none;border:1px solid rgba(255,255,255,.1);}
+.board .strip .empty{font-family:'Inter';font-size:10px;color:var(--muted);font-style:italic;padding:6px 2px 14px;}
+/* vibe scroller */
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;margin:0 -20px;padding-left:20px;padding-right:20px;}
+.hscroll::-webkit-scrollbar{display:none;}
+.vibe{flex:none;width:130px;border-radius:16px;overflow:hidden;position:relative;height:150px;border:2px solid transparent;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.35);}
+.vibe img{width:100%;height:100%;object-fit:cover;}
+.vibe .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(8,20,34,.9));}
+.vibe .nm{position:absolute;left:11px;right:11px;bottom:11px;font-family:'Nunito';font-weight:900;font-size:13px;color:#fff;line-height:1.05;}
+.vibe .ds{position:absolute;left:11px;bottom:0;font-family:'Inter';font-size:8px;color:#C7D2DC;}
+.vibe.sel{border-color:var(--teal);}
+.vibe.sel:after{content:"\2713";position:absolute;right:8px;top:8px;width:22px;height:22px;background:var(--teal);color:#062018;border-radius:50%;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.35);}
+/* gallery masonry */
+.gal{columns:2;column-gap:10px;}
+.gal .ph{position:relative;width:100%;border-radius:14px;overflow:hidden;margin-bottom:10px;break-inside:avoid;border:1px solid rgba(255,255,255,.06);cursor:pointer;}
+.gal .ph img{width:100%;display:block;}
+.gal .ph .heart{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:50%;background:rgba(8,20,34,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);}
+.gal .ph .heart svg{width:15px;height:15px;stroke:#fff;stroke-width:1.8;fill:none;}
+.gal .ph.saved .heart{background:var(--teal);}.gal .ph.saved .heart svg{fill:#fff;stroke:#fff;}
+/* inlay grid */
+.inlaygrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.inlay{position:relative;border-radius:14px;overflow:hidden;height:88px;cursor:pointer;border:2px solid transparent;}
+.inlay img{width:100%;height:100%;object-fit:cover;}
+.inlay .g{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(8,20,34,.85));}
+.inlay .nm{position:absolute;left:7px;right:7px;bottom:6px;font-family:'Inter';font-weight:600;font-size:8.5px;color:#fff;}
+.inlay.sel{border-color:var(--gold);}
+.inlay.sel:after{content:"\2713";position:absolute;right:5px;top:5px;width:19px;height:19px;background:var(--gold);color:#0A1F35;border-radius:50%;font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;}
+/* send card */
+.send{margin:24px 0 0;border-radius:20px;padding:18px;position:relative;overflow:hidden;
   background:linear-gradient(135deg,rgba(198,166,98,.14),rgba(58,191,184,.10));border:1px solid var(--line);}
-.send .h{font-family:'Nunito';font-weight:900;font-size:15px;color:#fff;}
-.send .h span{color:var(--gold-lt);}
+.send .h{font-family:'Nunito';font-weight:900;font-size:16px;color:#fff;}.send .h span{color:var(--gold-lt);}
 .send .s{font-family:'Inter';font-size:9.5px;color:#B9C6D2;margin-top:3px;margin-bottom:13px;}
-.frow{display:flex;align-items:center;gap:11px;height:46px;border-radius:12px;background:rgba(8,20,34,.5);border:1px solid rgba(255,255,255,.09);padding:0 14px;margin-bottom:9px;}
+.frow{display:flex;align-items:center;gap:11px;min-height:46px;border-radius:12px;background:rgba(8,20,34,.5);border:1px solid rgba(255,255,255,.09);padding:6px 14px;margin-bottom:9px;}
 .frow svg{width:16px;height:16px;stroke:var(--gold-lt);stroke-width:1.8;fill:none;flex:none;}
+.frow .txt{display:flex;flex-direction:column;justify-content:center;flex:1;}
 .frow .cap{font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
 .frow .val{font-family:'Inter';font-size:13px;color:#fff;margin-top:1px;}
-.frow .txt{display:flex;flex-direction:column;justify-content:center;}
-.frow.ghost .val{color:var(--muted);font-weight:400;}
-.sbtn{margin-top:5px;height:52px;border-radius:13px;background:linear-gradient(120deg,#D9BE7B,#C6A662);display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 20px rgba(198,166,98,.28);}
+.frow input{background:transparent;border:0;outline:none;color:#fff;font-family:'Inter';font-size:13px;margin-top:1px;width:100%;}
+.frow input::placeholder{color:var(--muted);}
+.sbtn{margin-top:5px;height:52px;border-radius:13px;background:linear-gradient(120deg,#D9BE7B,#C6A662);display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 20px rgba(198,166,98,.28);cursor:pointer;}
 .sbtn span{font-family:'Nunito';font-weight:900;font-size:14px;color:#0A1F35;text-transform:uppercase;letter-spacing:.4px;}
 .sbtn svg{width:17px;height:17px;stroke:#0A1F35;stroke-width:2.4;fill:none;}
-.both{text-align:center;margin-top:11px;font-family:'Inter';font-size:9.5px;color:var(--teal);}
-.both b{color:var(--gold-lt);}
-
+.both{text-align:center;margin-top:11px;font-family:'Inter';font-size:9.5px;color:var(--teal);}.both b{color:var(--gold-lt);}
+.pad{height:30px;}
+/* toast */
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
+  background:var(--teal);color:#052018;font-family:'Nunito';font-weight:900;font-size:12px;padding:11px 18px;border-radius:30px;
+  box-shadow:0 10px 24px rgba(0,0,0,.4);transition:all .28s;z-index:80;max-width:300px;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .nav{position:absolute;left:0;right:0;bottom:0;height:82px;background:rgba(9,22,37,.92);border-top:1px solid rgba(255,255,255,.07);
-  display:flex;justify-content:space-around;align-items:flex-start;padding-top:12px;}
+  display:flex;justify-content:space-around;align-items:flex-start;padding-top:12px;z-index:60;}
 .nav .item{display:flex;flex-direction:column;align-items:center;gap:5px;}
 .nav .item svg{width:22px;height:22px;stroke:var(--muted);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .nav .item .l{font-family:'Inter';font-weight:600;font-size:8.5px;color:var(--muted);}
 .nav .item.on svg{stroke:var(--gold);}.nav .item.on .l{color:var(--gold-lt);}
 .nav .item.on{position:relative;}.nav .item.on:before{content:"";position:absolute;top:-12px;width:26px;height:3px;border-radius:3px;background:var(--gold);}
 .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);}
-</style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -93,58 +115,60 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
 <script defer src="app.js"></script>
+<script defer src="studio.js"></script>
 </head>
 <body>
 <div class="screen">
   <div class="glow"></div>
   <div class="status"><div class="t">9:41</div><div class="r"><div class="b"></div><i></i></div></div>
-
   <div class="top">
     <div class="back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
     <div class="ti">Design <span>Studio</span></div>
-    <div class="step">Board Ready</div>
   </div>
 
-  <div class="wrap">
-    <div class="preview">
-      <img src="assets/img/detail-multitone.jpg">
-      <div class="ov"></div>
-      <div class="lab"><div class="k">the Miller residence</div><div class="h">Coastal Grey + Koi</div><div class="p">Custom blend · 1 inlay · lanai + pool deck</div></div>
-      <div class="live">Live preview</div>
+  <div class="scroll">
+    <div class="intro">
+      <div class="k">let's design</div>
+      <div class="h">Build the board <span>with your customer.</span></div>
+      <div class="p">Explore the looks, save what they love, and send the design board to you both. The design session is the close.</div>
     </div>
 
-    <div class="sec">
-      <div class="lb"><div class="t">Custom Blend</div><div class="e">Adjust</div></div>
-      <div class="blend">
-        <div class="c"><div class="sw" style="background:#BFC6CB"></div><div class="nm">Pale Grey</div><div class="pct">60%</div></div>
-        <div class="c"><div class="sw" style="background:#E7DFCF"></div><div class="nm">Cream</div><div class="pct">25%</div></div>
-        <div class="c"><div class="sw" style="background:#9AA3AB"></div><div class="nm">Lite Grey</div><div class="pct">15%</div></div>
-        <div class="c" style="border-style:dashed;display:flex;flex-direction:column;justify-content:center;"><div class="sw" style="background:transparent;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:Nunito;font-weight:900;color:var(--muted);">+</div><div class="nm" style="color:var(--muted)">Add</div></div>
+    <!-- Design Board -->
+    <div class="board">
+      <div class="bh">
+        <div class="l"><div class="s">Their design board</div><div class="t">This session</div></div>
+        <div class="meta" id="boardMeta">0 saves</div>
       </div>
+      <div class="strip" id="boardStrip"><div class="empty">Nothing saved yet — tap the hearts below to build the board.</div></div>
     </div>
 
-    <div class="sec">
-      <div class="lb"><div class="t">Choose an Inlay <span style="font-weight:400;font-size:9px;color:var(--muted);letter-spacing:0;text-transform:none;">· designs for the board</span></div><div class="e">Browse all</div></div>
-      <div class="inlays">
-        <div class="i sel" style="background-image:url('assets/img/inlay-koi.jpg')"></div>
-        <div class="i" style="background-image:url('assets/img/inlay-compass.jpg')"></div>
-        <div class="i" style="background-image:url('assets/img/inlay-turtle.jpg')"></div>
-        <div class="i" style="background-image:url('assets/img/inlay-sun.jpg')"></div>
-        <div class="more">+</div>
-      </div>
+    <!-- Vibe -->
+    <div class="sh"><div class="k">start here</div><div class="h">Pick a <span>vibe.</span></div></div>
+    <div class="hscroll" id="vibes"></div>
+
+    <!-- Gallery -->
+    <div class="sh row"><div><div class="k">get inspired</div><div class="h">Real FLOCO <span>spaces.</span></div></div><div class="e" id="galMore">Show all</div></div>
+    <div class="gal" id="gallery"></div>
+
+    <!-- Inlays -->
+    <div class="sh"><div class="k">make it theirs</div><div class="h">Add an <span>inlay.</span></div></div>
+    <div class="inlaygrid" id="inlays"></div>
+
+    <!-- Send -->
+    <div class="send">
+      <div class="h">Send the <span>design board</span></div>
+      <div class="s">Goes to you and your customer at the same time.</div>
+      <div class="frow"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <div class="txt"><div class="cap">Your email (installer)</div><input id="installerEmail" type="email" placeholder="your business email" inputmode="email" autocomplete="off"></div></div>
+      <div class="frow"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <div class="txt"><div class="cap">Customer's email</div><input id="custEmail" type="email" placeholder="enter your customer's email…" inputmode="email" autocomplete="off"></div></div>
+      <div class="sbtn" id="sendBtn"><span>Send to Both</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="both">📩 A copy lands in <b>both</b> inboxes instantly — no more chasing.</div>
     </div>
+    <div class="pad"></div>
   </div>
 
-  <div class="send">
-    <div class="h">Send the <span>design board</span></div>
-    <div class="s">Goes to you and your customer at the same time.</div>
-    <div class="frow"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-      <div class="txt"><div class="cap">Your email (installer)</div><div class="val">jeff@sprayriteusa.com</div></div></div>
-    <div class="frow ghost"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-      <div class="txt"><div class="cap">Customer's email</div><div class="val">enter your customer's email…</div></div></div>
-    <div class="sbtn"><span>Send to Both</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-    <div class="both">📩 A copy lands in <b>both</b> inboxes instantly — no more chasing.</div>
-  </div>
+  <div id="toast" class="toast"></div>
 
   <div class="nav">
     <div class="item"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><div class="l">Home</div></div>
