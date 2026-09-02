@@ -1,9 +1,10 @@
-/* FLOCO Certified — service worker (cache-first app shell) */
-var CACHE = 'floco-certified-v1';
+/* FLOCO Certified — service worker.
+   Network-first for pages/scripts (so updates ALWAYS show), cache-first for images/fonts. */
+var CACHE = 'floco-certified-v3';
 var CORE = [
   'home.html', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
-  'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'splash.html',
-  'app.css', 'app.js', 'manifest.webmanifest',
+  'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',
+  'app.css', 'app.js', 'studio.js', 'accounts.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png'
 ];
 
@@ -20,15 +21,36 @@ self.addEventListener('activate', function (e) {
   }).then(function () { return self.clients.claim(); }));
 });
 
+function isFresh(req) {
+  if (req.mode === 'navigate') return true;
+  var u = req.url;
+  return /\.(html|js|css|webmanifest)(\?|$)/.test(u);
+}
+
 self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(function (hit) {
-      return hit || fetch(e.request).then(function (res) {
+  var req = e.request;
+  if (isFresh(req)) {
+    // network-first: always try to get the latest page/script
+    e.respondWith(
+      fetch(req).then(function (res) {
         var copy = res.clone();
-        caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
+        caches.open(CACHE).then(function (c) { c.put(req, copy); });
         return res;
-      }).catch(function () { return caches.match('home.html'); });
-    })
-  );
+      }).catch(function () {
+        return caches.match(req).then(function (hit) { return hit || caches.match('home.html'); });
+      })
+    );
+  } else {
+    // cache-first for images/fonts (static, big)
+    e.respondWith(
+      caches.match(req).then(function (hit) {
+        return hit || fetch(req).then(function (res) {
+          var copy = res.clone();
+          caches.open(CACHE).then(function (c) { c.put(req, copy); });
+          return res;
+        });
+      })
+    );
+  }
 });
