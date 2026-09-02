@@ -1,0 +1,26 @@
+/* FLOCO Certified app — real-device overrides (loaded after each screen's inline styles) */
+html,body{background:#0A1F35 !important;margin:0 !important;padding:0 !important;}
+body{display:block !important;-webkit-font-smoothing:antialiased;}
+.screen{
+  width:100% !important;max-width:480px !important;
+  height:auto !important;min-height:100vh !important;min-height:100svh !important;
+  margin:0 auto !important;border-radius:0 !important;box-shadow:none !important;
+  overflow:visible !important;padding-bottom:96px !important;
+}
+/* real device shows its own status bar + home indicator */
+.status{display:none !important;}
+.homebar{display:none !important;}
+/* nav sticks to the bottom of the device, centered within the app column */
+.nav{
+  position:fixed !important;bottom:0 !important;left:50% !important;transform:translateX(-50%) !important;
+  width:100% !important;max-width:480px !important;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom)) !important;
+  height:auto !important;min-height:74px !important;z-index:50;
+}
+/* tappable affordance */
+.tile,.nav .item,[data-link]{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.tile:active,.nav .item:active,[data-link]:active{opacity:.85;transform:scale(.985);}
+.tile,[data-link]{transition:transform .08s ease, opacity .08s ease;}
+/* top safe-area breathing room on notched devices */
+.screen>.status+*,.screen>.glowtop~.status+*{}
+.screen{padding-top:env(safe-area-inset-top) !important;}

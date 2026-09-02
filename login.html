@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FLOCO Certified — Sign In</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0A1F35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FLOCO">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Black.ttf');font-weight:900;}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-ExtraBold.ttf');font-weight:800;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-Regular.ttf');font-weight:400;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-SemiBold.ttf');font-weight:600;}
+@font-face{font-family:'Caveat';src:url('assets/fonts/Caveat-Bold.ttf');font-weight:700;}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0A1F35;--gold:#C6A662;--gold-lt:#E4CB8E;--teal:#3BBFB8;--muted:#8DA2B5;--line:rgba(198,166,98,.28);}
+html,body{height:100%;}
+body{background:linear-gradient(170deg,#0B2036,#0A1B2E 55%,#081625);font-family:'Inter',sans-serif;
+  min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 26px calc(32px + env(safe-area-inset-bottom));color:#EAF0F3;position:relative;overflow:hidden;}
+.glow{position:absolute;top:-120px;left:-60px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(58,191,184,.15),transparent 70%);}
+.glow2{position:absolute;bottom:-90px;right:-70px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(198,166,98,.12),transparent 70%);}
+.wrap{position:relative;width:100%;max-width:380px;text-align:center;}
+.badge{width:120px;height:120px;margin:0 auto 22px;border-radius:50%;background:url('icons/icon-512.png') center/cover;box-shadow:0 10px 30px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.08);}
+.ey{font-family:'Inter';font-weight:600;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);}
+.k{font-family:'Caveat';font-size:26px;color:var(--teal);line-height:.8;margin-top:10px;}
+h1{font-family:'Nunito';font-weight:900;font-size:30px;color:#fff;letter-spacing:-.3px;margin-top:6px;}
+.sub{font-family:'Inter';font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5;}
+.card{margin-top:26px;background:rgba(19,47,76,.6);border:1px solid var(--line);border-radius:18px;padding:20px 18px;backdrop-filter:blur(8px);}
+label{display:block;text-align:left;font-family:'Inter';font-weight:600;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:8px;}
+input{width:100%;background:rgba(9,22,37,.7);border:1.5px solid rgba(198,166,98,.35);border-radius:12px;padding:15px 16px;color:#fff;
+  font-family:'Inter';font-weight:600;font-size:16px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;outline:none;}
+input:focus{border-color:var(--teal);}
+input::placeholder{color:#5f7488;letter-spacing:1px;text-transform:none;font-weight:400;}
+button{width:100%;margin-top:14px;background:linear-gradient(120deg,#3BBFB8,#2A9D96);color:#062018;border:0;border-radius:12px;padding:15px;
+  font-family:'Nunito';font-weight:900;font-size:15px;letter-spacing:.4px;cursor:pointer;box-shadow:0 8px 20px rgba(58,191,184,.25);}
+button:active{transform:scale(.99);}
+.err{color:#E8896B;font-family:'Inter';font-weight:600;font-size:12px;margin-top:12px;min-height:16px;}
+.foot{margin-top:22px;font-family:'Inter';font-size:10.5px;color:#5f7488;letter-spacing:.3px;}
+.shake{animation:sh .35s;}
+@keyframes sh{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+</style></head>
+<body>
+<div class="glow"></div><div class="glow2"></div>
+<div class="wrap">
+  <div class="badge"></div>
+  <div class="ey">The Certified Specialist Program</div>
+  <div class="k">welcome to</div>
+  <h1>FLOCO Certified</h1>
+  <div class="sub">Your whole FLOCO business, in one place.<br>Enter your company access code to sign in.</div>
+  <form class="card" id="f" autocomplete="off">
+    <label for="code">Company Access Code</label>
+    <input id="code" name="code" placeholder="e.g. YOURCODE2026" autocapitalize="characters" autocomplete="off" inputmode="text">
+    <button type="submit">Sign In</button>
+    <div class="err" id="err"></div>
+  </form>
+  <div class="foot">Trained · Tested · FLOCO Certified 🦩</div>
+</div>
+<script src="accounts.js"></script>
+<script>
+  // already signed in? go straight to the app
+  if (window.FLOCOauth && FLOCOauth.profile()) location.replace('home.html');
+  var f=document.getElementById('f'), err=document.getElementById('err'), inp=document.getElementById('code');
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var acct = FLOCOauth.login(inp.value);
+    if (acct){ err.textContent=''; location.replace('home.html'); }
+    else { err.textContent='That code isn’t recognized. Check with the FLOCO team.'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); inp.select(); }
+  });
+</script>
+</body></html>
