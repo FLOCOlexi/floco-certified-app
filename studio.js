@@ -172,6 +172,41 @@
     el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){ var bb=blend(); if(bb.length>=4){ toast('A blend holds up to 4 colors — remove one first'); return; } bb.push({n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c')}); saveBlend(bb); renderBlend(); renderPalette(); toast(pc.getAttribute('data-n')+' added'); }); });
   }
 
+  // ---- coping & edges ----
+  var C = 'assets/photos/coping/';
+  var CUTS = [
+    { slug:'bullnose',   name:'Bullnose',   img:'bullnose.jpg' },
+    { slug:'cantilever', name:'Cantilever', img:'cantilever-1.jpg' },
+    { slug:'tile-edge',  name:'Tile Edge',  img:'tile-edge.jpg' }
+  ];
+  var CSTYLES = ['style-01','style-02','style-03','style-04','style-05','style-06','style-07','style-08'];
+  function renderCoping(){
+    var cutsEl = document.getElementById('cuts');
+    if (cutsEl){
+      cutsEl.innerHTML = CUTS.map(function(k){
+        var id='cut:'+k.slug, sel=inBoard(id)?' sel':'';
+        return '<div class="cut'+sel+'" data-slug="'+k.slug+'"><img src="'+C+k.img+'" loading="lazy"><div class="nm">'+k.name+'</div></div>';
+      }).join('');
+      cutsEl.querySelectorAll('.cut').forEach(function(c){ c.addEventListener('click', function(){
+        var k = CUTS.filter(function(x){return x.slug===c.getAttribute('data-slug');})[0];
+        var added = toggle({type:'cut', id:'cut:'+k.slug, title:k.name+' edge', img:C+k.img});
+        c.classList.toggle('sel', added); toast(added? k.name+' edge saved':'Removed'); renderBoard();
+      }); });
+    }
+    var stEl = document.getElementById('copingStyles');
+    if (stEl){
+      stEl.innerHTML = CSTYLES.map(function(s){
+        var id='coping:'+s, sel=inBoard(id)?' sel':'';
+        return '<div class="cstyle'+sel+'" data-s="'+s+'"><img src="'+C+s+'.jpg" loading="lazy"></div>';
+      }).join('');
+      stEl.querySelectorAll('.cstyle').forEach(function(c){ c.addEventListener('click', function(){
+        var s=c.getAttribute('data-s');
+        var added = toggle({type:'coping', id:'coping:'+s, title:'Coping style', img:C+s+'.jpg'});
+        c.classList.toggle('sel', added); toast(added?'Coping style saved':'Removed'); renderBoard();
+      }); });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
     // installer email — remember what they type (universal login has no per-user email)
     var p = (window.FLOCOauth && FLOCOauth.profile && FLOCOauth.profile()) || null;
@@ -181,7 +216,7 @@
       ie.addEventListener('input', function(){ localStorage.setItem('floco_installer_email', ie.value); });
     }
 
-    renderBlend(); renderVibes(); renderGallery(); renderInlays(); renderBoard();
+    renderBlend(); renderVibes(); renderGallery(); renderInlays(); renderCoping(); renderBoard();
     var pc = document.getElementById('paletteClose'); if (pc) pc.addEventListener('click', closePalette);
     var scr = document.getElementById('scrim'); if (scr) scr.addEventListener('click', closePalette);
 

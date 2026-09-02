@@ -95,6 +95,17 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .pcol .sw{width:46px;height:46px;border-radius:50%;margin:0 auto 5px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
 .pcol .nm{font-family:'Inter';font-size:8px;color:#C7D2DC;line-height:1.1;}
 .pcol.dim{opacity:.3;pointer-events:none;}
+/* coping & edges */
+.cuts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+.cut{border-radius:14px;overflow:hidden;cursor:pointer;border:2px solid transparent;background:#fff;}
+.cut img{width:100%;height:66px;object-fit:cover;display:block;}
+.cut .nm{font-family:'Inter';font-weight:600;font-size:9px;color:#0A1F35;text-align:center;padding:6px 2px;}
+.cut.sel{border-color:var(--gold);}
+.cstyle{flex:none;width:104px;height:76px;border-radius:12px;overflow:hidden;position:relative;border:2px solid transparent;cursor:pointer;}
+.cstyle img{width:100%;height:100%;object-fit:cover;}
+.cstyle.sel{border-color:var(--teal);}
+.cstyle.sel:after{content:"\2713";position:absolute;right:6px;top:6px;width:18px;height:18px;background:var(--teal);color:#052018;border-radius:50%;font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;}
+.subk{font-family:'Inter';font-weight:600;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 9px;}
 /* send card */
 .send{margin:24px 0 0;border-radius:20px;padding:18px;position:relative;overflow:hidden;
   background:linear-gradient(135deg,rgba(198,166,98,.14),rgba(58,191,184,.10));border:1px solid var(--line);}
@@ -180,6 +191,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <!-- Inlays -->
     <div class="sh"><div class="k">make it theirs</div><div class="h">Add an <span>inlay.</span></div></div>
     <div class="inlaygrid" id="inlays"></div>
+
+    <!-- Coping & Edges -->
+    <div class="sh"><div class="k">frame it</div><div class="h">Coping <span>&amp; edges.</span></div></div>
+    <div class="subk">The cut · how the edge is finished</div>
+    <div class="cuts" id="cuts"></div>
+    <div class="subk">Coping styles · tap to save</div>
+    <div class="hscroll" id="copingStyles"></div>
 
     <!-- Send -->
     <div class="send">
