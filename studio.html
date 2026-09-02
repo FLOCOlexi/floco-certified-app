@@ -72,6 +72,29 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .inlay .nm{position:absolute;left:7px;right:7px;bottom:6px;font-family:'Inter';font-weight:600;font-size:8.5px;color:#fff;}
 .inlay.sel{border-color:var(--gold);}
 .inlay.sel:after{content:"\2713";position:absolute;right:5px;top:5px;width:19px;height:19px;background:var(--gold);color:#0A1F35;border-radius:50%;font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;}
+/* custom blend */
+.blendrow{display:flex;gap:9px;align-items:stretch;}
+.bcol{flex:1;border-radius:14px;padding:11px 5px 9px;text-align:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);position:relative;cursor:pointer;}
+.bcol .sw{width:36px;height:36px;border-radius:50%;margin:0 auto 7px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
+.bcol .nm{font-family:'Inter';font-weight:600;font-size:8.5px;color:#fff;line-height:1.1;}
+.bcol .pct{font-family:'Nunito';font-weight:900;font-size:14px;color:var(--gold-lt);margin-top:2px;}
+.bcol .x{position:absolute;right:4px;top:4px;width:17px;height:17px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:10px;line-height:17px;text-align:center;}
+.badd{flex:none;width:60px;border-radius:14px;border:1px dashed rgba(255,255,255,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;}
+.badd .plus{font-family:'Nunito';font-weight:900;font-size:22px;color:var(--gold-lt);line-height:1;}
+.badd .t{font-family:'Inter';font-size:7.5px;color:var(--muted);}
+.scrim{position:fixed;inset:0;background:rgba(4,12,22,.55);opacity:0;pointer-events:none;transition:opacity .28s;z-index:85;}
+.scrim.open{opacity:1;pointer-events:auto;}
+.sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(110%);bottom:0;width:100%;max-width:480px;background:#0E2A47;border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom));transition:transform .3s;z-index:90;box-shadow:0 -12px 30px rgba(0,0,0,.5);}
+.sheet.open{transform:translateX(-50%) translateY(0);}
+.sheet .shh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.sheet .shh .t{font-family:'Nunito';font-weight:900;font-size:16px;color:#fff;}
+.sheet .shh .t span{font-family:'Caveat';font-weight:700;font-size:15px;color:var(--teal);display:block;line-height:.7;}
+.sheet .shh .close{font-family:'Inter';font-weight:600;font-size:12px;color:var(--teal);cursor:pointer;padding:6px;}
+.palette{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 10px;max-height:46vh;overflow-y:auto;padding-top:6px;}
+.pcol{text-align:center;cursor:pointer;}
+.pcol .sw{width:46px;height:46px;border-radius:50%;margin:0 auto 5px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
+.pcol .nm{font-family:'Inter';font-size:8px;color:#C7D2DC;line-height:1.1;}
+.pcol.dim{opacity:.3;pointer-events:none;}
 /* send card */
 .send{margin:24px 0 0;border-radius:20px;padding:18px;position:relative;overflow:hidden;
   background:linear-gradient(135deg,rgba(198,166,98,.14),rgba(58,191,184,.10));border:1px solid var(--line);}
@@ -133,6 +156,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
       <div class="p">Explore the looks, save what they love, and send the design board to you both. The design session is the close.</div>
     </div>
 
+    <!-- Custom Blend -->
+    <div class="sh"><div class="k">mix it up</div><div class="h">Custom <span>blend.</span></div></div>
+    <div class="blendrow" id="blend"></div>
+
     <!-- Design Board -->
     <div class="board">
       <div class="bh">
@@ -169,6 +196,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
   </div>
 
   <div id="toast" class="toast"></div>
+
+  <!-- color palette sheet -->
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" id="palette">
+    <div class="shh"><div class="t"><span>the FLOCO palette</span>Add a color</div><div class="close" id="paletteClose">Done</div></div>
+    <div class="palette" id="paletteGrid"></div>
+  </div>
 
   <div class="nav">
     <div class="item"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><div class="l">Home</div></div>

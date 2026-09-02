@@ -137,6 +137,41 @@
     }
   }
 
+  // ---- custom blend ----
+  // ⚠️ PLACEHOLDER palette — swap for Lexi's real color list (the American Recycling colors) when it arrives.
+  var COLORS = [
+    {n:'Pale Grey',c:'#BFC6CB'},{n:'Lite Grey',c:'#9AA3AB'},{n:'Slate Grey',c:'#6E7A85'},{n:'Charcoal',c:'#3A3F44'},
+    {n:'Cream',c:'#E7DFCF'},{n:'Sand',c:'#D8C7A8'},{n:'Tan',c:'#C7A97B'},{n:'Terracotta',c:'#B07A5A'},
+    {n:'White',c:'#F2EFE9'},{n:'Teal',c:'#3BBFB8'},{n:'Deep Teal',c:'#2A7F79'},{n:'Navy',c:'#2A3B4D'},
+    {n:'Sage',c:'#A7B49A'},{n:'Sky Blue',c:'#A9C4CE'},{n:'Sunflower',c:'#E3B23C'},{n:'Coral',c:'#E08A6E'}
+  ];
+  var BLKEY = 'floco_blend';
+  function blend(){ try{ var b=JSON.parse(localStorage.getItem(BLKEY)); return (b&&b.length)?b:[{n:'Pale Grey',c:'#BFC6CB'},{n:'Cream',c:'#E7DFCF'},{n:'Lite Grey',c:'#9AA3AB'}]; }catch(e){ return [{n:'Pale Grey',c:'#BFC6CB'}]; } }
+  function saveBlend(b){ localStorage.setItem(BLKEY, JSON.stringify(b)); }
+  function pcts(n){ var base=Math.floor(100/n), out=[]; for(var i=0;i<n;i++) out.push(i===0?100-base*(n-1):base); return out; }
+  function renderBlend(){
+    var el=document.getElementById('blend'); if(!el) return;
+    var b=blend(), p=pcts(b.length);
+    var html=b.map(function(col,i){
+      return '<div class="bcol" data-i="'+i+'"><div class="x">&times;</div><div class="sw" style="background:'+col.c+'"></div><div class="nm">'+col.n+'</div><div class="pct">'+p[i]+'%</div></div>';
+    }).join('');
+    if(b.length<4) html+='<div class="badd" id="badd"><div class="plus">+</div><div class="t">Add</div></div>';
+    el.innerHTML=html;
+    el.querySelectorAll('.bcol').forEach(function(c){ c.addEventListener('click', function(){ var i=+c.getAttribute('data-i'); var bb=blend(); if(bb.length>1){ bb.splice(i,1); saveBlend(bb); renderBlend(); } else { toast('Keep at least one color'); } }); });
+    var add=document.getElementById('badd'); if(add) add.addEventListener('click', openPalette);
+  }
+  function openPalette(){ renderPalette(); document.getElementById('palette').classList.add('open'); document.getElementById('scrim').classList.add('open'); }
+  function closePalette(){ var s=document.getElementById('palette'); if(s)s.classList.remove('open'); var sc=document.getElementById('scrim'); if(sc)sc.classList.remove('open'); }
+  function renderPalette(){
+    var el=document.getElementById('paletteGrid'); if(!el) return;
+    var names=blend().map(function(x){return x.n;});
+    el.innerHTML=COLORS.map(function(col){
+      var dim=names.indexOf(col.n)>=0?' dim':'';
+      return '<div class="pcol'+dim+'" data-n="'+col.n+'" data-c="'+col.c+'"><div class="sw" style="background:'+col.c+'"></div><div class="nm">'+col.n+'</div></div>';
+    }).join('');
+    el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){ var bb=blend(); if(bb.length>=4){ toast('A blend holds up to 4 colors — remove one first'); return; } bb.push({n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c')}); saveBlend(bb); renderBlend(); renderPalette(); toast(pc.getAttribute('data-n')+' added'); }); });
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
     // installer email — remember what they type (universal login has no per-user email)
     var p = (window.FLOCOauth && FLOCOauth.profile && FLOCOauth.profile()) || null;
@@ -146,7 +181,9 @@
       ie.addEventListener('input', function(){ localStorage.setItem('floco_installer_email', ie.value); });
     }
 
-    renderVibes(); renderGallery(); renderInlays(); renderBoard();
+    renderBlend(); renderVibes(); renderGallery(); renderInlays(); renderBoard();
+    var pc = document.getElementById('paletteClose'); if (pc) pc.addEventListener('click', closePalette);
+    var scr = document.getElementById('scrim'); if (scr) scr.addEventListener('click', closePalette);
 
     var more = document.getElementById('galMore');
     if (more) more.addEventListener('click', function(){
