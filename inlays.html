@@ -128,7 +128,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
          or printed, whichever suits the job.
          ============================================================ -->
     <div class="slb"><div class="t">The Mold Library</div><div class="c" id="fileCount"></div></div>
-    <div class="slb-p">Every design FLOCO has cut, photographed against a rule so you can read the true size. Ask for any of them by name.</div>
+    <div class="slb-p">Every design FLOCO has cut, photographed against a rule so you can read the true size. The molds live at our shop, but you can <b style="color:#E4CB8E">download the files and have your own made</b>. Start with a core group: the handful your customers will actually ask for.</div>
     <div class="grid" id="files"></div>
 
     <div class="req"><div class="h">Need a custom design? ✂️</div><div class="p">Two ways to get one made. A <b style="color:#E4CB8E">cut stencil or mold</b> costs more up front and is worth it for designs you run over and over. A <b style="color:#E4CB8E">printed inlay</b> from a sign or vehicle wrap shop is cheaper and holds up just as well, which usually suits a one-off.</div></div>
@@ -218,7 +218,7 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
     return '<div class="file">'
       + '<div class="th mold" style="background-image:url(\'' + esc(m.img) + '\')"></div>'
       + '<div class="bd"><div class="nm">'+esc(m.name)+'</div>'
-      + '<div class="fmt"><span>Mold on hand</span></div></div>'
+      + '<div class="fmt"><span>File available</span></div></div>'
       + '</div>';
   }).join('');
   var c = document.getElementById('fileCount');
