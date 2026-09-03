@@ -63,6 +63,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .file{border-radius:16px;overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.07);}
 .file .th{position:relative;height:96px;background-size:cover;background-position:center;}
+.file .th.mold{height:150px;background-color:#fff;background-size:cover;}
 .file .th .dl{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:8px;background:rgba(198,166,98,.92);}
 .file .th .dl svg{width:13px;height:13px;}
 .file .th .pend{position:absolute;right:8px;top:8px;font-family:'Inter';font-weight:600;font-size:7px;letter-spacing:.5px;text-transform:uppercase;color:#0A1F35;background:rgba(255,255,255,.75);border-radius:6px;padding:3px 6px;}
@@ -70,6 +71,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .file .nm{font-family:'Nunito';font-weight:800;font-size:11.5px;color:#fff;}
 .file .fmt{display:flex;gap:5px;margin-top:6px;}
 .file .fmt span{font-family:'Inter';font-weight:600;font-size:7px;letter-spacing:.5px;color:var(--teal);border:1px solid rgba(58,191,184,.3);border-radius:5px;padding:2px 5px;}
+.file .fmt span.off{color:var(--muted);border-color:rgba(255,255,255,.12);}
 .file .fmt span.off{color:var(--muted);border-color:rgba(255,255,255,.12);}
 
 .req{margin:18px 0 0;border-radius:14px;border:1px dashed var(--line);padding:14px 16px;text-align:center;}
@@ -125,8 +127,8 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
          One design per file, from past FLOCO jobs. Made either as a cut stencil
          or printed, whichever suits the job.
          ============================================================ -->
-    <div class="slb"><div class="t">Individual Files</div><div class="c" id="fileCount"></div></div>
-    <div class="slb-p">Single designs, one file each, from past FLOCO jobs.</div>
+    <div class="slb"><div class="t">The Mold Library</div><div class="c" id="fileCount"></div></div>
+    <div class="slb-p">Every design FLOCO has cut, photographed against a rule so you can read the true size. Ask for any of them by name.</div>
     <div class="grid" id="files"></div>
 
     <div class="req"><div class="h">Need a custom design? ✂️</div><div class="p">Two ways to get one made. A <b style="color:#E4CB8E">cut stencil or mold</b> costs more up front and is worth it for designs you run over and over. A <b style="color:#E4CB8E">printed inlay</b> from a sign or vehicle wrap shop is cheaper and holds up just as well, which usually suits a one-off.</div></div>
@@ -167,11 +169,23 @@ var CUT_SHEETS = [
   }
 ];
 
-var INDIVIDUAL_FILES = [
-  { name: 'Sea Turtle',    thumb: 'assets/img/inlay-turtle.jpg',  file: null },
-  { name: 'Compass',       thumb: 'assets/img/inlay-compass.jpg', file: null },
-  { name: 'Koi',           thumb: 'assets/img/inlay-koi.jpg',     file: null },
-  { name: 'Sun / Latitude',thumb: 'assets/img/inlay-sun.jpg',     file: null }
+var MOLDS = [
+  { name: "5 O'clock Somewhere", img: "assets/molds/5-o-clock-somewhere.jpg" },
+  { name: "American Flag", img: "assets/molds/american-flag.jpg" },
+  { name: "Anchor", img: "assets/molds/anchor.jpg" },
+  { name: "Butterfly", img: "assets/molds/butterfly.jpg" },
+  { name: "Compass Rose", img: "assets/molds/compass-rose.jpg" },
+  { name: "Crab", img: "assets/molds/crab.jpg" },
+  { name: "Dolphin #1", img: "assets/molds/dolphin-1.jpg" },
+  { name: "Dolphin #2", img: "assets/molds/dolphin-2.jpg" },
+  { name: "Flip Flops", img: "assets/molds/flip-flops.jpg" },
+  { name: "Hibiscus Flower", img: "assets/molds/hibiscus-flower.jpg" },
+  { name: "Life Is Better At The Pool", img: "assets/molds/life-is-better-at-the-pool.jpg" },
+  { name: "Paradise", img: "assets/molds/paradise.jpg" },
+  { name: "Pelican", img: "assets/molds/pelican.jpg" },
+  { name: "Pool Life", img: "assets/molds/pool-life.jpg" },
+  { name: "Seahorse Family", img: "assets/molds/seahorse-family.jpg" },
+  { name: "Sun", img: "assets/molds/sun.jpg" }
 ];
 
 var DL_ICON = '<svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>';
@@ -191,30 +205,24 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
       +   '<div class="desc">'+esc(s.desc)+'</div>'
       +   '<div class="tags">'+s.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'
       +   '<div class="tip"><div class="h">Why one sheet beats one-offs</div>'
-      +     '<div class="p">Your CAD shop charges for setup, not just cutting. Nesting every stencil onto a single sheet — even sideways, in the gaps — means you pay that setup once instead of once per design. Order the sheet, not the shape.</div></div>'
+      +     '<div class="p">Whoever cuts your stencils charges for setup, not just cutting. Nesting every design onto one sheet, even sideways in the gaps, means you pay that setup once instead of once per design. Order the sheet, not the shape.</div></div>'
       + '</div></div>';
   }).join('');
   var c = document.getElementById('sheetCount');
   if (c) c.textContent = CUT_SHEETS.length + (CUT_SHEETS.length === 1 ? ' sheet' : ' sheets');
 })();
 
-(function renderFiles(){
+(function renderMolds(){
   var el = document.getElementById('files'); if(!el) return;
-  el.innerHTML = INDIVIDUAL_FILES.map(function(f){
-    var badge = f.file
-      ? '<a class="dl" href="'+esc(f.file)+'" download aria-label="Download '+esc(f.name)+'">'+DL_ICON+'</a>'
-      : '<div class="pend">Soon</div>';
-    var fmts = f.file
-      ? '<span>DXF</span><span>AI</span><span>SVG</span>'
-      : '<span class="off">Awaiting files</span>';
+  el.innerHTML = MOLDS.map(function(m){
     return '<div class="file">'
-      + '<div class="th" style="background-image:url(\'' + esc(f.thumb) + '\')">' + badge + '</div>'
-      + '<div class="bd"><div class="nm">'+esc(f.name)+'</div><div class="fmt">'+fmts+'</div></div>'
+      + '<div class="th mold" style="background-image:url(\'' + esc(m.img) + '\')"></div>'
+      + '<div class="bd"><div class="nm">'+esc(m.name)+'</div>'
+      + '<div class="fmt"><span>Mold on hand</span></div></div>'
       + '</div>';
   }).join('');
-  var ready = INDIVIDUAL_FILES.filter(function(f){ return f.file; }).length;
   var c = document.getElementById('fileCount');
-  if (c) c.textContent = ready + ' of ' + INDIVIDUAL_FILES.length + ' ready';
+  if (c) c.textContent = MOLDS.length + ' designs';
 })();
 </script>
 </body></html>
