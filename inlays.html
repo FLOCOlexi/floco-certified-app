@@ -20,7 +20,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .top .back svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none;}
 .top .ti{font-family:'Nunito';font-weight:900;font-size:19px;color:#fff;line-height:1;}.top .ti span{color:var(--gold-lt);}
 .sub{padding:2px 24px 0;font-family:'Inter';font-size:10.5px;color:var(--muted);}
-.wrap{padding:14px 20px 0;}
+
+/* the page scrolls above the tab bar */
+.scroll{position:absolute;top:104px;left:0;right:0;bottom:82px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.wrap{padding:14px 20px 26px;}
+
 /* process sheet featured */
 .proc{border-radius:16px;background:linear-gradient(120deg,#123A5C,#0E2A47);border:1px solid var(--line);padding:15px 16px;display:flex;align-items:center;gap:13px;box-shadow:0 8px 22px rgba(0,0,0,.35);}
 .proc .ic{width:46px;height:46px;border-radius:12px;background:rgba(198,166,98,.16);display:flex;align-items:center;justify-content:center;flex:none;}
@@ -28,31 +32,57 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .proc .tx{flex:1;}
 .proc .tx .h{font-family:'Nunito';font-weight:800;font-size:13px;color:#fff;}
 .proc .tx .p{font-family:'Inter';font-size:9px;color:#B9C6D2;margin-top:2px;line-height:1.35;}
-.proc .dl{width:30px;height:30px;border-radius:9px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex:none;}
-.proc .dl svg{width:15px;height:15px;stroke:#0A1F35;stroke-width:2.2;fill:none;}
-.slb{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px;}
+.dl{width:30px;height:30px;border-radius:9px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex:none;border:none;cursor:pointer;text-decoration:none;}
+.dl svg{width:15px;height:15px;stroke:#0A1F35;stroke-width:2.2;fill:none;}
+/* nothing to download yet — say so instead of faking a button */
+.soon{flex:none;font-family:'Inter';font-weight:600;font-size:7.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border:1px dashed rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;text-align:center;line-height:1.2;}
+
+.slb{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 4px;}
 .slb .t{font-family:'Nunito';font-weight:800;font-size:13px;color:#fff;}
-.slb .srch{display:flex;align-items:center;gap:6px;font-family:'Inter';font-size:9.5px;color:var(--muted);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 11px;}
-.slb .srch svg{width:12px;height:12px;stroke:var(--muted);stroke-width:2;fill:none;}
+.slb .c{font-family:'Inter';font-weight:600;font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+.slb-p{font-family:'Inter';font-size:9px;color:var(--muted);line-height:1.45;margin-bottom:12px;}
+
+/* a themed cut sheet — the hero card */
+.sheet{border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--line);margin-bottom:13px;}
+.sheet .th{display:block;width:100%;background:#fff;padding:8px;}
+.sheet .th img{display:block;width:100%;height:auto;border-radius:4px;}
+.sheet .bd{padding:12px 14px 14px;}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.sheet .nm{font-family:'Nunito';font-weight:900;font-size:14px;color:#fff;}
+.sheet .meta{font-family:'Inter';font-size:9px;color:var(--gold-lt);margin-top:2px;}
+.sheet .desc{font-family:'Inter';font-size:9.5px;color:#B9C6D2;line-height:1.5;margin-top:8px;}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px;}
+.tags span{font-family:'Inter';font-weight:600;font-size:7.5px;letter-spacing:.3px;color:var(--muted);border:1px solid rgba(255,255,255,.12);border-radius:5px;padding:2px 6px;}
+
+/* the money note */
+.tip{margin-top:11px;border-left:2px solid var(--teal);background:rgba(58,191,184,.08);border-radius:0 8px 8px 0;padding:9px 11px;}
+.tip .h{font-family:'Nunito';font-weight:800;font-size:9.5px;color:var(--teal);letter-spacing:.3px;}
+.tip .p{font-family:'Inter';font-size:9px;color:#B9C6D2;line-height:1.5;margin-top:3px;}
+
+/* individual inlay files */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .file{border-radius:16px;overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.07);}
 .file .th{position:relative;height:96px;background-size:cover;background-position:center;}
-.file .th .dl{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:8px;background:rgba(198,166,98,.92);display:flex;align-items:center;justify-content:center;}
-.file .th .dl svg{width:13px;height:13px;stroke:#0A1F35;stroke-width:2.3;fill:none;}
+.file .th .dl{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:8px;background:rgba(198,166,98,.92);}
+.file .th .dl svg{width:13px;height:13px;}
+.file .th .pend{position:absolute;right:8px;top:8px;font-family:'Inter';font-weight:600;font-size:7px;letter-spacing:.5px;text-transform:uppercase;color:#0A1F35;background:rgba(255,255,255,.75);border-radius:6px;padding:3px 6px;}
 .file .bd{padding:9px 11px 11px;}
 .file .nm{font-family:'Nunito';font-weight:800;font-size:11.5px;color:#fff;}
 .file .fmt{display:flex;gap:5px;margin-top:6px;}
 .file .fmt span{font-family:'Inter';font-weight:600;font-size:7px;letter-spacing:.5px;color:var(--teal);border:1px solid rgba(58,191,184,.3);border-radius:5px;padding:2px 5px;}
-.req{margin:18px 20px 0;border-radius:14px;border:1px dashed var(--line);padding:14px 16px;text-align:center;}
+.file .fmt span.off{color:var(--muted);border-color:rgba(255,255,255,.12);}
+
+.req{margin:18px 0 0;border-radius:14px;border:1px dashed var(--line);padding:14px 16px;text-align:center;}
 .req .h{font-family:'Nunito';font-weight:800;font-size:12px;color:var(--gold-lt);}
-.req .p{font-family:'Inter';font-size:9px;color:var(--muted);margin-top:3px;}
-.nav{position:absolute;left:0;right:0;bottom:0;height:82px;background:rgba(9,22,37,.92);border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-around;align-items:flex-start;padding-top:12px;}
+.req .p{font-family:'Inter';font-size:9px;color:var(--muted);margin-top:3px;line-height:1.45;}
+
+.nav{position:absolute;left:0;right:0;bottom:0;height:82px;background:rgba(9,22,37,.92);border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-around;align-items:flex-start;padding-top:12px;z-index:5;}
 .nav .item{display:flex;flex-direction:column;align-items:center;gap:5px;}
 .nav .item svg{width:22px;height:22px;stroke:var(--muted);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .nav .item .l{font-family:'Inter';font-weight:600;font-size:8.5px;color:var(--muted);}
 .nav .item.on svg{stroke:var(--gold);}.nav .item.on .l{color:var(--gold-lt);}
 .nav .item.on{position:relative;}.nav .item.on:before{content:"";position:absolute;top:-12px;width:26px;height:3px;border-radius:3px;background:var(--gold);}
-.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);z-index:6;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -71,24 +101,36 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
   <div class="glow"></div>
   <div class="status"><div class="t">9:41</div><div class="r"><div class="b"></div><i></i></div></div>
   <div class="top"><div class="back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ti">Inlay <span>Cut Files</span></div></div>
-  <div class="sub">Download & hand to your local CAD shop to cut.</div>
+  <div class="sub">Your shop files. Hand these to whoever makes your inlays, never to a customer.</div>
 
+  <div class="scroll">
   <div class="wrap">
     <div class="proc">
       <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16h6"/></svg></div>
-      <div class="tx"><div class="h">CAD Process Sheet</div><div class="p">Give this to your CAD person — exactly how to work & cut the files for FLOCO. (from CAD941)</div></div>
-      <div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div>
+      <div class="tx"><div class="h">Process Sheet</div><div class="p">Give this to whoever makes your inlays: exactly how to work the files for FLOCO.</div></div>
+      <div class="soon">File<br>coming</div>
     </div>
 
-    <div class="slb"><div class="t">The Library</div><div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Search</div></div>
-    <div class="grid">
-      <div class="file"><div class="th" style="background-image:url('assets/img/inlay-turtle.jpg')"><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div></div><div class="bd"><div class="nm">Sea Turtle</div><div class="fmt"><span>DXF</span><span>AI</span><span>SVG</span></div></div></div>
-      <div class="file"><div class="th" style="background-image:url('assets/img/inlay-compass.jpg')"><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div></div><div class="bd"><div class="nm">Compass</div><div class="fmt"><span>DXF</span><span>AI</span><span>SVG</span></div></div></div>
-      <div class="file"><div class="th" style="background-image:url('assets/img/inlay-koi.jpg')"><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div></div><div class="bd"><div class="nm">Koi</div><div class="fmt"><span>DXF</span><span>AI</span><span>SVG</span></div></div></div>
-      <div class="file"><div class="th" style="background-image:url('assets/img/inlay-sun.jpg')"><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div></div><div class="bd"><div class="nm">Sun / Latitude</div><div class="fmt"><span>DXF</span><span>AI</span><span>SVG</span></div></div></div>
-    </div>
+    <!-- ============================================================
+         CUT SHEETS — many stencils nested onto one sheet.
+         This is the cost-saving way to order: one setup, one sheet,
+         dozens of stencils in a range of sizes.
+         ============================================================ -->
+    <div class="slb"><div class="t">Cut Sheets</div><div class="c" id="sheetCount"></div></div>
+    <div class="slb-p">Themed sheets with many stencils nested together. One sheet, one cut, dozens of designs.</div>
+    <div id="sheets"></div>
 
-    <div class="req"><div class="h">Need a custom design? ✂️</div><div class="p">Request a new inlay from CAD941 — right from the app.</div></div>
+    <!-- ============================================================
+         INDIVIDUAL FILES — one design per file, for a single inlay.
+         One design per file, from past FLOCO jobs. Made either as a cut stencil
+         or printed, whichever suits the job.
+         ============================================================ -->
+    <div class="slb"><div class="t">Individual Files</div><div class="c" id="fileCount"></div></div>
+    <div class="slb-p">Single designs, one file each, from past FLOCO jobs.</div>
+    <div class="grid" id="files"></div>
+
+    <div class="req"><div class="h">Need a custom design? ✂️</div><div class="p">Two ways to get one made. A <b style="color:#E4CB8E">cut stencil or mold</b> costs more up front and is worth it for designs you run over and over. A <b style="color:#E4CB8E">printed inlay</b> from a sign or vehicle wrap shop is cheaper and holds up just as well, which usually suits a one-off.</div></div>
+  </div>
   </div>
 
   <div class="nav">
@@ -100,4 +142,79 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
   </div>
   <div class="homebar"></div>
 </div>
+
+<script>
+/* ------------------------------------------------------------------
+   The cut-file library.
+
+   Data-driven on purpose: adding a new sheet or file is one entry
+   here plus the asset in assets/cutsheets/. Nothing else changes.
+
+   RULE: `file` is a real path or it is null. A null renders as
+   "file coming" — never as a download button that does nothing.
+   A dead download button in front of a paying certified partner is
+   worse than an honest blank.
+   ------------------------------------------------------------------ */
+
+var CUT_SHEETS = [
+  {
+    name: 'Florida Coastal',
+    meta: 'Multi-stencil sheet · mixed sizes',
+    thumb: 'assets/cutsheets/florida-thumb.png',
+    file: 'assets/cutsheets/floco-cut-sheet-florida.pdf',
+    desc: 'The everyday Florida set — the designs customers ask for most, drawn at a range of sizes so one cut covers a whole season of jobs.',
+    tags: ['Dolphin','Shark','Hibiscus','Scallop shell','Rope anchor','Anchors','Sun (2 styles)','Palm trees','Florida outline','Crab','Seahorse','Starfish','Angelfish','Whale tail','Sea turtle','Cocktail glass','Porthole scene','Custom phrase','Company logo']
+  }
+];
+
+var INDIVIDUAL_FILES = [
+  { name: 'Sea Turtle',    thumb: 'assets/img/inlay-turtle.jpg',  file: null },
+  { name: 'Compass',       thumb: 'assets/img/inlay-compass.jpg', file: null },
+  { name: 'Koi',           thumb: 'assets/img/inlay-koi.jpg',     file: null },
+  { name: 'Sun / Latitude',thumb: 'assets/img/inlay-sun.jpg',     file: null }
+];
+
+var DL_ICON = '<svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>';
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+(function renderSheets(){
+  var el = document.getElementById('sheets'); if(!el) return;
+  el.innerHTML = CUT_SHEETS.map(function(s){
+    var action = s.file
+      ? '<a class="dl" href="'+esc(s.file)+'" download aria-label="Download '+esc(s.name)+'">'+DL_ICON+'</a>'
+      : '<div class="soon">File<br>coming</div>';
+    return '<div class="sheet">'
+      + (s.thumb ? '<div class="th"><img src="'+esc(s.thumb)+'" alt="'+esc(s.name)+' cut sheet" loading="lazy"></div>' : '')
+      + '<div class="bd">'
+      +   '<div class="hd"><div><div class="nm">'+esc(s.name)+'</div><div class="meta">'+esc(s.meta)+'</div></div>'+action+'</div>'
+      +   '<div class="desc">'+esc(s.desc)+'</div>'
+      +   '<div class="tags">'+s.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'
+      +   '<div class="tip"><div class="h">Why one sheet beats one-offs</div>'
+      +     '<div class="p">Your CAD shop charges for setup, not just cutting. Nesting every stencil onto a single sheet — even sideways, in the gaps — means you pay that setup once instead of once per design. Order the sheet, not the shape.</div></div>'
+      + '</div></div>';
+  }).join('');
+  var c = document.getElementById('sheetCount');
+  if (c) c.textContent = CUT_SHEETS.length + (CUT_SHEETS.length === 1 ? ' sheet' : ' sheets');
+})();
+
+(function renderFiles(){
+  var el = document.getElementById('files'); if(!el) return;
+  el.innerHTML = INDIVIDUAL_FILES.map(function(f){
+    var badge = f.file
+      ? '<a class="dl" href="'+esc(f.file)+'" download aria-label="Download '+esc(f.name)+'">'+DL_ICON+'</a>'
+      : '<div class="pend">Soon</div>';
+    var fmts = f.file
+      ? '<span>DXF</span><span>AI</span><span>SVG</span>'
+      : '<span class="off">Awaiting files</span>';
+    return '<div class="file">'
+      + '<div class="th" style="background-image:url(\'' + esc(f.thumb) + '\')">' + badge + '</div>'
+      + '<div class="bd"><div class="nm">'+esc(f.name)+'</div><div class="fmt">'+fmts+'</div></div>'
+      + '</div>';
+  }).join('');
+  var ready = INDIVIDUAL_FILES.filter(function(f){ return f.file; }).length;
+  var c = document.getElementById('fileCount');
+  if (c) c.textContent = ready + ' of ' + INDIVIDUAL_FILES.length + ' ready';
+})();
+</script>
 </body></html>

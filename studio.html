@@ -74,7 +74,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .inlay.sel:after{content:"\2713";position:absolute;right:5px;top:5px;width:19px;height:19px;background:var(--gold);color:#0A1F35;border-radius:50%;font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;}
 /* custom blend */
 .blendrow{display:flex;gap:9px;align-items:stretch;}
-.bcol{flex:1;border-radius:14px;padding:11px 5px 9px;text-align:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);position:relative;cursor:pointer;}
+.bcol{flex:1;min-width:0;border-radius:14px;padding:11px 5px 9px;text-align:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);position:relative;cursor:pointer;}
 .bcol .sw{width:36px;height:36px;border-radius:50%;margin:0 auto 7px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
 .bcol .nm{font-family:'Inter';font-weight:600;font-size:8.5px;color:#fff;line-height:1.1;}
 .bcol .pct{font-family:'Nunito';font-weight:900;font-size:14px;color:var(--gold-lt);margin-top:2px;}
@@ -94,6 +94,32 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .pcol{text-align:center;cursor:pointer;}
 .pcol .sw{width:46px;height:46px;border-radius:50%;margin:0 auto 5px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
 .pcol .nm{font-family:'Inter';font-size:8px;color:#C7D2DC;line-height:1.1;}
+/* Real granule photo chips. Size comes from the inline width/height set in
+   studio.js; box-sizing keeps the ring from inflating it. The parent's
+   background colour shows through until the photo decodes. */
+.chip{display:block;border-radius:50%;overflow:hidden;margin:0 auto 7px;box-sizing:border-box;border:2px solid rgba(255,255,255,.22);}
+.chip img{display:block;width:100%;height:100%;object-fit:cover;}
+.pcol .chip{margin:0 auto 5px;}
+/* materials calculator */
+.matbox{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:6px;}
+.sqrow{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sqrow .cap{flex:1;min-width:0;font-family:'Inter';font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.sqrow input{width:104px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Nunito';font-weight:900;font-size:19px;text-align:center;padding:8px 6px;outline:none;}
+.sqrow input:focus{border-color:var(--teal);}
+.matempty{padding:14px 2px 2px;font-family:'Inter';font-size:10.5px;color:var(--muted);line-height:1.5;}
+.matline{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.matline:last-of-type{border-bottom:0;}
+.matline .code{width:52px;font-family:'Nunito';font-weight:900;font-size:14px;color:#fff;}
+.matline .nm{flex:1;min-width:0;font-family:'Inter';font-size:11px;color:#B9C6D2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.matline .bags{font-family:'Nunito';font-weight:900;font-size:19px;color:var(--teal);}
+.matline .bags i{font-family:'Inter';font-weight:600;font-size:9px;font-style:normal;color:var(--muted);margin-left:4px;}
+.mattot{margin-top:10px;background:rgba(58,191,184,.1);border:1px solid rgba(58,191,184,.3);border-radius:12px;padding:10px 12px;text-align:center;font-family:'Nunito';font-weight:900;font-size:12.5px;color:var(--teal);}
+.matwork{margin-top:10px;font-family:'Inter';font-size:9px;color:var(--muted);line-height:1.55;}
+.matwork b{color:#B9C6D2;font-weight:600;}
+.matwarn{margin-top:9px;background:rgba(230,150,90,.12);border-left:2px solid #E8965A;border-radius:0 8px 8px 0;padding:8px 10px;font-family:'Inter';font-size:9.5px;color:#F0C9A8;line-height:1.5;}
+/* "Use this blend" badge on a gallery photo whose recipe we know. Sits over
+   the image, stops the tap from also toggling the board save. */
+.ph .useblend{position:absolute;left:6px;bottom:6px;z-index:2;background:rgba(58,191,184,.94);color:#052018;font-family:'Nunito',sans-serif;font-weight:900;font-size:8.5px;letter-spacing:.02em;padding:4px 8px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.35);}
 .pcol.dim{opacity:.3;pointer-events:none;}
 /* coping & edges */
 .cuts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
@@ -170,6 +196,16 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <!-- Custom Blend -->
     <div class="sh"><div class="k">mix it up</div><div class="h">Custom <span>blend.</span></div></div>
     <div class="blendrow" id="blend"></div>
+
+    <!-- Materials -->
+    <div class="sh"><div class="k">do the math</div><div class="h">Materials <span>needed.</span></div></div>
+    <div class="matbox">
+      <div class="sqrow">
+        <div class="cap">Total square feet</div>
+        <input id="sqft" type="number" inputmode="numeric" min="0" placeholder="0">
+      </div>
+      <div id="matout"></div>
+    </div>
 
     <!-- Design Board -->
     <div class="board">
