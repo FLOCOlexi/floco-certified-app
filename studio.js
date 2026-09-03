@@ -139,21 +139,24 @@
 
   // ---- custom blend ----
   // ⚠️ PLACEHOLDER palette — swap for Lexi's real color list (the American Recycling colors) when it arrives.
+  // Genuine Rosehill TPV color range (via American Recycling) — code, name, sampled hex
   var COLORS = [
-    {n:'Pale Grey',c:'#BFC6CB'},{n:'Lite Grey',c:'#9AA3AB'},{n:'Slate Grey',c:'#6E7A85'},{n:'Charcoal',c:'#3A3F44'},
-    {n:'Cream',c:'#E7DFCF'},{n:'Sand',c:'#D8C7A8'},{n:'Tan',c:'#C7A97B'},{n:'Terracotta',c:'#B07A5A'},
-    {n:'White',c:'#F2EFE9'},{n:'Teal',c:'#3BBFB8'},{n:'Deep Teal',c:'#2A7F79'},{n:'Navy',c:'#2A3B4D'},
-    {n:'Sage',c:'#A7B49A'},{n:'Sky Blue',c:'#A9C4CE'},{n:'Sunflower',c:'#E3B23C'},{n:'Coral',c:'#E08A6E'}
+    {code:'RH31',n:'Cream',c:'#CCC6B4'},{code:'RH30',n:'Beige',c:'#F0B68F'},{code:'RH41',n:'Bright Yellow',c:'#E6D039'},{code:'RH40',n:'Mustard',c:'#E79B3A'},
+    {code:'RH50',n:'Orange',c:'#EB6A3C'},{code:'RH01',n:'Standard Red',c:'#D65F54'},{code:'RH02',n:'Bright Red',c:'#E33F50'},{code:'RH90',n:'Funky Pink',c:'#E55891'},
+    {code:'RH21',n:'Purple',c:'#4B539C'},{code:'RH20',n:'Standard Blue',c:'#1888C3'},{code:'RH22',n:'Light Blue',c:'#18A6D7'},{code:'RH23',n:'Azure',c:'#17ABCA'},
+    {code:'RH26',n:'Turquoise',c:'#36B4BB'},{code:'RH12',n:'Dark Green',c:'#34A385'},{code:'RH10',n:'Standard Green',c:'#78B279'},{code:'RH11',n:'Bright Green',c:'#32A961'},
+    {code:'RH32',n:'Brown',c:'#AF7462'},{code:'RH70',n:'Black',c:'#3D4242'},{code:'RH60',n:'Dark Grey',c:'#62686A'},{code:'RH61',n:'Light Grey',c:'#777E82'},
+    {code:'RH65',n:'Pale Grey',c:'#C0C5C0'}
   ];
   var BLKEY = 'floco_blend';
-  function blend(){ try{ var b=JSON.parse(localStorage.getItem(BLKEY)); return (b&&b.length)?b:[{n:'Pale Grey',c:'#BFC6CB'},{n:'Cream',c:'#E7DFCF'},{n:'Lite Grey',c:'#9AA3AB'}]; }catch(e){ return [{n:'Pale Grey',c:'#BFC6CB'}]; } }
+  function blend(){ try{ var b=JSON.parse(localStorage.getItem(BLKEY)); return (b&&b.length)?b:[{code:'RH31',n:'Cream',c:'#CCC6B4'},{code:'RH32',n:'Brown',c:'#AF7462'},{code:'RH61',n:'Light Grey',c:'#777E82'}]; }catch(e){ return [{code:'RH31',n:'Cream',c:'#CCC6B4'}]; } }
   function saveBlend(b){ localStorage.setItem(BLKEY, JSON.stringify(b)); }
   function pcts(n){ var base=Math.floor(100/n), out=[]; for(var i=0;i<n;i++) out.push(i===0?100-base*(n-1):base); return out; }
   function renderBlend(){
     var el=document.getElementById('blend'); if(!el) return;
     var b=blend(), p=pcts(b.length);
     var html=b.map(function(col,i){
-      return '<div class="bcol" data-i="'+i+'"><div class="x">&times;</div><div class="sw" style="background:'+col.c+'"></div><div class="nm">'+col.n+'</div><div class="pct">'+p[i]+'%</div></div>';
+      return '<div class="bcol" data-i="'+i+'"><div class="x">&times;</div><div class="sw" style="background:'+col.c+'"></div><div class="nm">'+col.n+(col.code?' <span style="opacity:.55;font-weight:800">'+col.code+'</span>':'')+'</div><div class="pct">'+p[i]+'%</div></div>';
     }).join('');
     if(b.length<4) html+='<div class="badd" id="badd"><div class="plus">+</div><div class="t">Add</div></div>';
     el.innerHTML=html;
@@ -167,9 +170,9 @@
     var names=blend().map(function(x){return x.n;});
     el.innerHTML=COLORS.map(function(col){
       var dim=names.indexOf(col.n)>=0?' dim':'';
-      return '<div class="pcol'+dim+'" data-n="'+col.n+'" data-c="'+col.c+'"><div class="sw" style="background:'+col.c+'"></div><div class="nm">'+col.n+'</div></div>';
+      return '<div class="pcol'+dim+'" data-code="'+(col.code||'')+'" data-n="'+col.n+'" data-c="'+col.c+'"><div class="sw" style="background:'+col.c+'"></div><div class="nm"><span style="display:block;font-size:8.5px;font-weight:800;opacity:.6;letter-spacing:.03em">'+(col.code||'')+'</span>'+col.n+'</div></div>';
     }).join('');
-    el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){ var bb=blend(); if(bb.length>=4){ toast('A blend holds up to 4 colors — remove one first'); return; } bb.push({n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c')}); saveBlend(bb); renderBlend(); renderPalette(); toast(pc.getAttribute('data-n')+' added'); }); });
+    el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){ var bb=blend(); if(bb.length>=4){ toast('A blend holds up to 4 colors — remove one first'); return; } bb.push({code:pc.getAttribute('data-code'),n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c')}); saveBlend(bb); renderBlend(); renderPalette(); toast(pc.getAttribute('data-n')+' added'); }); });
   }
 
   // ---- coping & edges ----
@@ -239,7 +242,7 @@
       var lines = [];
       var bl = blend(), bp = pcts(bl.length);
       lines.push('— CUSTOM BLEND —');
-      lines.push(bl.map(function(c,i){ return c.n + ' ' + bp[i] + '%'; }).join('  ·  '));
+      lines.push(bl.map(function(c,i){ return bp[i] + '% ' + (c.code?c.code+' ':'') + c.n; }).join('  ·  '));
       lines.push('');
       function group(type){ return b.filter(function(x){ return x.type===type; }).map(function(x){ return '• ' + x.title; }); }
       var vibes = group('vibe'), photos = group('gallery'), inlays = group('inlay'), coping = b.filter(function(x){ return x.type==='coping'||x.type==='cut'; }).map(function(x){ return '• ' + x.title; });
