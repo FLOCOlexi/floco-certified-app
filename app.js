@@ -155,12 +155,145 @@
       if (el.children.length > 1) continue;
       var t = (el.textContent || '').trim();
       if (t === 'Order' || t === 'Ordering') {
-        wire(el, function () { toast('Your American Recycling rep connects here soon 🦩'); });
+        wire(el, function () {
+          var b = document.getElementById('ordEmail');
+          if (b) { b.scrollIntoView({behavior:'smooth', block:'center'}); b.click(); }
+          else toast('Open Materials to start an order 🦩');
+        });
       } else if (/^Order the FLOCO cleaner/i.test(t)) {
         wire(el, function () { location.href = 'mailto:' + MAIL + '?subject=FLOCO%20Cleaner%20Order'; });
       }
     }
   }
+
+
+  /* ==================================================================
+   * ORDERING FROM AMERICAN RECYCLING
+   *
+   * Modelled on how FLOCO actually orders today: Mike Weidman → **Kaylee
+   * Arellano**, FLOCO's rep at American Recycling. A PO number in the
+   * subject, a short note, then the quantities as a plain list.
+   *
+   * Three things are added deliberately, because the real threads show they
+   * are what causes a round of back-and-forth every time:
+   *   - a named contact WITH a phone number ("I see you placed the order,
+   *     but did not provide a phone number. Should I use Brett?")
+   *   - an explicit ship-to and a requested delivery date
+   *   - a PO number, which is how ARC tracks the order on their side
+   *
+   * 🚫 No prices. FLOCO's per-bag rates are negotiated and are not a
+   * partner's rates — quoting them here would be wrong twice over. The
+   * partner asks for the total with freight, same as FLOCO does.
+   *
+   * The bag counts come from the installer's own Design Studio blends, so
+   * the numbers are already done. Nothing is sent automatically — this
+   * only opens their mail app with a draft they check and send.
+   * ================================================================== */
+  var ARC_EMAIL = 'Kaylee.Arellano@americanrecycling.com';
+  var ARC_TEL   = '+19897255100';
+  var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 125;
+
+  function ordProfile(){
+    try { return JSON.parse(localStorage.getItem('floco_auth_v1')) || {}; } catch(e){ return {}; }
+  }
+  function ordBlends(){
+    try { var v = JSON.parse(localStorage.getItem('floco_blends')); return (v && v.length) ? v : []; } catch(e){ return []; }
+  }
+  /* Same largest-remainder split the Studio and the manual use, so the
+   * order can never disagree with what the app showed on screen. */
+  function ordBags(sqft, cols){
+    var total = Math.ceil(sqft / SQFT_PER_BAG), n = cols.length;
+    var pct = cols.map(function(c){ return typeof c.pct === 'number' ? c.pct : Math.round(100/n); });
+    var raw = pct.map(function(p){ return total * p / 100; });
+    var out = raw.map(function(r){ return Math.max(1, Math.floor(r)); });
+    var used = out.reduce(function(a,b){ return a+b; }, 0);
+    var order = raw.map(function(r,i){ return [r - Math.floor(r), i]; }).sort(function(a,b){ return b[0]-a[0]; });
+    var k = 0;
+    while (used < total && order.length) { out[order[k % order.length][1]]++; used++; k++; }
+    return out;
+  }
+
+  /* One flat list, rolled up across every blend — which is exactly how Mike's
+   * real orders read. American Recycling does not care which job a bag is for;
+   * they care about the code and the count. Blend names stay out of it. */
+  function ordLines(){
+    var list = ordBlends().filter(function(b){ return b.cols && b.cols.length && b.sqft > 0; });
+    if (!list.length) return null;
+    var roll = {}, order = [], totalSq = 0, totalBags = 0;
+    list.forEach(function(b){
+      var bags = ordBags(b.sqft, b.cols);
+      b.cols.forEach(function(c,i){
+        if (!roll[c.code]) { roll[c.code] = { code:c.code, n:c.n, bags:0 }; order.push(c.code); }
+        roll[c.code].bags += bags[i];
+        totalBags += bags[i];
+      });
+      totalSq += b.sqft;
+    });
+    var buckets = Math.ceil(totalSq / SQFT_PER_BUCKET);
+    var lines = order.map(function(c){ return roll[c].code + '  ' + roll[c].n + '  ' + roll[c].bags + ' bags'; });
+    lines.push('Pre-Mark 80  ' + buckets + ' buckets');
+    return { lines: lines, sqft: totalSq, bags: totalBags, buckets: buckets, colors: order.length };
+  }
+
+  function initOrdering(){
+    var btn = document.getElementById('ordEmail');
+    if (!btn) return;
+    var data = ordLines();
+
+    var sum = document.getElementById('ordSummary');
+    if (sum && data){
+      sum.innerHTML = '<b>' + data.bags + ' bags</b> across ' + data.colors + ' colours &middot; <b>'
+        + data.buckets + ' buckets</b> of Pre-Mark 80<br>' + data.sqft + ' sq ft total, already worked out.';
+    }
+
+    wire(btn, function(){
+      var p = ordProfile();
+      /* ARC tracks orders by PO. Mike's run MMDDYY-C-WH-MW; a partner just
+       * needs something unique and dated, and can add their own initials. */
+      var d = new Date();
+      var po = ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2) + String(d.getFullYear()).slice(-2);
+      var subject = 'New Order — PO# ' + po;
+      var body = [
+        'Kaylee,',
+        '',
+        'Here is a new order. Could you get this placed and let me know the total with freight, and I will get payment over to you.',
+        '',
+        'PO# ' + po,
+        /* No city prefilled — a partner ships to their own terminal or
+         * warehouse, which is rarely where their profile says they are. */
+        'Ship to: [ADDRESS]',
+        'Requested delivery: [DATE]',
+        'Contact for this order: [YOUR NAME] · [YOUR PHONE]',
+        ''
+      ];
+      if (data) body = body.concat(data.lines);
+      else body = body.concat([
+        'RH31  Cream  00 bags',
+        'RH65  Pale Grey  00 bags',
+        'Pre-Mark 80  0 buckets'
+      ]);
+      body.push('');
+      body.push('Thank you!');
+      body.push('');
+      body.push('[YOUR NAME]');
+      body.push('FLOCO Certified Installer');
+      /* Their own company reads under the certification, not instead of it —
+       * the certification is the part that means something to the supplier. */
+      if (p.company) body.push(p.company);
+
+      var href = 'mailto:' + ARC_EMAIL + '?subject=' + encodeURIComponent(subject)
+               + '&body=' + encodeURIComponent(body.join('\n'));
+      if (href.length > 1900) toast('Big order — check nothing was cut off before sending');
+      location.href = href;
+    });
+
+    var call = document.getElementById('ordCall');
+    if (call) wire(call, function(){ location.href = 'tel:' + ARC_TEL; });
+  }
+  /* app.js is deferred so the DOM is normally parsed by now, but guard it
+   * anyway — this page is also opened straight from the home tiles. */
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initOrdering);
+  else initOrdering();
 
   // service worker
   if ('serviceWorker' in navigator) {

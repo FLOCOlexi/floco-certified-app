@@ -90,19 +90,10 @@
     var el = document.getElementById('gallery'); if (!el) return;
     el.innerHTML = galleryList().map(function(f){
       var id = 'photo:'+f, saved = inBoard(id) ? ' saved' : '';
-      var hasBlend = blendForPhoto(f) ? '<div class="useblend" data-blend="'+f+'">Use this blend</div>' : '';
       return '<div class="ph'+saved+'" data-id="'+id+'" data-file="'+f+'">'
         + '<img src="'+G+f+'.jpg" loading="lazy">'
-        + hasBlend
         + '<div class="heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C1 9.5 2.5 6 6 6c2 0 3.2 1.2 6 4 2.8-2.8 4-4 6-4 3.5 0 5 3.5 3.5 6.5C19 16.65 12 21 12 21z"/></svg></div></div>';
     }).join('');
-    el.querySelectorAll('.useblend').forEach(function(b){
-      b.addEventListener('click', function(ev){
-        ev.stopPropagation();
-        var f = b.getAttribute('data-blend');
-        toast(applyPhotoBlend(f) ? 'Blend loaded into your builder 🎨' : 'No recipe saved for that one yet');
-      });
-    });
     el.querySelectorAll('.ph').forEach(function(p){
       p.addEventListener('click', function(){
         var f = p.getAttribute('data-file');
@@ -169,81 +160,262 @@
   }
 
 
-  // ---- photo -> blend recipes ----
-  // When a customer points at a pool and says "I want that exact blend," the
-  // rep taps the photo and the recipe loads straight into the blend builder.
-  //
-  // AWAITING DATA (Katie, emailed 2026-09-03). A photo with an empty array is
-  // simply not offered: a guessed blend would put the wrong material on a real
-  // pool. Fill in real RH codes totalling 100 and the photo turns on by itself.
-  // Mirror of floco-studio/src/lib/photoBlends.ts — keep the two in sync.
-  var PHOTO_BLENDS = {
-    'warm-tans-02-lakefront-pool':        [],
-    'warm-tans-08-pool-life':             [],
-    'cool-greys-03-curved-pool':          [],
-    'cool-greys-04-tile-edge-spa':        [],
-    'bright-airy-01-white-sand-pool':     [],
-    'bright-airy-05-clean-grey-patio':    [],
-    'beach-vibes-04-poolside-landscape':  [],
-    'earthy-organic-02-terracotta-lanai': [],
-    'earthy-organic-04-warm-earthy':      [],
-    'deep-moody-04-navy-edge':            [],
-    'layered-blend-03-navy-teal-dual':    [],
-    'layered-blend-02-teal-tile-modern':  []
-  };
-  function blendForPhoto(file){
-    var b = PHOTO_BLENDS[file];
-    return (b && b.length) ? b : null;
+  /* ================= BASE BLENDS =================================
+   * Katie's eight, mixed and photographed for real. A starting point, never a
+   * rule — "Build from scratch" is always one tap away. Mirror of
+   * floco-studio/src/lib/baseBlends.ts; keep the two in sync.
+   * Photos are deep crops into the granules so the sample bag disappears.
+   * ============================================================== */
+  var BASES = [
+    {id:'base-01', label:'Base 01', ch:'Pale grey & cream', fp:'02', cp:'01',
+      f:[{code:'RH65',pct:45},{code:'RH31',pct:40},{code:'RH61',pct:10},{code:'RH60',pct:5}],
+      c:[{code:'RH60',pct:60},{code:'RH31',pct:15},{code:'RH65',pct:15},{code:'RH70',pct:10}]},
+    /* Floor and companion were SWAPPED on 2026-09-04. Katie's two bags for this
+     * pair carried no floor/coping label so it was inferred "darker = coping";
+     * the real installed photo shows the opposite — the deck is the near-black
+     * mix, the lighter grey is the band round the pool. */
+    {id:'base-02', label:'Base 02', nm:'The Bachelor', ch:'Greys & black', fp:'03', cp:'04', inst:'base-02',
+      f:[{code:'RH70',pct:70},{code:'RH60',pct:15},{code:'RH61',pct:15}],
+      c:[{code:'RH61',pct:40},{code:'RH60',pct:40},{code:'RH65',pct:20}]},
+    {id:'base-03', label:'Base 03', ch:'Cream & brown', fp:'05', cp:'06',
+      f:[{code:'RH31',pct:70},{code:'RH32',pct:15},{code:'RH30',pct:15}],
+      c:[{code:'RH32',pct:80},{code:'RH30',pct:10},{code:'RH31',pct:10}]},
+    {id:'base-04', label:'Base 04', ch:'Cream & dark grey', fp:'08', cp:'07',
+      f:[{code:'RH31',pct:45},{code:'RH65',pct:40},{code:'RH60',pct:15}],
+      c:[{code:'RH60',pct:70},{code:'RH65',pct:20},{code:'RH31',pct:10}]},
+    /* The installed shot argues for "companion" over "coping blend": the same
+     * darker mix runs the band round the pool AND the mermaid inlay. */
+    {id:'base-05', label:'Base 05', nm:'Sanibel', ch:'Cream, turquoise & green', fp:'10', cp:'09', inst:'base-05',
+      f:[{code:'RH31',pct:50},{code:'RH65',pct:30},{code:'RH26',pct:10},{code:'RH12',pct:10}],
+      c:[{code:'RH12',pct:50},{code:'RH26',pct:30},{code:'RH70',pct:20}]},
+    {id:'base-06', label:'Base 06', ch:'Warm greige & earth', fp:'12', cp:'11',
+      /* RH32 — Katie's label read RH35, which does not exist; she confirmed the
+       * correction herself on 2026-09-04. */
+      f:[{code:'RH30',pct:30},{code:'RH32',pct:25},{code:'RH60',pct:20},{code:'RH65',pct:15},{code:'RH31',pct:10}],
+      c:[{code:'RH60',pct:30},{code:'RH70',pct:30},{code:'RH32',pct:30},{code:'RH30',pct:10}]},
+    {id:'base-07', label:'Base 07', ch:'Light sand & beige', fp:'13', cp:'14',
+      f:[{code:'RH31',pct:50},{code:'RH30',pct:30},{code:'RH65',pct:10},{code:'RH61',pct:10}],
+      c:[{code:'RH30',pct:45},{code:'RH31',pct:25},{code:'RH61',pct:20},{code:'RH65',pct:10}]},
+    {id:'base-08', label:'Base 08', ch:'Cream & coastal blue', fp:'15', cp:'16',
+      f:[{code:'RH31',pct:80},{code:'RH30',pct:10},{code:'RH65',pct:5},{code:'RH20',pct:5}],
+      c:[{code:'RH31',pct:65},{code:'RH20',pct:20},{code:'RH30',pct:10},{code:'RH65',pct:5}]}
+  ];
+  function blendPhoto(f){ return 'assets/photos/blends/' + f + '.jpg'; }
+  /* A real finished job in this blend, or null. Only bases we can actually
+   * verify get one — never a lookalike borrowed from the gallery. */
+  function installedPhoto(b){ return b.inst ? 'assets/photos/blends/installed/' + b.inst + '.jpg' : null; }
+  function colByCode(code){ for(var i=0;i<COLORS.length;i++) if(COLORS[i].code===code) return COLORS[i]; return null; }
+  /* Turn a base recipe into blend colours, carrying the real percentages. */
+  function hydrate(parts){
+    var out=[]; for(var i=0;i<parts.length;i++){ var c=colByCode(parts[i].code);
+      if(c) out.push({code:c.code,n:c.n,c:c.c,pct:parts[i].pct}); } return out;
   }
-  // Load a photo's recipe into the blend builder, replacing what is there.
-  function applyPhotoBlend(file){
-    var recipe = blendForPhoto(file); if (!recipe) return false;
-    var out = [];
-    for (var i=0;i<recipe.length;i++){
-      var col = null;
-      for (var j=0;j<COLORS.length;j++) if (COLORS[j].code===recipe[i].code) col=COLORS[j];
-      if (col) out.push({ code:col.code, n:col.n, c:col.c, pct:recipe[i].pct });
-    }
-    if (!out.length) return false;
-    saveBlend(out); renderBlend();
-    return true;
+  function recipeText(parts){
+    return parts.map(function(p){ var c=colByCode(p.code); return p.pct+'% '+(c?c.n:p.code); }).join(' · ');
   }
 
-  var BLKEY = 'floco_blend';
-  function blend(){ try{ var b=JSON.parse(localStorage.getItem(BLKEY)); return (b&&b.length)?b:[{code:'RH31',n:'Cream',c:'#CCC6B4'},{code:'RH32',n:'Brown',c:'#AF7462'},{code:'RH61',n:'Light Grey',c:'#777E82'}]; }catch(e){ return [{code:'RH31',n:'Cream',c:'#CCC6B4'}]; } }
-  function saveBlend(b){ localStorage.setItem(BLKEY, JSON.stringify(b)); }
-  // Even split across n colours, remainder onto the first.
-  function pcts(n){ var base=Math.floor(100/n), out=[]; for(var i=0;i<n;i++) out.push(i===0?100-base*(n-1):base); return out; }
-  // Percentages for a blend. A recipe loaded from a photo carries its own
-  // ratios (40/40/20), and those must survive: an even split would quietly
-  // turn a real blend into a different colour. Hand-built blends have no pct
-  // stored, so they keep falling back to the even split.
-  function blendPcts(b){
-    var hasAll = b.length > 0 && b.every(function(c){ return typeof c.pct === 'number' && c.pct > 0; });
-    return hasAll ? b.map(function(c){ return c.pct; }) : pcts(b.length);
+  /* ================= NAMED BLENDS ================================
+   * A job is rarely one blend. The floor gets one, the coping usually gets a
+   * companion, and a front porch might get a third. Each carries its own name
+   * so the crew knows what goes where, and its own square footage so the bag
+   * count is per blend rather than one lump.
+   * Migrates the old single-blend key on first run.
+   * ============================================================== */
+  var BLKEY = 'floco_blends', OLDKEY = 'floco_blend', OLDSQ = 'floco_sqft';
+  function uid(){ return 'b' + Math.random().toString(36).slice(2,8); }
+  function blends(){
+    try{ var v=JSON.parse(localStorage.getItem(BLKEY)); if(v && v.length) return v; }catch(e){}
+    try{
+      var old=JSON.parse(localStorage.getItem(OLDKEY));
+      if(old && old.length){
+        var sq=parseFloat(localStorage.getItem(OLDSQ)||'0')||0;
+        var m=[{id:uid(), name:'Floor blend', cols:old, sqft:sq}];
+        localStorage.setItem(BLKEY, JSON.stringify(m)); return m;
+      }
+    }catch(e){}
+    return [];
   }
-  function renderBlend(){
-    var el=document.getElementById('blend'); if(!el) return;
-    var b=blend(), p=blendPcts(b);
-    var html=b.map(function(col,i){
-      return '<div class="bcol" data-i="'+i+'"><div class="x">&times;</div>'+swatchHtml(col,38)+'<div class="nm">'+col.n+(col.code?' <span style="opacity:.55;font-weight:800">'+col.code+'</span>':'')+'</div><div class="pct">'+p[i]+'%</div></div>';
+  function saveBlends(v){ localStorage.setItem(BLKEY, JSON.stringify(v)); }
+  function pcts(n){ var base=Math.floor(100/n), out=[]; for(var i=0;i<n;i++) out.push(i===0?100-base*(n-1):base); return out; }
+  /* Percentages a blend actually carries. A base recipe brings real ratios
+   * (70/15/15) and those must survive — an even split would quietly turn it
+   * into a different colour. Hand-built colours with no pct fall back. */
+  function blendPcts(cols){
+    var all = cols.length>0 && cols.every(function(c){ return typeof c.pct==='number' && c.pct>0; });
+    if(all) return cols.map(function(c){ return c.pct; });
+    return pcts(cols.length);
+  }
+  function totalPct(cols){ return blendPcts(cols).reduce(function(a,b){return a+b;},0); }
+
+  /* ---- the rough blend preview -------------------------------------
+   * Flat chips scattered by ratio. It reads closer to epoxy flake than to
+   * real rubber, and that is fine and labelled: its job is to answer "roughly
+   * what colour is this mixture", not to show texture. The disclaimer under it
+   * says so out loud so nobody sells off it. */
+  function previewInto(cv, cols){
+    if(!cv || !cv.getContext) return;
+    var S=cv.width=cv.height=104, x=cv.getContext('2d');
+    var p=blendPcts(cols), bag=[];
+    for(var i=0;i<cols.length;i++){ var n=Math.max(1,Math.round(p[i]*10)); for(var k=0;k<n;k++) bag.push(cols[i].c); }
+    if(!bag.length){ x.clearRect(0,0,S,S); return; }
+    /* seeded so a blend always renders the same and never shimmers */
+    var seed=0; for(var q=0;q<cols.length;q++) seed+=(cols[q].code||'').charCodeAt(2)*(p[q]+3);
+    var st=(seed>>>0)||7; function R(){ st^=st<<13; st^=st>>>17; st^=st<<5; return ((st>>>0)%100000)/100000; }
+    x.fillStyle=bag[0]; x.fillRect(0,0,S,S);
+    for(var j=0;j<1500;j++){
+      var cx=R()*S, cy=R()*S, r=S*0.026+R()*S*0.022, rot=R()*6.2832, v=5+Math.floor(R()*3);
+      x.fillStyle=bag[Math.floor(R()*bag.length)];
+      x.beginPath();
+      for(var t=0;t<v;t++){ var a=rot+t/v*6.2832, rr=r*(0.72+R()*0.5);
+        t? x.lineTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr) : x.moveTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr); }
+      x.closePath(); x.fill();
+    }
+  }
+
+  function renderBases(){
+    var el=document.getElementById('bases'); if(!el) return;
+    el.innerHTML = BASES.map(function(b){
+      var hero = installedPhoto(b);
+      return '<div class="basecard'+(hero?' hashero':'')+'">'
+        + (hero ? '<img class="basehero" data-base="'+b.id+'" data-side="f" src="'+hero+'" alt="A finished FLOCO job in '+(b.nm||b.label)+'" loading="lazy">' : '')
+        + '<div class="basebody">'
+        + '<div class="basetop">'
+        +   '<img class="basecirc" data-base="'+b.id+'" data-side="f" src="'+blendPhoto(b.fp)+'" alt="'+b.ch+'" loading="lazy">'
+        +   '<img class="basecomp" data-base="'+b.id+'" data-side="c" src="'+blendPhoto(b.cp)+'" alt="companion" loading="lazy">'
+        + '</div>'
+        + '<div class="no">'+b.label+'</div>'
+        + '<div class="ch">'+(b.nm||b.ch)+'</div>'
+        + (b.nm ? '<div class="sub">'+b.ch+'</div>' : '')
+        + '<div class="rc">'+recipeText(b.f)+'</div>'
+        + '<div class="cmp">Optional companion &nbsp;'+recipeText(b.c)+'</div>'
+      + '</div></div>';
     }).join('');
-    if(b.length<4) html+='<div class="badd" id="badd"><div class="plus">+</div><div class="t">Add</div></div>';
-    el.innerHTML=html;
-    el.querySelectorAll('.bcol').forEach(function(c){ c.addEventListener('click', function(){ var i=+c.getAttribute('data-i'); var bb=blend(); if(bb.length>1){ bb.splice(i,1); bb.forEach(function(x){ delete x.pct; }); saveBlend(bb); renderBlend(); } else { toast('Keep at least one color'); } }); });
-    var add=document.getElementById('badd'); if(add) add.addEventListener('click', openPalette);
+    el.querySelectorAll('img[data-base]').forEach(function(img){
+      img.addEventListener('click', function(){
+        var b=null, id=img.getAttribute('data-base');
+        for(var i=0;i<BASES.length;i++) if(BASES[i].id===id) b=BASES[i];
+        if(!b) return;
+        var side=img.getAttribute('data-side');
+        var list=blends();
+        var nm = side==='c' ? 'Companion blend' : (list.length ? 'Blend '+(list.length+1) : 'Floor blend');
+        list.push({ id:uid(), name:nm, cols:hydrate(side==='c'?b.c:b.f), sqft:0, base:b.id });
+        saveBlends(list); renderBlends();
+        toast(b.label+' added as "'+nm+'"');
+        var t=document.getElementById('blends'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+  }
+
+  function renderBlends(){
+    var el=document.getElementById('blends'); if(!el) return;
+    var list=blends();
+    if(!list.length){
+      el.innerHTML='<div class="bempty">No blends yet. Tap a base above to drop one in, or add one and build it from scratch.</div>';
+      renderMaterials(); return;
+    }
+    el.innerHTML = list.map(function(bl, bi){
+      var p=blendPcts(bl.cols), tot=p.reduce(function(a,b){return a+b;},0);
+      var rows = bl.cols.map(function(col,i){
+        return '<div class="pctline">'
+          + swatchHtml(col,28)
+          + '<div class="nm">'+col.n+'<i>'+(col.code||'')+'</i></div>'
+          + '<div class="step" data-b="'+bi+'" data-i="'+i+'" data-d="-1">&minus;</div>'
+          + '<div class="pnum">'+p[i]+'%</div>'
+          + '<div class="step" data-b="'+bi+'" data-i="'+i+'" data-d="1">+</div>'
+          + '<div class="prm" data-rm="'+bi+'" data-i="'+i+'">&times;</div>'
+        + '</div>';
+      }).join('');
+      return '<div class="blendcard">'
+        + '<div class="bnrow">'
+        +   '<canvas class="bprev" data-prev="'+bi+'"></canvas>'
+        +   '<input class="bname" data-nm="'+bi+'" value="'+(bl.name||'').replace(/"/g,'&quot;')+'" placeholder="Name this blend">'
+        +   '<div class="bdel" data-del="'+bi+'">&times;</div>'
+        + '</div>'
+        + rows
+        + '<div class="btot"><span class="l">Total</span><span><span class="v '+(tot===100?'ok':'off')+'">'+tot+'%</span>'
+        +   (tot!==100 ? '<span class="bfix" data-bal="'+bi+'">balance to 100</span>' : '')
+        + '</span></div>'
+        + (bl.cols.length<6 ? '<div class="baddc" data-add="'+bi+'">+ Add a color</div>' : '')
+        + '<div class="bsq"><span class="cap">Square feet</span><input type="number" inputmode="numeric" min="0" placeholder="0" data-sq="'+bi+'" value="'+(bl.sqft||'')+'"></div>'
+      + '</div>';
+    }).join('');
+
+    list.forEach(function(bl,bi){ previewInto(el.querySelector('canvas[data-prev="'+bi+'"]'), bl.cols); });
+
+    el.querySelectorAll('.step').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var L=blends(), bi=+btn.getAttribute('data-b'), i=+btn.getAttribute('data-i'), d=+btn.getAttribute('data-d');
+        var p=blendPcts(L[bi].cols);
+        for(var k=0;k<L[bi].cols.length;k++) L[bi].cols[k].pct=p[k];
+        L[bi].cols[i].pct=Math.max(0,Math.min(100,L[bi].cols[i].pct + d*5));
+        saveBlends(L); renderBlends();
+      });
+    });
+    el.querySelectorAll('.bfix').forEach(function(b){
+      b.addEventListener('click', function(){
+        var L=blends(), bi=+b.getAttribute('data-bal'), p=blendPcts(L[bi].cols);
+        var tot=p.reduce(function(a,x){return a+x;},0), diff=100-tot;
+        /* Put the difference on the biggest colour — it distorts the look least. */
+        var big=0; for(var k=1;k<p.length;k++) if(p[k]>p[big]) big=k;
+        for(var k2=0;k2<L[bi].cols.length;k2++) L[bi].cols[k2].pct=p[k2];
+        L[bi].cols[big].pct=Math.max(0,p[big]+diff);
+        saveBlends(L); renderBlends();
+      });
+    });
+    el.querySelectorAll('.prm').forEach(function(b){
+      b.addEventListener('click', function(){
+        var L=blends(), bi=+b.getAttribute('data-rm'), i=+b.getAttribute('data-i');
+        if(L[bi].cols.length<2){ toast('Keep at least one color'); return; }
+        /* No undo, and this sits beside the + stepper. Ask first. */
+        if(!confirm('Remove '+L[bi].cols[i].n+' from "'+(L[bi].name||'this blend')+'"?')) return;
+        var p=blendPcts(L[bi].cols);
+        for(var k=0;k<L[bi].cols.length;k++) L[bi].cols[k].pct=p[k];
+        L[bi].cols.splice(i,1); saveBlends(L); renderBlends();
+      });
+    });
+    el.querySelectorAll('.bdel').forEach(function(b){
+      b.addEventListener('click', function(){
+        var L=blends(), bi=+b.getAttribute('data-del');
+        L.splice(bi,1); saveBlends(L); renderBlends();
+      });
+    });
+    el.querySelectorAll('.baddc').forEach(function(b){
+      b.addEventListener('click', function(){ openPalette(+b.getAttribute('data-add')); });
+    });
+    el.querySelectorAll('.bname').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var L=blends(); L[+inp.getAttribute('data-nm')].name=inp.value; saveBlends(L);
+      });
+    });
+    el.querySelectorAll('input[data-sq]').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var L=blends(); L[+inp.getAttribute('data-sq')].sqft=Math.max(0,parseFloat(inp.value)||0);
+        saveBlends(L); renderMaterials();
+      });
+    });
     renderMaterials();
   }
-  function openPalette(){ renderPalette(); document.getElementById('palette').classList.add('open'); document.getElementById('scrim').classList.add('open'); }
+
+  var paletteTarget = 0;
+  function openPalette(bi){ paletteTarget = bi||0; renderPalette(); document.getElementById('palette').classList.add('open'); document.getElementById('scrim').classList.add('open'); }
   function closePalette(){ var s=document.getElementById('palette'); if(s)s.classList.remove('open'); var sc=document.getElementById('scrim'); if(sc)sc.classList.remove('open'); }
   function renderPalette(){
     var el=document.getElementById('paletteGrid'); if(!el) return;
-    var names=blend().map(function(x){return x.n;});
+    var L=blends(), cur=L[paletteTarget];
+    var names=(cur?cur.cols:[]).map(function(x){return x.n;});
     el.innerHTML=COLORS.map(function(col){
       var dim=names.indexOf(col.n)>=0?' dim':'';
       return '<div class="pcol'+dim+'" data-code="'+(col.code||'')+'" data-n="'+col.n+'" data-c="'+col.c+'">'+swatchHtml(col,44)+'<div class="nm"><span style="display:block;font-size:8.5px;font-weight:800;opacity:.6;letter-spacing:.03em">'+(col.code||'')+'</span>'+col.n+'</div></div>';
     }).join('');
-    el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){ var bb=blend(); if(bb.length>=4){ toast('A blend holds up to 4 colors — remove one first'); return; } bb.push({code:pc.getAttribute('data-code'),n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c')}); saveBlend(bb); renderBlend(); renderPalette(); toast(pc.getAttribute('data-n')+' added'); }); });
+    el.querySelectorAll('.pcol').forEach(function(pc){ pc.addEventListener('click', function(){
+      var L=blends(), bl=L[paletteTarget]; if(!bl) return;
+      if(bl.cols.length>=6){ toast('A blend holds up to 6 colors — remove one first'); return; }
+      /* Freeze the current ratios before adding, so an even-split blend does
+       * not silently re-divide when a new colour joins it. */
+      var p=blendPcts(bl.cols); for(var k=0;k<bl.cols.length;k++) bl.cols[k].pct=p[k];
+      bl.cols.push({code:pc.getAttribute('data-code'),n:pc.getAttribute('data-n'),c:pc.getAttribute('data-c'),pct:5});
+      saveBlends(L); renderBlends(); renderPalette(); toast(pc.getAttribute('data-n')+' added');
+    }); });
   }
 
   // ---- materials calculator ----
@@ -252,8 +424,6 @@
   // Cover the area FIRST, then split by percentage. Never work out each
   // colour's square footage and round each up, that over-orders every colour.
   var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 125;
-  var SQKEY = 'floco_sqft';
-  function sqft(){ var v = parseFloat(localStorage.getItem(SQKEY)); return isFinite(v) && v > 0 ? v : 0; }
   function coverageBags(a){ return a > 0 ? Math.ceil(a / SQFT_PER_BAG) : 0; }
 
   function bagsFor(area, cols, pct){
@@ -283,16 +453,39 @@
 
   function renderMaterials(){
     var out = document.getElementById('matout'); if (!out) return;
-    var area = sqft(), b = blend(), p = blendPcts(b);
-    if (area <= 0){
-      out.innerHTML = '<div class="matempty">Enter the square footage and the bag count works itself out from the blend above.</div>';
+    var list = blends();
+    var priced = list.filter(function(bl){ return bl.sqft > 0 && bl.cols.length; });
+    if (!priced.length){
+      out.innerHTML = '<div class="matempty">Add the square feet to each blend above and the bag count works itself out.</div>';
       return;
     }
-    var rows = bagsFor(area, b, p);
-    var total = 0; for (var i = 0; i < rows.length; i++) total += rows[i].bags;
-    var buckets = Math.ceil(area / SQFT_PER_BUCKET);
-    var needed = coverageBags(area);
-    var html = rows.map(function(r){
+
+    /* Each blend is costed on its own square footage, then rolled up by colour
+     * — one order for the whole job, but the split stays honest per blend. */
+    var byCode = {}, order = [], grand = 0, totalSq = 0, warn = [];
+    priced.forEach(function(bl){
+      var p = blendPcts(bl.cols), tot = p.reduce(function(x,y){return x+y;},0);
+      if (tot !== 100) warn.push('"' + (bl.name||'Unnamed blend') + '" adds up to ' + tot + '%, not 100%.');
+      var rows = bagsFor(bl.sqft, bl.cols, p), sum = 0;
+      rows.forEach(function(r){
+        if (!byCode[r.code]){ byCode[r.code] = {code:r.code, n:r.n, c:r.c, bags:0}; order.push(r.code); }
+        byCode[r.code].bags += r.bags; sum += r.bags;
+      });
+      grand += sum; totalSq += bl.sqft;
+      var need = coverageBags(bl.sqft);
+      if (sum > need) warn.push('"' + (bl.name||'Unnamed blend') + '" only needs ' + need + ' bag' + (need===1?'':'s')
+        + ' to cover, but takes ' + sum + ' because every colour needs at least one. Consider fewer colours here.');
+    });
+    var buckets = Math.ceil(totalSq / SQFT_PER_BUCKET);
+
+    var html = priced.map(function(bl){
+      var p = blendPcts(bl.cols);
+      return '<div class="matsub">' + (bl.name || 'Unnamed blend') + ' &middot; ' + bl.sqft + ' sq ft &middot; '
+        + coverageBags(bl.sqft) + ' bags</div>';
+    }).join('');
+
+    html += order.map(function(code){
+      var r = byCode[code];
       return '<div class="matline">' + swatchHtml({n:r.n,c:r.c,code:r.code}, 30)
         + '<div class="code">' + r.code + '</div><div class="nm">' + r.n + '</div>'
         + '<div class="bags">' + r.bags + '<i>bags</i></div></div>';
@@ -300,15 +493,11 @@
     html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#F4F1EA"></span>'
       + '<div class="code">PM80</div><div class="nm">Pre-mark 80 primer</div>'
       + '<div class="bags">' + buckets + '<i>buckets</i></div></div>';
-    html += '<div class="mattot">' + total + ' bags &middot; ' + buckets + ' buckets &middot; ' + area + ' sq ft</div>';
-    html += '<div class="matwork">Worked out as <b>' + area + ' &divide; ' + SQFT_PER_BAG + ' sq ft per bag = ' + needed
-      + ' bags</b>, split across the blend by percentage, with the spare bag going to the biggest leftover. '
-      + 'Primer is ' + area + ' &divide; ' + SQFT_PER_BUCKET + ' sq ft per bucket.</div>';
-    if (total > needed){
-      html += '<div class="matwarn">This area only needs ' + needed + ' bag' + (needed === 1 ? '' : 's')
-        + ' to cover, but a ' + b.length + '-colour blend needs ' + total
-        + ' because every colour takes at least one bag. Consider fewer colours on a small area.</div>';
-    }
+    html += '<div class="mattot">' + grand + ' bags &middot; ' + buckets + ' buckets &middot; ' + totalSq + ' sq ft</div>';
+    html += '<div class="matwork">Each blend is worked out on its own footage &mdash; <b>sq ft &divide; '
+      + SQFT_PER_BAG + ' per bag</b>, split by percentage with the spare bag going to the biggest leftover &mdash; '
+      + 'then the colours are added together into one order. Primer is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per bucket.</div>';
+    warn.forEach(function(w){ html += '<div class="matwarn">' + w + '</div>'; });
     out.innerHTML = html;
   }
 
@@ -356,16 +545,15 @@
       ie.addEventListener('input', function(){ localStorage.setItem('floco_installer_email', ie.value); });
     }
 
-    var sq = document.getElementById('sqft');
-    if (sq){
-      var saved = sqft(); if (saved) sq.value = saved;
-      sq.addEventListener('input', function(){
-        localStorage.setItem(SQKEY, sq.value);
-        renderMaterials();
-      });
-    }
 
-    renderBlend(); renderVibes(); renderGallery(); renderInlays(); renderCoping(); renderBoard();
+    renderBases(); renderBlends();
+    var ab=document.getElementById('addBlend');
+    if(ab) ab.addEventListener('click', function(){
+      var L=blends();
+      L.push({ id:uid(), name: L.length? 'Blend '+(L.length+1) : 'Floor blend',
+               cols:[{code:'RH31',n:'Cream',c:'#CCC6B4',pct:100}], sqft:0 });
+      saveBlends(L); renderBlends();
+    }); renderVibes(); renderGallery(); renderInlays(); renderCoping(); renderBoard();
     var pc = document.getElementById('paletteClose'); if (pc) pc.addEventListener('click', closePalette);
     var scr = document.getElementById('scrim'); if (scr) scr.addEventListener('click', closePalette);
 
@@ -386,17 +574,30 @@
 
       // build the board summary
       var lines = [];
-      var bl = blend(), bp = blendPcts(bl);
-      lines.push('— CUSTOM BLEND —');
-      lines.push(bl.map(function(c,i){ return bp[i] + '% ' + (c.code?c.code+' ':'') + c.n; }).join('  ·  '));
-      var area = sqft();
-      if (area > 0){
-        var mrows = bagsFor(area, bl, bp), mtot = 0;
-        for (var mi = 0; mi < mrows.length; mi++) mtot += mrows[mi].bags;
-        lines.push('— MATERIALS (' + area + ' SQ FT) —');
-        lines = lines.concat(mrows.map(function(r){ return r.code + '  ' + r.n + '  ' + r.bags + ' bags'; }));
-        lines.push('Pre-mark 80  ' + Math.ceil(area / SQFT_PER_BUCKET) + ' buckets');
-        lines.push('Total ' + mtot + ' bags');
+      /* Every named blend, each with its own footage and bag split, then one
+       * rolled-up order — the same shape the materials panel shows. */
+      var list = blends().filter(function(x){ return x.cols.length; });
+      var roll = {}, order = [], grand = 0, totalSq = 0;
+      list.forEach(function(bln){
+        var bp = blendPcts(bln.cols);
+        lines.push('— ' + (bln.name || 'BLEND').toUpperCase() + ' —');
+        lines.push(bln.cols.map(function(c,i){ return bp[i] + '% ' + (c.code?c.code+' ':'') + c.n; }).join('  ·  '));
+        if (bln.sqft > 0){
+          lines.push(bln.sqft + ' sq ft');
+          var rr = bagsFor(bln.sqft, bln.cols, bp);
+          rr.forEach(function(r){
+            if (!roll[r.code]){ roll[r.code] = {code:r.code,n:r.n,bags:0}; order.push(r.code); }
+            roll[r.code].bags += r.bags; grand += r.bags;
+          });
+          totalSq += bln.sqft;
+        }
+        lines.push('');
+      });
+      if (totalSq > 0){
+        lines.push('— MATERIALS FOR THE JOB (' + totalSq + ' SQ FT) —');
+        lines = lines.concat(order.map(function(c){ return roll[c].code + '  ' + roll[c].n + '  ' + roll[c].bags + ' bags'; }));
+        lines.push('Pre-mark 80  ' + Math.ceil(totalSq / SQFT_PER_BUCKET) + ' buckets');
+        lines.push('Total ' + grand + ' bags');
         lines.push('');
       }
       lines.push('');
