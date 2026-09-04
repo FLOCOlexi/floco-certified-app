@@ -192,6 +192,9 @@
   var ARC_EMAIL = 'Kaylee.Arellano@americanrecycling.com';
   var ARC_TEL   = '+19897255100';
   var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 125;
+  /* Glitter: 1 oz per mixing bucket, two buckets to a bag → 2 oz per bag.
+   * Matches Lexi's example exactly: 40 bags → 80 oz. */
+  var GLITTER_OZ_PER_BAG = 2;
 
   function ordProfile(){
     try { return JSON.parse(localStorage.getItem('floco_auth_v1')) || {}; } catch(e){ return {}; }
@@ -269,7 +272,11 @@
       totalBags += roll[c].bags;
     });
     var lines = order.map(function(c){ return roll[c].code + '  ' + roll[c].n + '  ' + roll[c].bags + ' bags'; });
-    lines.push('Pre-Mark 80  ' + buckets + ' buckets');
+    lines.push('Pre-Mark 80 binder  ' + buckets + ' pails');
+    /* Glitter rides on the order automatically when the job has it. */
+    var jd = {};
+    try { jd = JSON.parse(localStorage.getItem('floco_job_details')) || {}; } catch(e){}
+    if (jd.jdGlitter) lines.push('Glitter  ' + (totalBags * GLITTER_OZ_PER_BAG) + ' oz');
     return { lines: lines, sqft: totalSq, bags: totalBags, buckets: buckets, colors: order.length };
   }
 

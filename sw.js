@@ -1,6 +1,6 @@
 /* FLOCO Certified — service worker.
    Network-first for pages/scripts (so updates ALWAYS show), cache-first for images/fonts. */
-var CACHE = 'floco-certified-v23';
+var CACHE = 'floco-certified-v24';
 var CORE = [
   'home.html', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
   'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',

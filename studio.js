@@ -484,6 +484,9 @@
   // Cover the area FIRST, then split by percentage. Never work out each
   // colour's square footage and round each up, that over-orders every colour.
   var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 125;
+  /* Glitter: 1 oz per mixing bucket, and a bag of granule makes two buckets,
+   * so 2 oz per bag. Checks against Lexi's own example — 40 bags → 80 oz. */
+  var GLITTER_OZ_PER_BAG = 2;
   function coverageBags(a){ return a > 0 ? Math.ceil(a / SQFT_PER_BAG) : 0; }
 
   function bagsFor(area, cols, pct){
@@ -569,6 +572,9 @@
     }).join('');
 
     var ov = bagOverrides(), edited = false;
+    var shownTotal = order.reduce(function(a,c){
+      return a + (Object.prototype.hasOwnProperty.call(ov, c) ? ov[c] : byCode[c].bags);
+    }, 0);
     html += '<div class="matgrp top">What to order &middot; all blends combined<span class="hint">tap a number to change it</span></div>';
     html += order.map(function(code){
       var r = byCode[code];
@@ -582,16 +588,21 @@
         + '<div class="bags tap" data-bagcode="' + code + '" data-calc="' + r.bags + '">' + shown + '<i>bags</i></div></div>';
     }).join('');
     html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#F4F1EA"></span>'
-      + '<div class="code">PM80</div><div class="nm">Pre-mark 80 primer</div>'
-      + '<div class="bags">' + buckets + '<i>buckets</i></div></div>';
-    var shownTotal = order.reduce(function(a,c){
-      return a + (Object.prototype.hasOwnProperty.call(ov, c) ? ov[c] : byCode[c].bags);
-    }, 0);
-    html += '<div class="mattot">' + shownTotal + ' bags &middot; ' + buckets + ' buckets &middot; ' + totalSq + ' sq ft</div>';
+      + '<div class="code">PM80</div><div class="nm">Pre-Mark 80 binder</div>'
+      + '<div class="bags">' + buckets + '<i>pails</i></div></div>';
+    /* Glitter only appears when the job is actually getting it. */
+    var jdG = (jobDetails().jdGlitter || '');
+    if (jdG){
+      var oz = shownTotal * GLITTER_OZ_PER_BAG;
+      html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#DCD6C6"></span>'
+        + '<div class="code">GLIT</div><div class="nm">Glitter<i class="was">' + jdG + ' &middot; 2 oz per bag</i></div>'
+        + '<div class="bags">' + oz + '<i>oz</i></div></div>';
+    }
+    html += '<div class="mattot">' + shownTotal + ' bags &middot; ' + buckets + ' pails &middot; ' + totalSq + ' sq ft</div>';
     if (edited) html += '<div class="matedit">Bag counts edited by hand. <span id="matReset">Put them back to the calculated numbers</span></div>';
     html += '<div class="matwork">Each blend is worked out on its own footage &mdash; <b>sq ft &divide; '
       + SQFT_PER_BAG + ' per bag</b>, split by percentage with the spare bag going to the biggest leftover &mdash; '
-      + 'then the colours are added together into the order above. Primer is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per bucket.</div>';
+      + 'then the colours are added together into the order above. Binder is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per 5-gallon pail.</div>';
     warn.forEach(function(w){ html += '<div class="matwarn">' + w + '</div>'; });
     out.innerHTML = html;
 
