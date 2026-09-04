@@ -478,12 +478,19 @@
     });
     var buckets = Math.ceil(totalSq / SQFT_PER_BUCKET);
 
-    var html = priced.map(function(bl){
-      var p = blendPcts(bl.cols);
-      return '<div class="matsub">' + (bl.name || 'Unnamed blend') + ' &middot; ' + bl.sqft + ' sq ft &middot; '
-        + coverageBags(bl.sqft) + ' bags</div>';
+    /* Two clearly separated parts. The first pass stacked every blend heading
+     * and then printed one merged colour list underneath, so the combined bag
+     * counts read as if they belonged to the last blend named. They don't. */
+    var html = '<div class="matgrp">Each blend on its own</div>';
+    html += priced.map(function(bl){
+      return '<div class="matblend">'
+        + '<span class="bn">' + (bl.name || 'Unnamed blend') + '</span>'
+        + '<span class="bs">' + bl.sqft + ' sq ft</span>'
+        + '<span class="bb">' + coverageBags(bl.sqft) + '<i>bags</i></span>'
+        + '</div>';
     }).join('');
 
+    html += '<div class="matgrp top">What to order &middot; all blends combined</div>';
     html += order.map(function(code){
       var r = byCode[code];
       return '<div class="matline">' + swatchHtml({n:r.n,c:r.c,code:r.code}, 30)
@@ -496,7 +503,7 @@
     html += '<div class="mattot">' + grand + ' bags &middot; ' + buckets + ' buckets &middot; ' + totalSq + ' sq ft</div>';
     html += '<div class="matwork">Each blend is worked out on its own footage &mdash; <b>sq ft &divide; '
       + SQFT_PER_BAG + ' per bag</b>, split by percentage with the spare bag going to the biggest leftover &mdash; '
-      + 'then the colours are added together into one order. Primer is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per bucket.</div>';
+      + 'then the colours are added together into the order above. Primer is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per bucket.</div>';
     warn.forEach(function(w){ html += '<div class="matwarn">' + w + '</div>'; });
     out.innerHTML = html;
   }
