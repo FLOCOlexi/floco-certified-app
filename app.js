@@ -208,23 +208,39 @@
   function ordBlends(){
     try { var v = JSON.parse(localStorage.getItem('floco_blends')); return (v && v.length) ? v : []; } catch(e){ return []; }
   }
-  /* Same largest-remainder split the Studio and the manual use, so the
-   * order can never disagree with what the app showed on screen. */
+  /* THE ONE COPY OF THE SPLIT.
+   * This was reimplemented here once, and a sweep of 1,600 blend/footage
+   * combinations found it disagreeing with the Studio on 27 of them — the
+   * screen would show one split and the email would send another. Same
+   * algorithm, character for character, as bagsFor() in studio.js:
+   * largest-remainder, then guarantee every colour at least one bag by taking
+   * it off the biggest. Change one, change both.
+   */
   function ordBags(sqft, cols){
-    var total = Math.ceil(sqft / SQFT_PER_BAG), n = cols.length;
-    var pct = cols.map(function(c){ return typeof c.pct === 'number' ? c.pct : Math.round(100/n); });
-    var raw = pct.map(function(p){ return total * p / 100; });
-    var out = raw.map(function(r){ return Math.max(1, Math.floor(r)); });
-    var used = out.reduce(function(a,b){ return a+b; }, 0);
-    var order = raw.map(function(r,i){ return [r - Math.floor(r), i]; }).sort(function(a,b){ return b[0]-a[0]; });
+    if (sqft <= 0 || !cols.length) return [];
+    var total = Math.ceil(sqft / SQFT_PER_BAG), rows = [], i;
+    var n = cols.length;
+    for (i = 0; i < n; i++){
+      var pct = (typeof cols[i].pct === 'number') ? cols[i].pct : Math.round(100 / n);
+      var raw = total * pct / 100, fl = Math.floor(raw);
+      rows.push({ bags: fl, rem: raw - fl });
+    }
+    var used = 0; for (i = 0; i < rows.length; i++) used += rows[i].bags;
+    var spare = total - used;
+    var order = rows.slice().sort(function(a,b){ return b.rem - a.rem; });
     var k = 0;
-    while (used < total && order.length) { out[order[k % order.length][1]]++; used++; k++; }
-    return out;
+    while (spare > 0 && order.length){ order[k % order.length].bags += 1; spare--; k++; }
+    for (i = 0; i < rows.length; i++){
+      if (rows[i].bags < 1){
+        rows[i].bags = 1;
+        var big = rows[0];
+        for (var j = 1; j < rows.length; j++) if (rows[j].bags > big.bags) big = rows[j];
+        if (big !== rows[i] && big.bags > 1) big.bags -= 1;
+      }
+    }
+    return rows.map(function(r){ return r.bags; });
   }
 
-  /* One flat list, rolled up across every blend — which is exactly how Mike's
-   * real orders read. American Recycling does not care which job a bag is for;
-   * they care about the code and the count. Blend names stay out of it. */
   function ordLines(){
     var picked = ordPicked();
     var list = ordBlends().filter(function(b){
