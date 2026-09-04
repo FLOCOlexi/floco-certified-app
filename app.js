@@ -196,6 +196,15 @@
   function ordProfile(){
     try { return JSON.parse(localStorage.getItem('floco_auth_v1')) || {}; } catch(e){ return {}; }
   }
+  /* Which blends this particular order covers. Mike's real orders often span
+   * several jobs at once, so an installer needs to tick the ones going in.
+   * Default is everything; the choice is remembered per device. */
+  var PICKKEY = 'floco_order_pick';
+  function ordPicked(){
+    try { var v = JSON.parse(localStorage.getItem(PICKKEY)); return Array.isArray(v) ? v : null; } catch(e){ return null; }
+  }
+  function ordSetPicked(ids){ localStorage.setItem(PICKKEY, JSON.stringify(ids)); }
+
   function ordBlends(){
     try { var v = JSON.parse(localStorage.getItem('floco_blends')); return (v && v.length) ? v : []; } catch(e){ return []; }
   }
@@ -217,7 +226,11 @@
    * real orders read. American Recycling does not care which job a bag is for;
    * they care about the code and the count. Blend names stay out of it. */
   function ordLines(){
-    var list = ordBlends().filter(function(b){ return b.cols && b.cols.length && b.sqft > 0; });
+    var picked = ordPicked();
+    var list = ordBlends().filter(function(b){
+      if (!(b.cols && b.cols.length && b.sqft > 0)) return false;
+      return picked ? picked.indexOf(b.id) > -1 : true;
+    });
     if (!list.length) return null;
     var roll = {}, order = [], totalSq = 0, totalBags = 0;
     list.forEach(function(b){
@@ -235,19 +248,143 @@
     return { lines: lines, sqft: totalSq, bags: totalBags, buckets: buckets, colors: order.length };
   }
 
+
+  /* Everything on Mike's order sheet that a blend can't supply: extra bags of
+   * a colour, more primer, buffings, binder. His sheet lists them as
+   * item / quantity, so this does the same.
+   * 🚫 No prices. Mike's sheet carries FLOCO's negotiated per-bag rates; a
+   * partner's rates are their own, so the order asks for the total with
+   * freight instead of quoting numbers that would be wrong. */
+  var ARC_ITEMS = [
+    ['RH31','Cream'],['RH30','Beige'],['RH32','Brown'],['RH41','Bright Yellow'],['RH40','Mustard'],
+    ['RH50','Orange'],['RH01','Standard Red'],['RH02','Bright Red'],['RH90','Pink'],['RH21','Purple'],
+    ['RH20','Standard Blue'],['RH22','Light Blue'],['RH23','Azure'],['RH26','Turquoise'],
+    ['RH12','Dark Green'],['RH10','Standard Green'],['RH11','Bright Green'],
+    ['RH65','Pale Grey'],['RH61','Light Grey'],['RH60','Dark Grey'],['RH70','Black']
+  ];
+  var ARC_OTHER = [
+    ['PM80','Pre-Mark 80','buckets'],
+    ['BUFF','Buffings','bags'],
+    ['ALI80','Aliphatic 80 binder','pails']
+  ];
+  var XKEY = 'floco_order_extra', SHIPKEY = 'floco_order_ship';
+  function ordExtras(){ try { var v=JSON.parse(localStorage.getItem(XKEY)); return Array.isArray(v)?v:[]; } catch(e){ return []; } }
+  function ordSetExtras(v){ localStorage.setItem(XKEY, JSON.stringify(v)); }
+  function ordShip(){ try { return JSON.parse(localStorage.getItem(SHIPKEY)) || {}; } catch(e){ return {}; } }
+  function ordSetShip(v){ localStorage.setItem(SHIPKEY, JSON.stringify(v)); }
+
+  function renderExtras(){
+    var sel = document.getElementById('xSel'), host = document.getElementById('extraList');
+    if (!sel || !host) return;
+    if (!sel.options.length){
+      var html = '<optgroup label="Rosehill TPV — bags">';
+      ARC_ITEMS.forEach(function(c){ html += '<option value="'+c[0]+'|'+c[1]+'|bags">'+c[0]+'  '+c[1]+'</option>'; });
+      html += '</optgroup><optgroup label="Everything else">';
+      ARC_OTHER.forEach(function(c){ html += '<option value="'+c[0]+'|'+c[1]+'|'+c[2]+'">'+c[1]+'</option>'; });
+      sel.innerHTML = html + '</optgroup>';
+    }
+    var list = ordExtras();
+    host.innerHTML = list.length ? list.map(function(x,i){
+      return '<div class="xrow"><span class="nm">' + (x.code === x.n ? x.n : x.code + '  ' + x.n) + '</span>'
+        + '<span class="q">' + x.qty + ' ' + x.unit + '</span>'
+        + '<span class="rm" data-x="' + i + '">&times;</span></div>';
+    }).join('') : '';
+    host.querySelectorAll('.rm').forEach(function(b){
+      b.addEventListener('click', function(){
+        var l = ordExtras(); l.splice(+b.getAttribute('data-x'),1); ordSetExtras(l); initOrdering();
+      });
+    });
+  }
+
+  function initShipFields(){
+    var d = document.getElementById('ordDate'), pl = document.getElementById('ordPallets');
+    var sh = ordShip();
+    if (d && !d._fw){ d._fw = 1; d.value = sh.date || '';
+      d.addEventListener('input', function(){ var v = ordShip(); v.date = d.value; ordSetShip(v); }); }
+    if (pl && !pl._fw){ pl._fw = 1; pl.value = sh.pallets || '';
+      pl.addEventListener('input', function(){ var v = ordShip(); v.pallets = pl.value; ordSetShip(v); }); }
+    var add = document.getElementById('xAdd');
+    if (add && !add._fw){ add._fw = 1;
+      add.addEventListener('click', function(){
+        var sel = document.getElementById('xSel'), q = document.getElementById('xQty');
+        var parts = (sel.value||'').split('|'); var qty = Math.max(1, parseInt(q.value,10) || 1);
+        if (parts.length < 3) return;
+        var l = ordExtras();
+        /* Same item twice just adds up, rather than listing it twice. */
+        var hit = null;
+        l.forEach(function(x){ if (x.code === parts[0] && x.unit === parts[2]) hit = x; });
+        if (hit) hit.qty += qty; else l.push({ code:parts[0], n:parts[1], qty:qty, unit:parts[2] });
+        ordSetExtras(l); q.value = 1; initOrdering();
+        toast(parts[1] + ' added to the order');
+      });
+    }
+  }
+
+  function niceDate(iso){
+    var b = (iso||'').split('-'); if (b.length !== 3) return iso;
+    var M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return M[+b[1]-1] + ' ' + (+b[2]) + ', ' + b[0];
+  }
+  var CHECK = '<svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>';
+  function renderPicker(){
+    var host = document.getElementById('pickList');
+    if (!host) return;
+    var all = ordBlends().filter(function(b){ return b.cols && b.cols.length && b.sqft > 0; });
+    if (!all.length){
+      host.innerHTML = '<div class="pickempty">No blends with square footage yet. Build them in the Design Studio and they show up here.</div>';
+      return;
+    }
+    var picked = ordPicked();
+    host.innerHTML = all.map(function(b){
+      var on = picked ? picked.indexOf(b.id) > -1 : true;
+      return '<div class="pick ' + (on ? 'on' : 'off') + '" data-id="' + b.id + '">'
+        + '<span class="bx">' + CHECK + '</span>'
+        + '<span class="nm">' + (b.name || 'Unnamed blend') + '</span>'
+        + '<span class="sq">' + b.sqft + ' sq ft</span>'
+        + '<span class="bg">' + Math.ceil(b.sqft / SQFT_PER_BAG) + '</span>'
+        + '</div>';
+    }).join('');
+    host.querySelectorAll('.pick').forEach(function(row){
+      row.addEventListener('click', function(){
+        var ids = ordPicked();
+        if (!ids) ids = all.map(function(b){ return b.id; });
+        var id = row.getAttribute('data-id'), i = ids.indexOf(id);
+        if (i > -1) { if (ids.length === 1) return; ids.splice(i,1); } else ids.push(id);
+        ordSetPicked(ids);
+        initOrdering();
+      });
+    });
+  }
+
   function initOrdering(){
     var btn = document.getElementById('ordEmail');
     if (!btn) return;
+    renderPicker();
+    renderExtras();
+    initShipFields();
     var data = ordLines();
 
+    /* The calculator at the top of the page reflects the same selection —
+     * it used to show a hard-coded 1,200 sq ft that was true for nobody. */
+    var cs = document.getElementById('calcSq'), cb = document.getElementById('calcBags');
+    if (cs) cs.textContent = data ? data.sqft.toLocaleString() : '—';
+    if (cb) cb.textContent = data ? (data.bags + ' bags') : '—';
+
     var sum = document.getElementById('ordSummary');
-    if (sum && data){
-      sum.innerHTML = '<b>' + data.bags + ' bags</b> across ' + data.colors + ' colours &middot; <b>'
-        + data.buckets + ' buckets</b> of Pre-Mark 80<br>' + data.sqft + ' sq ft total, already worked out.';
+    var nx = ordExtras().length;
+    if (sum){
+      if (data) sum.innerHTML = '<b>' + data.bags + ' bags</b> across ' + data.colors + ' colours &middot; <b>'
+        + data.buckets + ' buckets</b> of Pre-Mark 80' + (nx ? ' &middot; <b>' + nx + '</b> added by hand' : '')
+        + '<br>' + data.sqft + ' sq ft total, already worked out.';
+      else if (nx) sum.innerHTML = '<b>' + nx + '</b> item' + (nx===1?'':'s') + ' added by hand. Tick a blend above to add its bag counts.';
     }
 
+    /* initOrdering re-runs on every tick, and wire() only ever binds once —
+     * so read the current selection at click time, not at bind time. */
     wire(btn, function(){
       var p = ordProfile();
+      var data = ordLines();
+      var sh = ordShip();
       var subject = 'New Order';
       var body = [
         'Kaylee,',
@@ -257,14 +394,18 @@
         /* No city prefilled — a partner ships to their own terminal or
          * warehouse, which is rarely where their profile says they are. */
         'Ship to: [ADDRESS]',
-        'Requested delivery: [DATE]',
+        'Requested delivery: ' + (sh.date ? niceDate(sh.date) : '[DATE]'),
+        'Pallets: ' + (sh.pallets ? sh.pallets : '[HOW MANY]'),
         'Contact for this order: [YOUR NAME] · [YOUR PHONE]',
         ''
       ];
       if (data) body = body.concat(data.lines);
-      else body = body.concat([
+      var extras = ordExtras();
+      if (extras.length) extras.forEach(function(x){
+        body.push((x.code === x.n ? x.n : x.code + '  ' + x.n) + '  ' + x.qty + ' ' + x.unit);
+      });
+      if (!data && !extras.length) body = body.concat([
         'RH31  Cream  00 bags',
-        'RH65  Pale Grey  00 bags',
         'Pre-Mark 80  0 buckets'
       ]);
       body.push('');

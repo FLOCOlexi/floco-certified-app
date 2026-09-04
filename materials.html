@@ -66,6 +66,33 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .ordbtn{display:flex;align-items:center;justify-content:center;gap:9px;height:50px;border-radius:14px;background:linear-gradient(120deg,#3BBFB8,#2A9D96);color:#04201E;font-family:'Nunito';font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(58,191,184,.28);-webkit-tap-highlight-color:transparent;}
 .ordcall{display:flex;align-items:center;justify-content:center;gap:9px;height:46px;margin-top:9px;border-radius:14px;border:1px solid var(--line);color:var(--gold-lt);font-family:'Nunito';font-weight:900;font-size:13px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ordnote{font-family:'Inter';font-size:9px;line-height:1.5;color:var(--muted);margin-top:9px;}
+
+.calc .pickl{font-family:'Inter';font-weight:800;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:14px 0 7px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);}
+.pick{display:flex;align-items:center;gap:11px;padding:8px 0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.pick .bx{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);flex:none;display:flex;align-items:center;justify-content:center;}
+.pick.on .bx{background:var(--teal,#3BBFB8);border-color:var(--teal,#3BBFB8);}
+.pick .bx svg{width:13px;height:13px;stroke:#04201E;stroke-width:3;fill:none;opacity:0;}
+.pick.on .bx svg{opacity:1;}
+.pick .nm{flex:1;min-width:0;font-family:'Nunito';font-weight:900;font-size:12.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pick.off .nm{opacity:.45;}
+.pick .sq{flex:none;font-family:'Inter';font-size:10px;color:var(--muted);}
+.pick .bg{flex:none;width:52px;text-align:right;font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);}
+.pick.off .bg{opacity:.4;}
+.pickempty{font-family:'Inter';font-size:10px;line-height:1.55;color:var(--muted);padding:4px 0 2px;}
+
+.xadd{display:flex;gap:8px;align-items:center;margin-top:9px;}
+.xadd select{flex:1;min-width:0;height:40px;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Inter';font-size:11.5px;padding:0 9px;outline:none;}
+.xadd input{width:60px;height:40px;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;font-size:14px;text-align:center;outline:none;}
+.xbtn{flex:none;height:40px;padding:0 15px;line-height:40px;border-radius:11px;border:1px solid var(--line);color:var(--gold-lt);font-family:'Nunito';font-weight:900;font-size:12.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.xrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06);}
+.xrow:first-child{border-top:0;}
+.xrow .nm{flex:1;min-width:0;font-family:'Inter';font-size:11.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.xrow .q{flex:none;font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);}
+.xrow .rm{flex:none;width:30px;height:30px;line-height:30px;text-align:center;color:var(--muted);font-size:15px;cursor:pointer;}
+.shipg{display:flex;gap:9px;}
+.shipg label{flex:1;min-width:0;display:block;}
+.shipg label span{display:block;font-family:'Inter';font-weight:700;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.shipg input{width:100%;height:40px;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;font-size:13px;padding:0 10px;outline:none;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -74,10 +101,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=14"></script>
+<script src="accounts.js?v=17"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=14"></script>
+<script defer src="app.js?v=17"></script>
 </head>
 <body>
 <div class="screen">
@@ -96,9 +123,25 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="calc">
       <div class="t">How much will I need?</div>
       <div class="row">
-        <div class="in"><div class="cap">Square feet</div><div class="v">1,200</div></div>
-        <div class="eq">→</div>
-        <div class="out"><div class="cap">Batches</div><div class="v">24 batches</div></div>
+        <div class="in"><div class="cap">Square feet</div><div class="v" id="calcSq">&mdash;</div></div>
+        <div class="eq">&rarr;</div>
+        <div class="out"><div class="cap">Bags</div><div class="v" id="calcBags">&mdash;</div></div>
+      </div>
+      <div class="pickl">Which blends are you ordering for?</div>
+      <div id="pickList"><div class="pickempty">No blends yet. Build them in the Design Studio and they show up here.</div></div>
+
+      <div class="pickl">Anything else on this order?</div>
+      <div id="extraList"></div>
+      <div class="xadd">
+        <select id="xSel"></select>
+        <input id="xQty" type="number" inputmode="numeric" min="1" value="1">
+        <div class="xbtn" id="xAdd">Add</div>
+      </div>
+
+      <div class="pickl">Shipping</div>
+      <div class="shipg">
+        <label><span>Requested delivery</span><input id="ordDate" type="date"></label>
+        <label><span>Pallets</span><input id="ordPallets" type="number" inputmode="numeric" min="0" placeholder="&mdash;"></label>
       </div>
     </div>
 

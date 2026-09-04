@@ -325,16 +325,17 @@
           + '<div class="prm" data-rm="'+bi+'" data-i="'+i+'">&times;</div>'
         + '</div>';
       }).join('');
+      var empty = bl.cols.length === 0;
       return '<div class="blendcard">'
         + '<div class="bnrow">'
         +   '<canvas class="bprev" data-prev="'+bi+'"></canvas>'
         +   '<input class="bname" data-nm="'+bi+'" value="'+(bl.name||'').replace(/"/g,'&quot;')+'" placeholder="Name this blend">'
         +   '<div class="bdel" data-del="'+bi+'">&times;</div>'
         + '</div>'
-        + rows
-        + '<div class="btot"><span class="l">Total</span><span><span class="v '+(tot===100?'ok':'off')+'">'+tot+'%</span>'
+        + (empty ? '<div class="bempty2">Empty — add colours to start this blend.</div>' : rows)
+        + (empty ? '' : '<div class="btot"><span class="l">Total</span><span><span class="v '+(tot===100?'ok':'off')+'">'+tot+'%</span>'
         +   (tot!==100 ? '<span class="bfix" data-bal="'+bi+'">balance to 100</span>' : '')
-        + '</span></div>'
+        + '</span></div>')
         + (bl.cols.length<6 ? '<div class="baddc" data-add="'+bi+'">+ Add a color</div>' : '')
         + '<div class="bsq"><span class="cap">Square feet</span><input type="number" inputmode="numeric" min="0" placeholder="0" data-sq="'+bi+'" value="'+(bl.sqft||'')+'"></div>'
       + '</div>';
@@ -365,8 +366,10 @@
     el.querySelectorAll('.prm').forEach(function(b){
       b.addEventListener('click', function(){
         var L=blends(), bi=+b.getAttribute('data-rm'), i=+b.getAttribute('data-i');
-        if(L[bi].cols.length<2){ toast('Keep at least one color'); return; }
-        /* No undo, and this sits beside the + stepper. Ask first. */
+        /* A blend is allowed to go completely empty — clearing it out and
+         * starting again is a normal thing to want, and nobody is going to
+         * leave it that way. No undo though, and this sits beside the +
+         * stepper, so ask first. */
         if(!confirm('Remove '+L[bi].cols[i].n+' from "'+(L[bi].name||'this blend')+'"?')) return;
         var p=blendPcts(L[bi].cols);
         for(var k=0;k<L[bi].cols.length;k++) L[bi].cols[k].pct=p[k];
