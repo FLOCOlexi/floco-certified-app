@@ -243,6 +243,15 @@
       totalSq += b.sqft;
     });
     var buckets = Math.ceil(totalSq / SQFT_PER_BUCKET);
+    /* A rep can nudge a bag count in the Studio (FLOCO's own sheets do it).
+     * The order has to send what they decided, not what the math proposed. */
+    var ov = {};
+    try { ov = JSON.parse(localStorage.getItem('floco_bag_override')) || {}; } catch(e){}
+    totalBags = 0;
+    order.forEach(function(c){
+      if (Object.prototype.hasOwnProperty.call(ov, c)) roll[c].bags = ov[c];
+      totalBags += roll[c].bags;
+    });
     var lines = order.map(function(c){ return roll[c].code + '  ' + roll[c].n + '  ' + roll[c].bags + ' bags'; });
     lines.push('Pre-Mark 80  ' + buckets + ' buckets');
     return { lines: lines, sqft: totalSq, bags: totalBags, buckets: buckets, colors: order.length };
@@ -374,9 +383,9 @@
     var nx = ordExtras().length;
     if (sum){
       if (data) sum.innerHTML = '<b>' + data.bags + ' bags</b> across ' + data.colors + ' colours &middot; <b>'
-        + data.buckets + ' buckets</b> of Pre-Mark 80' + (nx ? ' &middot; <b>' + nx + '</b> added by hand' : '')
+        + data.buckets + ' buckets</b> of Pre-Mark 80' + (nx ? ' &middot; <b>' + nx + '</b> extra item' + (nx===1?'':'s') : '')
         + '<br>' + data.sqft + ' sq ft total, already worked out.';
-      else if (nx) sum.innerHTML = '<b>' + nx + '</b> item' + (nx===1?'':'s') + ' added by hand. Tick a blend above to add its bag counts.';
+      else if (nx) sum.innerHTML = '<b>' + nx + '</b> extra item' + (nx===1?'':'s') + '. Tick a blend above to add its bag counts.';
     }
 
     /* initOrdering re-runs on every tick, and wire() only ever binds once —

@@ -511,6 +511,24 @@
     return rows;
   }
 
+
+  /* ================= HAND-ADJUSTED BAG COUNTS ===================
+   * FLOCO's own sheets get nudged. On Bill's 589 sq ft job the split came out
+   * 14/5/5/1 and the sheet went out as 13/5/5/2 — a bag moved to the blue,
+   * because one bag of a 5% accent is thin on a real floor.
+   *
+   * So the math proposes and the rep decides. An override is remembered per
+   * colour, shown as edited, and can be dropped back to the calculated number.
+   * ============================================================== */
+  var OVKEY = 'floco_bag_override';
+  function bagOverrides(){ try { return JSON.parse(localStorage.getItem(OVKEY)) || {}; } catch(e){ return {}; } }
+  function setBagOverride(code, n){
+    var o = bagOverrides();
+    if (n === null) delete o[code]; else o[code] = n;
+    localStorage.setItem(OVKEY, JSON.stringify(o));
+  }
+  function clearBagOverrides(){ localStorage.removeItem(OVKEY); }
+
   function renderMaterials(){
     var out = document.getElementById('matout'); if (!out) return;
     var list = blends();
@@ -550,22 +568,48 @@
         + '</div>';
     }).join('');
 
-    html += '<div class="matgrp top">What to order &middot; all blends combined</div>';
+    var ov = bagOverrides(), edited = false;
+    html += '<div class="matgrp top">What to order &middot; all blends combined<span class="hint">tap a number to change it</span></div>';
     html += order.map(function(code){
       var r = byCode[code];
-      return '<div class="matline">' + swatchHtml({n:r.n,c:r.c,code:r.code}, 30)
-        + '<div class="code">' + r.code + '</div><div class="nm">' + r.n + '</div>'
-        + '<div class="bags">' + r.bags + '<i>bags</i></div></div>';
+      var has = Object.prototype.hasOwnProperty.call(ov, code);
+      var shown = has ? ov[code] : r.bags;
+      if (has && ov[code] !== r.bags) edited = true;
+      return '<div class="matline' + (has && ov[code] !== r.bags ? ' ed' : '') + '">'
+        + swatchHtml({n:r.n,c:r.c,code:r.code}, 30)
+        + '<div class="code">' + r.code + '</div><div class="nm">' + r.n
+        + (has && ov[code] !== r.bags ? '<i class="was">math said ' + r.bags + '</i>' : '') + '</div>'
+        + '<div class="bags tap" data-bagcode="' + code + '" data-calc="' + r.bags + '">' + shown + '<i>bags</i></div></div>';
     }).join('');
     html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#F4F1EA"></span>'
       + '<div class="code">PM80</div><div class="nm">Pre-mark 80 primer</div>'
       + '<div class="bags">' + buckets + '<i>buckets</i></div></div>';
-    html += '<div class="mattot">' + grand + ' bags &middot; ' + buckets + ' buckets &middot; ' + totalSq + ' sq ft</div>';
+    var shownTotal = order.reduce(function(a,c){
+      return a + (Object.prototype.hasOwnProperty.call(ov, c) ? ov[c] : byCode[c].bags);
+    }, 0);
+    html += '<div class="mattot">' + shownTotal + ' bags &middot; ' + buckets + ' buckets &middot; ' + totalSq + ' sq ft</div>';
+    if (edited) html += '<div class="matedit">Bag counts edited by hand. <span id="matReset">Put them back to the calculated numbers</span></div>';
     html += '<div class="matwork">Each blend is worked out on its own footage &mdash; <b>sq ft &divide; '
       + SQFT_PER_BAG + ' per bag</b>, split by percentage with the spare bag going to the biggest leftover &mdash; '
       + 'then the colours are added together into the order above. Primer is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per bucket.</div>';
     warn.forEach(function(w){ html += '<div class="matwarn">' + w + '</div>'; });
     out.innerHTML = html;
+
+    out.querySelectorAll('.bags.tap').forEach(function(el){
+      el.addEventListener('click', function(){
+        var code = el.getAttribute('data-bagcode');
+        var calc = +el.getAttribute('data-calc');
+        var cur  = Object.prototype.hasOwnProperty.call(bagOverrides(), code) ? bagOverrides()[code] : calc;
+        var v = prompt('How many bags of ' + code + '?\n\nThe math works it out as ' + calc + '.', cur);
+        if (v === null) return;
+        v = parseInt(v, 10);
+        if (!isFinite(v) || v < 0) { toast('Enter a whole number'); return; }
+        setBagOverride(code, v === calc ? null : v);
+        renderMaterials();
+      });
+    });
+    var rs = document.getElementById('matReset');
+    if (rs) rs.addEventListener('click', function(){ clearBagOverrides(); renderMaterials(); });
   }
 
   // ---- coping & edges ----
