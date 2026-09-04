@@ -591,16 +591,20 @@
         + '<div class="bags tap" data-bagcode="' + code + '" data-calc="' + r.bags + '">' + shown + '<i>bags</i></div></div>';
     }).join('');
     html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#F4F1EA"></span>'
-      + '<div class="code">PM80</div><div class="nm">Pre-Mark 80 binder</div>'
+      + '<div class="code">PM80</div><div class="nm">Pre-Mark 80 binder<i class="was">1 pail per ' + SQFT_PER_BUCKET + ' sq ft</i></div>'
       + '<div class="bags">' + buckets + '<i>pails</i></div></div>';
-    /* Glitter only appears when the job is actually getting it. */
+    /* Glitter is always shown, on or off, with a switch right here.
+     * It used to appear only once someone had opened the collapsed Job Details
+     * card and turned it on — so if you had not, there was no glitter line and
+     * no hint that the app could work it out at all. */
     var jdG = (jobDetails().jdGlitter || '');
-    if (jdG){
-      var oz = shownTotal * GLITTER_OZ_PER_BAG;
-      html += '<div class="matline"><span class="chip" style="width:30px;height:30px;background:#DCD6C6"></span>'
-        + '<div class="code">GLIT</div><div class="nm">Glitter<i class="was">' + jdG + ' &middot; 2 oz per bag</i></div>'
-        + '<div class="bags">' + oz + '<i>oz</i></div></div>';
-    }
+    var oz = shownTotal * GLITTER_OZ_PER_BAG;
+    html += '<div class="matline glit' + (jdG ? '' : ' off') + '">'
+      + '<span class="chip" style="width:30px;height:30px;background:#DCD6C6"></span>'
+      + '<div class="code">GLIT</div>'
+      + '<div class="nm">Glitter<i class="was">' + (jdG ? jdG + ' &middot; 2 oz per bag' : 'not on this job') + '</i></div>'
+      + '<div class="bags">' + (jdG ? oz + '<i>oz</i>' : '<span class="glitoff">add</span>') + '</div>'
+      + '</div>';
     html += '<div class="mattot">' + shownTotal + ' bags &middot; ' + buckets + ' pails &middot; ' + totalSq + ' sq ft</div>';
     if (edited) html += '<div class="matedit">Bag counts edited by hand. <span id="matReset">Put them back to the calculated numbers</span></div>';
     html += '<div class="matwork">Each blend is worked out on its own footage &mdash; <b>sq ft &divide; '
@@ -608,6 +612,16 @@
       + 'then the colours are added together into the order above. Binder is total sq ft &divide; ' + SQFT_PER_BUCKET + ' per 5-gallon pail.</div>';
     warn.forEach(function(w){ html += '<div class="matwarn">' + w + '</div>'; });
     out.innerHTML = html;
+
+    var gl = out.querySelector('.matline.glit');
+    if (gl) gl.addEventListener('click', function(){
+      var v = jobDetails();
+      v.jdGlitter = v.jdGlitter ? '' : 'Yes';
+      saveJobDetails(v);
+      var sel = document.getElementById('jdGlitter'); if (sel) sel.value = v.jdGlitter;
+      var sm = document.getElementById('jdSummary'); if (sm) sm.textContent = jdSummaryText();
+      renderMaterials();
+    });
 
     out.querySelectorAll('.bags.tap').forEach(function(el){
       el.addEventListener('click', function(){
