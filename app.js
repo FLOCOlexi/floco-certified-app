@@ -248,17 +248,12 @@
 
     wire(btn, function(){
       var p = ordProfile();
-      /* ARC tracks orders by PO. Mike's run MMDDYY-C-WH-MW; a partner just
-       * needs something unique and dated, and can add their own initials. */
-      var d = new Date();
-      var po = ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2) + String(d.getFullYear()).slice(-2);
-      var subject = 'New Order — PO# ' + po;
+      var subject = 'New Order';
       var body = [
         'Kaylee,',
         '',
         'Here is a new order. Could you get this placed and let me know the total with freight, and I will get payment over to you.',
         '',
-        'PO# ' + po,
         /* No city prefilled — a partner ships to their own terminal or
          * warehouse, which is rarely where their profile says they are. */
         'Ship to: [ADDRESS]',
@@ -282,7 +277,7 @@
       if (p.company) body.push(p.company);
 
       var href = 'mailto:' + ARC_EMAIL + '?subject=' + encodeURIComponent(subject)
-               + '&body=' + encodeURIComponent(body.join('\n'));
+               + '&body=' + encodeURIComponent(body.join('\r\n'));
       if (href.length > 1900) toast('Big order — check nothing was cut off before sending');
       location.href = href;
     });
