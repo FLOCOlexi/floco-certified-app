@@ -89,10 +89,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .xrow .nm{flex:1;min-width:0;font-family:'Inter';font-size:11.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .xrow .q{flex:none;font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);}
 .xrow .rm{flex:none;width:30px;height:30px;line-height:30px;text-align:center;color:var(--muted);font-size:15px;cursor:pointer;}
-.shipg{display:flex;gap:9px;}
-.shipg label{flex:1;min-width:0;display:block;}
-.shipg label span{display:block;font-family:'Inter';font-weight:700;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.shipg input{width:100%;height:40px;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;font-size:13px;padding:0 10px;outline:none;}
+.shipg{display:grid;grid-template-columns:2fr 1fr;gap:10px;}
+.shipg label{min-width:0;display:block;}
+.shipg label span{display:block;font-family:'Inter';font-weight:700;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.shipg input{width:100%;min-width:0;height:40px;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;font-size:13px;padding:0 10px;outline:none;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -101,10 +101,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=17"></script>
+<script src="accounts.js?v=18"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=17"></script>
+<script defer src="app.js?v=18"></script>
 </head>
 <body>
 <div class="screen">
@@ -140,7 +140,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 
       <div class="pickl">Shipping</div>
       <div class="shipg">
-        <label><span>Requested delivery</span><input id="ordDate" type="date"></label>
+        <label><span>Delivery date</span><input id="ordDate" type="date"></label>
         <label><span>Pallets</span><input id="ordPallets" type="number" inputmode="numeric" min="0" placeholder="&mdash;"></label>
       </div>
     </div>
