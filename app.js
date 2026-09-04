@@ -191,7 +191,10 @@
    * ================================================================== */
   var ARC_EMAIL = 'Kaylee.Arellano@americanrecycling.com';
   var ARC_TEL   = '+19897255100';
-  var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 125;
+  /* Pre-Mark 80 is the BINDER, not a primer. 150 sq ft per 5-gallon pail —
+   * Brett confirmed this on 2026-09-04 over the ~124 the old design sheets
+   * implied, so those sheets were padding. */
+  var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 150;
   /* Glitter: 1 oz per mixing bucket, two buckets to a bag → 2 oz per bag.
    * Matches Lexi's example exactly: 40 bags → 80 oz. */
   var GLITTER_OZ_PER_BAG = 2;
