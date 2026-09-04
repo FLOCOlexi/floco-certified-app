@@ -336,6 +336,7 @@
         + (empty ? '' : '<div class="btot"><span class="l">Total</span><span><span class="v '+(tot===100?'ok':'off')+'">'+tot+'%</span>'
         +   (tot!==100 ? '<span class="bfix" data-bal="'+bi+'">balance to 100</span>' : '')
         + '</span></div>')
+        + (empty ? '' : '<div class="bclear" data-clr="'+bi+'">Clear all colours</div>')
         + (bl.cols.length<6 ? '<div class="baddc" data-add="'+bi+'">+ Add a color</div>' : '')
         + '<div class="bsq"><span class="cap">Square feet</span><input type="number" inputmode="numeric" min="0" placeholder="0" data-sq="'+bi+'" value="'+(bl.sqft||'')+'"></div>'
       + '</div>';
@@ -374,6 +375,13 @@
         var p=blendPcts(L[bi].cols);
         for(var k=0;k<L[bi].cols.length;k++) L[bi].cols[k].pct=p[k];
         L[bi].cols.splice(i,1); saveBlends(L); renderBlends();
+      });
+    });
+    el.querySelectorAll('.bclear').forEach(function(b){
+      b.addEventListener('click', function(){
+        var L=blends(), bi=+b.getAttribute('data-clr');
+        if(!confirm('Clear every colour out of "'+(L[bi].name||'this blend')+'" and start again?')) return;
+        L[bi].cols=[]; saveBlends(L); renderBlends();
       });
     });
     el.querySelectorAll('.bdel').forEach(function(b){
