@@ -216,6 +216,25 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .matblend .bs{flex:none;font-family:'Inter';font-size:10px;color:var(--muted);}
 .matblend .bb{flex:none;width:56px;text-align:right;font-family:'Nunito';font-weight:900;font-size:14px;color:#fff;}
 .matblend .bb i{font-family:'Inter';font-style:normal;font-weight:600;font-size:8.5px;color:var(--muted);margin-left:3px;}
+
+/* ---- job details (the spec-sheet fields, folded away) ---------------- */
+.jd{border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);margin-bottom:8px;overflow:hidden;}
+.jdh{display:flex;align-items:center;gap:9px;padding:14px 15px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.jdh .t{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;flex:none;}
+.jdh .s{flex:1;min-width:0;font-family:'Inter';font-size:9.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.jdh .c{flex:none;font-family:'Nunito';font-weight:900;font-size:17px;color:var(--gold-lt);line-height:1;}
+.jd.open .jdh .c{transform:rotate(45deg);}
+.jdb{display:none;padding:0 15px 15px;}
+.jd.open .jdb{display:block;}
+.jdl{font-family:'Inter';font-weight:800;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-lt);margin:12px 0 8px;padding-top:11px;border-top:1px solid rgba(255,255,255,.08);}
+.jdl:first-child{border-top:0;padding-top:0;margin-top:0;}
+.jdg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+.jdg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:9px;}
+.jd label{display:block;min-width:0;}
+.jd label span{display:block;font-family:'Inter';font-weight:700;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.jd input,.jd select,.jd textarea{width:100%;min-width:0;border-radius:11px;background:rgba(8,20,34,.55);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;font-size:13px;padding:0 10px;height:40px;outline:none;-webkit-appearance:none;}
+.jd textarea{height:auto;padding:10px;font-family:'Inter';font-weight:400;font-size:11.5px;line-height:1.5;resize:vertical;}
+.jdfull{margin-bottom:9px;}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
@@ -225,11 +244,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=19"></script>
+<script src="accounts.js?v=20"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=19"></script>
-<script defer src="studio.js?v=19"></script>
+<script defer src="app.js?v=20"></script>
+<script defer src="studio.js?v=20"></script>
 </head>
 <body>
 <div class="screen">
@@ -265,6 +284,40 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="basenote">Name each blend so the crew knows what goes where &mdash; &ldquo;Floor blend&rdquo;, &ldquo;Front porch&rdquo;, &ldquo;Harry&rsquo;s blend&rdquo;. Add as many as the job needs.</div>
     <div id="blends"></div>
     <div class="addblend" id="addBlend"><span class="p">+</span> Add another blend</div>
+
+    <div class="jd" id="jobDetails">
+      <div class="jdh" id="jdToggle"><span class="t">Job details</span><span class="s" id="jdSummary">Coping, steps, glitter, inlay &amp; notes</span><span class="c">+</span></div>
+      <div class="jdb" id="jdBody">
+        <div class="jdl">Coping &amp; edges</div>
+        <div class="jdg">
+          <label><span>Linear feet</span><input id="jdCopeLf" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+          <label><span>Width (in)</span><input id="jdCopeW" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+        </div>
+        <div class="jdg">
+          <label><span>Coping cut #</span><select id="jdCut"><option value="">&mdash;</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></label>
+          <label><span>Schluter</span><select id="jdSchluter"><option value="">None</option><option>White</option><option>Black</option></select></label>
+        </div>
+        <div class="jdg">
+          <label><span>Faux coping</span><select id="jdFaux"><option value="">No</option><option>Yes</option></select></label>
+          <label><span>Dist. from edge (in)</span><input id="jdEdge" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+        </div>
+
+        <div class="jdl">Step faces &amp; risers</div>
+        <div class="jdg3">
+          <label><span>Width (in)</span><input id="jdStepW" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+          <label><span>Height (in)</span><input id="jdStepH" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+          <label><span>How many</span><input id="jdStepN" type="number" inputmode="numeric" min="0" placeholder="&mdash;"></label>
+        </div>
+
+        <div class="jdl">Additions</div>
+        <div class="jdg">
+          <label><span>Glitter</span><select id="jdGlitter"><option value="">No</option><option>Yes</option><option>Yes — extra</option></select></label>
+          <label><span>Mosaic tiles</span><select id="jdMosaic"><option value="">No</option><option>Yes</option></select></label>
+        </div>
+        <label class="jdfull"><span>Inlay</span><textarea id="jdInlay" rows="2" placeholder="Sun, thin black outline, shade turquoise, standard blue and cream mostly in the centre"></textarea></label>
+        <label class="jdfull"><span>Notes for the crew</span><textarea id="jdNotes" rows="2" placeholder="Do not cover coping. Gate code. Where to stage material."></textarea></label>
+      </div>
+    </div>
     <div class="disc">The little circle beside each blend is a <b>rough idea of the colour mixture only</b> &mdash; generated from the percentages, not a photo. The real surface will not look like that: poured rubber has depth and texture a flat preview can&rsquo;t show. Always confirm the final look against physical samples.</div>
 
     <!-- Materials -->

@@ -272,6 +272,55 @@
     }
   }
 
+
+  /* ================= JOB DETAILS =================================
+   * The fields from FLOCO's real design sheet that a blend can't carry:
+   * coping measurements and cut, step risers, glitter, the inlay
+   * description, and notes for the crew.
+   *
+   * Folded away behind one header on purpose. Lexi: "without making it too
+   * many steps and too busy." An installer who doesn't need it never opens
+   * it; the header summarises what's filled in so nothing hides silently.
+   * ============================================================== */
+  var JDKEY = 'floco_job_details';
+  var JD_FIELDS = ['jdCopeLf','jdCopeW','jdCut','jdSchluter','jdFaux','jdEdge',
+                   'jdStepW','jdStepH','jdStepN','jdGlitter','jdMosaic','jdInlay','jdNotes'];
+  function jobDetails(){ try { return JSON.parse(localStorage.getItem(JDKEY)) || {}; } catch(e){ return {}; } }
+  function saveJobDetails(v){ localStorage.setItem(JDKEY, JSON.stringify(v)); }
+
+  function jdSummaryText(){
+    var d = jobDetails(), bits = [];
+    if (d.jdCopeLf && d.jdCopeW) bits.push('coping ' + d.jdCopeLf + 'ft × ' + d.jdCopeW + 'in');
+    else if (d.jdCut) bits.push('coping cut ' + d.jdCut);
+    if (d.jdStepW && d.jdStepH) bits.push((d.jdStepN || 1) + ' step' + ((d.jdStepN||1) == 1 ? '' : 's'));
+    if (d.jdGlitter) bits.push('glitter');
+    if (d.jdMosaic) bits.push('mosaic');
+    if (d.jdInlay) bits.push('inlay');
+    if (d.jdNotes) bits.push('notes');
+    return bits.length ? bits.join(' · ') : 'Coping, steps, glitter, inlay & notes';
+  }
+
+  function initJobDetails(){
+    var card = document.getElementById('jobDetails'); if (!card) return;
+    var d = jobDetails();
+    JD_FIELDS.forEach(function(id){
+      var el = document.getElementById(id); if (!el) return;
+      if (d[id] !== undefined) el.value = d[id];
+      el.addEventListener('input', function(){
+        var v = jobDetails(); v[id] = el.value; saveJobDetails(v);
+        document.getElementById('jdSummary').textContent = jdSummaryText();
+      });
+      el.addEventListener('change', function(){
+        var v = jobDetails(); v[id] = el.value; saveJobDetails(v);
+        document.getElementById('jdSummary').textContent = jdSummaryText();
+      });
+    });
+    document.getElementById('jdSummary').textContent = jdSummaryText();
+    document.getElementById('jdToggle').addEventListener('click', function(){
+      card.classList.toggle('open');
+    });
+  }
+
   function renderBases(){
     var el=document.getElementById('bases'); if(!el) return;
     el.innerHTML = BASES.map(function(b){
@@ -564,7 +613,7 @@
     }
 
 
-    renderBases(); renderBlends();
+    renderBases(); renderBlends(); initJobDetails();
     var ab=document.getElementById('addBlend');
     if(ab) ab.addEventListener('click', function(){
       var L=blends();
@@ -618,6 +667,31 @@
         lines.push('Total ' + grand + ' bags');
         lines.push('');
       }
+      var jd = jobDetails();
+      var jdl = [];
+      if (jd.jdCopeLf || jd.jdCopeW || jd.jdCut || jd.jdSchluter || jd.jdFaux || jd.jdEdge){
+        jdl.push('— COPING & EDGES —');
+        if (jd.jdCopeLf || jd.jdCopeW) jdl.push('Measurements: ' + (jd.jdCopeLf||'?') + ' linear ft × ' + (jd.jdCopeW||'?') + ' in wide');
+        if (jd.jdCut) jdl.push('Coping cut #' + jd.jdCut);
+        if (jd.jdFaux) jdl.push('Faux coping: ' + jd.jdFaux + (jd.jdEdge ? ', ' + jd.jdEdge + ' in from the edge' : ''));
+        else if (jd.jdEdge) jdl.push('Distance from edge: ' + jd.jdEdge + ' in');
+        if (jd.jdSchluter) jdl.push('Schluter bracket: ' + jd.jdSchluter);
+        jdl.push('');
+      }
+      if (jd.jdStepW || jd.jdStepH){
+        jdl.push('— STEP FACES & RISERS —');
+        jdl.push((jd.jdStepN ? jd.jdStepN + ' × ' : '') + (jd.jdStepW||'?') + ' in wide × ' + (jd.jdStepH||'?') + ' in high');
+        jdl.push('');
+      }
+      if (jd.jdGlitter || jd.jdMosaic || jd.jdInlay){
+        jdl.push('— ADDITIONS —');
+        if (jd.jdGlitter) jdl.push('Glitter: ' + jd.jdGlitter);
+        if (jd.jdMosaic) jdl.push('Mosaic tiles: ' + jd.jdMosaic);
+        if (jd.jdInlay) jdl.push('Inlay: ' + jd.jdInlay);
+        jdl.push('');
+      }
+      if (jd.jdNotes){ jdl.push('— NOTES —'); jdl.push(jd.jdNotes); jdl.push(''); }
+      lines = lines.concat(jdl);
       lines.push('');
       function group(type){ return b.filter(function(x){ return x.type===type; }).map(function(x){ return '• ' + x.title; }); }
       var vibes = group('vibe'), photos = group('gallery'), inlays = group('inlay'), coping = b.filter(function(x){ return x.type==='coping'||x.type==='cut'; }).map(function(x){ return '• ' + x.title; });
