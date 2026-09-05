@@ -138,16 +138,10 @@
   }
 
   // ---- custom blend ----
-  // ⚠️ PLACEHOLDER palette — swap for Lexi's real color list (the American Recycling colors) when it arrives.
-  // Genuine Rosehill TPV color range (via American Recycling) — code, name, sampled hex
-  var COLORS = [
-    {code:'RH31',n:'Cream',c:'#CCC6B4'},{code:'RH30',n:'Beige',c:'#F0B68F'},{code:'RH41',n:'Bright Yellow',c:'#E6D039'},{code:'RH40',n:'Mustard',c:'#E79B3A'},
-    {code:'RH50',n:'Orange',c:'#EB6A3C'},{code:'RH01',n:'Standard Red',c:'#D65F54'},{code:'RH02',n:'Bright Red',c:'#E33F50'},{code:'RH90',n:'Funky Pink',c:'#E55891'},
-    {code:'RH21',n:'Purple',c:'#4B539C'},{code:'RH20',n:'Standard Blue',c:'#1888C3'},{code:'RH22',n:'Light Blue',c:'#18A6D7'},{code:'RH23',n:'Azure',c:'#17ABCA'},
-    {code:'RH26',n:'Turquoise',c:'#36B4BB'},{code:'RH12',n:'Dark Green',c:'#34A385'},{code:'RH10',n:'Standard Green',c:'#78B279'},{code:'RH11',n:'Bright Green',c:'#32A961'},
-    {code:'RH32',n:'Brown',c:'#AF7462'},{code:'RH70',n:'Black',c:'#3D4242'},{code:'RH60',n:'Dark Grey',c:'#62686A'},{code:'RH61',n:'Light Grey',c:'#777E82'},
-    {code:'RH65',n:'Pale Grey',c:'#C0C5C0'}
-  ];
+  // The palette itself lives in colors.js so the Studio, the order builder
+  // and My Jobs can never drift apart. See that file to change a colour.
+  var COLORS = window.FLOCO_COLORS;
+
   // Real granule photos, cropped from Rosehill's official TPV Color Range
   // sheet. A flat hex is a lie about a product made of irregular coloured
   // granules, so the swatch is the actual material. The hex stays underneath

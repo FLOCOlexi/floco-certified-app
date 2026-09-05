@@ -8,7 +8,7 @@
     'The Playbook': 'playbook.html', 'Design Studio': 'studio.html',
     'Marketing Vault': 'vault.html', 'Inlay Cut Files': 'inlays.html',
     'Materials': 'materials.html', 'Cleaning Division': 'cleaning.html',
-    'Quotes': 'quotes.html',
+    'Quotes': 'quotes.html', 'My Jobs': 'jobs.html',
     'My Brand': 'mybrand.html', 'Support': 'support.html'
   };
   function go(url) { if (url) location.href = url; }
@@ -35,9 +35,6 @@
     document.querySelectorAll('.tile').forEach(function (t) {
       var nm = txt(t.querySelector('.nm'));
       if (tiles[nm]) t.addEventListener('click', function () { go(tiles[nm]); });
-      else if (nm === 'My Jobs') t.addEventListener('click', function () {
-        toast('Your job log is being built — next up 🦩');
-      });
     });
     // back buttons
     document.querySelectorAll('.back, .top .back').forEach(function (b) {
