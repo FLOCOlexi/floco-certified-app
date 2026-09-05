@@ -284,7 +284,8 @@
    * ============================================================== */
   var JDKEY = 'floco_job_details';
   var JD_FIELDS = ['jdCopeLf','jdCopeW','jdCut','jdSchluter','jdFaux','jdEdge',
-                   'jdStepW','jdStepH','jdStepN','jdGlitter','jdMosaic','jdInlay','jdNotes'];
+                   'jdStepW','jdStepH','jdStepN','jdGlitter','jdMosaic','jdInlay',
+                   'jdDeposit','jdBalance','jdPayNotes','jdNotes'];
   function jobDetails(){ try { return JSON.parse(localStorage.getItem(JDKEY)) || {}; } catch(e){ return {}; } }
   function saveJobDetails(v){ localStorage.setItem(JDKEY, JSON.stringify(v)); }
 
@@ -296,6 +297,7 @@
     if (d.jdGlitter) bits.push('glitter');
     if (d.jdMosaic) bits.push('mosaic');
     if (d.jdInlay) bits.push('inlay');
+    if (d.jdDeposit || d.jdBalance || d.jdPayNotes) bits.push('payment');
     if (d.jdNotes) bits.push('notes');
     return bits.length ? bits.join(' · ') : 'Coping, steps, glitter, inlay & notes';
   }
@@ -760,6 +762,13 @@
         if (jd.jdGlitter) jdl.push('Glitter: ' + jd.jdGlitter);
         if (jd.jdMosaic) jdl.push('Mosaic tiles: ' + jd.jdMosaic);
         if (jd.jdInlay) jdl.push('Inlay: ' + jd.jdInlay);
+        jdl.push('');
+      }
+      if (jd.jdDeposit || jd.jdBalance || jd.jdPayNotes){
+        jdl.push('— PAYMENT —');
+        if (jd.jdDeposit) jdl.push('Deposit taken: ' + jd.jdDeposit);
+        if (jd.jdBalance) jdl.push('Balance due: ' + jd.jdBalance);
+        if (jd.jdPayNotes) jdl.push(jd.jdPayNotes);
         jdl.push('');
       }
       if (jd.jdNotes){ jdl.push('— NOTES —'); jdl.push(jd.jdNotes); jdl.push(''); }

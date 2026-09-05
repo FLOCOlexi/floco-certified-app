@@ -254,11 +254,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=26"></script>
+<script src="accounts.js?v=27"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=26"></script>
-<script defer src="studio.js?v=26"></script>
+<script defer src="app.js?v=27"></script>
+<script defer src="studio.js?v=27"></script>
 </head>
 <body>
 <div class="screen">
@@ -325,6 +325,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
           <label><span>Mosaic tiles</span><select id="jdMosaic"><option value="">No</option><option>Yes</option></select></label>
         </div>
         <label class="jdfull"><span>Inlay</span><textarea id="jdInlay" rows="2" placeholder="Sun, thin black outline, shade turquoise, standard blue and cream mostly in the centre"></textarea></label>
+        <div class="jdl">Payment</div>
+        <div class="jdg">
+          <label><span>Deposit taken</span><input id="jdDeposit" type="text" inputmode="decimal" placeholder="&mdash;"></label>
+          <label><span>Balance due</span><input id="jdBalance" type="text" inputmode="decimal" placeholder="&mdash;"></label>
+        </div>
+        <label class="jdfull"><span>Payment notes</span><textarea id="jdPayNotes" rows="2" placeholder="50% deposit taken on signing, balance on completion. Cheque, card, financing…"></textarea></label>
+
         <label class="jdfull"><span>Notes for the crew</span><textarea id="jdNotes" rows="2" placeholder="Do not cover coping. Gate code. Where to stage material."></textarea></label>
       </div>
     </div>
