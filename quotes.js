@@ -175,7 +175,11 @@
    * first — localStorage is small and a phone photo of a sign would blow it. */
   var LOGOKEY = 'floco_logo';
   function profile(){ try { return JSON.parse(localStorage.getItem('floco_auth_v1')) || {}; } catch(e){ return {}; } }
-  function saveProfile(v){ localStorage.setItem('floco_auth_v1', JSON.stringify(v)); }
+  function saveProfile(v){
+    localStorage.setItem('floco_auth_v1', JSON.stringify(v));
+    /* Keep it across sign-outs too, so nobody retypes their own letterhead. */
+    if(window.FLOCOauth && FLOCOauth.remember) FLOCOauth.remember(v);
+  }
   function logo(){ return localStorage.getItem(LOGOKEY) || ''; }
 
   function paintLogo(){
@@ -225,6 +229,44 @@
     var c = document.getElementById('qLogoClear');
     if(c) c.addEventListener('click', function(){ localStorage.removeItem(LOGOKEY); paintLogo(); });
     paintLogo();
+
+    /* The form is for setting up once. After that it folds into a summary,
+       because a company that has already told us who it is should not have to
+       scroll past its own address to reach the customer. */
+    document.getElementById('coDone').addEventListener('click', function(){
+      if(!(profile().company || '').trim()){
+        alert('Add your company name first — that is the name the customer sees at the top of the quote.');
+        document.getElementById('pCompany').focus();
+        return;
+      }
+      showSaved(true);
+    });
+    document.getElementById('coEdit').addEventListener('click', function(){ showSaved(false); });
+    /* An empty logo well is an invitation, so tapping it opens the form. */
+    document.getElementById('sLogoBox').addEventListener('click', function(){
+      if(!logo()) showSaved(false);
+    });
+
+    /* Fold it away on arrival only if it is genuinely set up. */
+    showSaved(!!(profile().company || '').trim());
+  }
+
+  /* Renders the folded summary — what the customer will actually see up top. */
+  function showSaved(folded){
+    var pr = profile();
+    document.getElementById('coSaved').style.display = folded ? '' : 'none';
+    document.getElementById('coForm').style.display  = folded ? 'none' : '';
+    if(!folded) return;
+
+    document.getElementById('sCo').textContent = (pr.company || '').trim() || 'Your Company';
+    var bits = [pr.repName, pr.location, pr.phone, pr.email]
+      .map(function(x){ return (x || '').trim(); }).filter(Boolean);
+    document.getElementById('sMeta').textContent = bits.join('  ·  ');
+
+    var box = document.getElementById('sLogoBox'), img = document.getElementById('sLogoImg');
+    var d = logo();
+    if(d){ img.src = d; box.className = 'savedlogo has'; }
+    else { img.removeAttribute('src'); box.className = 'savedlogo'; }
   }
 
   function boot(){

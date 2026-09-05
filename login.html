@@ -49,25 +49,35 @@ button:active{transform:scale(.99);}
   <div class="ey">The Certified Specialist Program</div>
   <div class="k">welcome to</div>
   <h1>FLOCO Certified</h1>
-  <div class="sub">Your whole FLOCO business, in one place.<br>Enter your access code to sign in.</div>
+  <div class="sub">Your whole FLOCO business, in one place.<br>Sign in with your email and your program password.</div>
   <form class="card" id="f" autocomplete="off">
-    <label for="code">Access Code</label>
-    <input id="code" name="code" placeholder="Enter your access code" autocapitalize="characters" autocomplete="off" inputmode="text">
+    <label for="email">Your email</label>
+    <input id="email" name="email" type="email" placeholder="you@yourcompany.com" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" inputmode="email">
+    <label for="code" style="margin-top:14px">Program password</label>
+    <input id="code" name="code" type="password" placeholder="Enter your password" autocapitalize="characters" autocomplete="current-password" inputmode="text">
     <button type="submit">Sign In</button>
     <div class="err" id="err"></div>
   </form>
   <div class="foot">Trained · Tested · FLOCO Certified 🦩</div>
 </div>
-<script src="accounts.js?v=29"></script>
+<script src="accounts.js?v=30"></script>
 <script>
   // already signed in? go straight to the app
   if (window.FLOCOauth && FLOCOauth.profile()) location.replace('home.html');
-  var f=document.getElementById('f'), err=document.getElementById('err'), inp=document.getElementById('code');
+  var f=document.getElementById('f'), err=document.getElementById('err'),
+      inp=document.getElementById('code'), em=document.getElementById('email');
   f.addEventListener('submit', function(e){
     e.preventDefault();
-    var acct = FLOCOauth.login(inp.value);
-    if (acct){ err.textContent=''; location.replace('home.html'); }
-    else { err.textContent='That code isn’t recognized. Check with the FLOCO team.'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); inp.select(); }
+    var acct = FLOCOauth.login(em.value, inp.value);
+    if (acct){ err.textContent=''; location.replace('home.html'); return; }
+    /* Say which half is wrong — a bad email and a bad password are different
+       problems, and guessing on a phone at a job site is miserable. */
+    var badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((em.value||'').trim());
+    err.textContent = badEmail
+      ? 'That does not look like an email address.'
+      : 'That password isn’t recognized. Check with the FLOCO team.';
+    f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+    (badEmail ? em : inp).select();
   });
 </script>
 </body></html>

@@ -74,6 +74,18 @@ textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:
 .logobox img{max-width:100%;max-height:100%;object-fit:contain;display:none;}
 .logobox.has img{display:block;} .logobox.has span{display:none;} .logobox.has{border-style:solid;}
 .logoside{flex:1;min-width:0;}
+.savedrow{display:flex;gap:14px;align-items:center;}
+.savedlogo{width:74px;height:74px;flex:none;border-radius:12px;border:1px solid rgba(198,166,98,.3);
+  background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;padding:7px;}
+.savedlogo{cursor:pointer;text-align:center;}
+.savedlogo img{max-width:100%;max-height:100%;object-fit:contain;display:none;}
+.savedlogo span{font-family:'Inter';font-size:9px;line-height:1.35;color:var(--muted);}
+.savedlogo.has img{display:block;} .savedlogo.has span{display:none;}
+.savedlogo.has{border-style:solid;} .savedlogo:not(.has){border-style:dashed;}
+.savedside{flex:1;min-width:0;}
+.savedco{font-family:'Nunito';font-weight:900;font-size:16px;color:#fff;line-height:1.2;}
+.savedmeta{font-family:'Inter';font-size:10.5px;line-height:1.6;color:var(--muted);margin-top:3px;}
+.savednote{font-family:'Inter';font-size:10px;line-height:1.55;color:var(--teal);margin-top:6px;}
 .logot{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;}
 .logop{font-family:'Inter';font-size:10.5px;line-height:1.55;color:var(--muted);margin:4px 0 9px;}
 .logobtns{display:flex;gap:8px;}
@@ -97,13 +109,30 @@ textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:
   </div>
 
   <div class="sh"><div class="k">this is your paper</div><div class="h">Your <span>company.</span></div></div>
-  <div class="box">
+
+  <!-- Once it is filled in, the whole form folds away into a summary. A company
+       sets this on their first quote and should never see the form again unless
+       something actually changes. -->
+  <div class="box saved" id="coSaved" style="display:none">
+    <div class="savedrow">
+      <div class="savedlogo" id="sLogoBox"><img id="sLogoImg" alt=""><span id="sLogoHint">Add your logo</span></div>
+      <div class="savedside">
+        <div class="savedco" id="sCo">Your Company</div>
+        <div class="savedmeta" id="sMeta"></div>
+        <div class="savednote">Saved on this device. It goes on every quote and your terms page.</div>
+      </div>
+    </div>
+    <div class="logobtns" style="margin-top:12px"><span class="lb ghost" id="coEdit">Change these details</span></div>
+  </div>
+
+  <div class="box" id="coForm">
     <div class="logorow">
       <div class="logobox" id="qLogoBox"><span id="qLogoHint">Your logo</span><img id="qLogoImg" alt=""></div>
       <div class="logoside">
         <div class="logot">Put your logo on it</div>
         <div class="logop">This is your quote, in your name. Set it once and every quote and your
-          terms page carry it.</div>
+          terms page carry it. If your surfacing brand is still being decided, put what you have
+          now and change it here whenever you like.</div>
         <div class="logobtns">
           <label class="lb" for="qLogoFile">Upload</label>
           <span class="lb ghost" id="qLogoClear">Remove</span>
@@ -117,9 +146,10 @@ textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:
       <label><span class="cap">Phone</span><input id="pPhone" type="tel" placeholder="(239) 555-0100"></label>
     </div>
     <div class="two">
-      <label style="margin-bottom:0"><span class="cap">Email</span><input id="pEmail" type="email" placeholder="hello@yourcompany.com"></label>
-      <label style="margin-bottom:0"><span class="cap">Town / area</span><input id="pLocation" placeholder="Naples, FL"></label>
+      <label><span class="cap">Email</span><input id="pEmail" type="email" placeholder="hello@yourcompany.com"></label>
+      <label><span class="cap">Town / area</span><input id="pLocation" placeholder="Naples, FL"></label>
     </div>
+    <div class="logobtns"><span class="lb" id="coDone">Save my company</span></div>
   </div>
 
   <div class="sh"><div class="k">who it's for</div><div class="h">The <span>customer.</span></div></div>
@@ -190,7 +220,7 @@ textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:
   <div class="b send" id="qSend">Send the quote</div>
 </div>
 
-<script src="accounts.js?v=29"></script>
+<script src="accounts.js?v=30"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
-<script src="quotes.js?v=29"></script>
+<script src="quotes.js?v=30"></script>
 </body></html>
