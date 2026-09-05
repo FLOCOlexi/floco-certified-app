@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quotes</title>
+<style>
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Black.ttf');font-weight:900;}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-ExtraBold.ttf');font-weight:800;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-Regular.ttf');font-weight:400;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-SemiBold.ttf');font-weight:600;}
+@font-face{font-family:'Caveat';src:url('assets/fonts/Caveat-Bold.ttf');font-weight:700;}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0A1F35;--card:#132F4C;--card2:#16385A;--gold:#C6A662;--gold-lt:#E4CB8E;
+      --teal:#3BBFB8;--ink:#EAF0F3;--muted:#8DA2B5;--line:rgba(198,166,98,.28);}
+body{background:#0B2036;font-family:'Inter',sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;}
+.wrap{max-width:560px;margin:0 auto;padding:22px 18px 110px;}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.back{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
+      display:flex;align-items:center;justify-content:center;flex:none;text-decoration:none;}
+.back svg{width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.ti{font-family:'Nunito';font-weight:900;font-size:19px;}
+.ti span{color:var(--gold-lt);}
+.intro .k{font-family:'Caveat';font-size:22px;color:var(--teal);line-height:1;}
+.intro .h{font-family:'Nunito';font-weight:900;font-size:25px;line-height:1.15;margin:2px 0 6px;}
+.intro .h span{color:var(--gold-lt);}
+.intro .p{font-family:'Inter';font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:20px;}
+.sh{margin:22px 0 10px;}
+.sh .k{font-family:'Caveat';font-size:19px;color:var(--teal);line-height:1;}
+.sh .h{font-family:'Nunito';font-weight:900;font-size:17px;}
+.sh .h span{color:var(--gold-lt);}
+.box{border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 15px;margin-bottom:10px;}
+label{display:block;min-width:0;margin-bottom:10px;}
+label span.cap{display:block;font-family:'Inter';font-weight:600;font-size:8.5px;letter-spacing:.13em;
+     text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+input,select,textarea{width:100%;min-width:0;border-radius:11px;background:rgba(8,20,34,.55);
+  border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Nunito';font-weight:900;
+  font-size:14px;padding:0 11px;height:44px;outline:none;-webkit-appearance:none;}
+textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:12.5px;line-height:1.55;resize:vertical;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.arow{display:flex;align-items:center;gap:9px;padding:8px 0;border-top:1px solid rgba(255,255,255,.07);}
+.arow:first-child{border-top:0;}
+.arow input.an{flex:1;height:40px;font-size:13px;}
+.arow input.aq{width:92px;height:40px;text-align:right;font-size:13px;}
+.arow .rm{width:32px;height:32px;line-height:32px;text-align:center;color:var(--muted);font-size:15px;cursor:pointer;flex:none;}
+.add{margin-top:10px;border:1px dashed rgba(255,255,255,.22);border-radius:11px;padding:11px;
+     text-align:center;font-family:'Nunito';font-weight:900;font-size:12.5px;color:var(--gold-lt);cursor:pointer;}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:11px;
+     border-top:1px solid rgba(255,255,255,.1);}
+.tot .l{font-family:'Inter';font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
+.tot .v{font-family:'Nunito';font-weight:900;font-size:20px;color:var(--gold-lt);}
+.price{background:linear-gradient(125deg,#123A5C,#0E2A47);border:1px solid var(--line);}
+.price .big{font-family:'Nunito';font-weight:900;font-size:30px;color:#fff;line-height:1.1;}
+.price .note{font-family:'Inter';font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
+.chk{display:flex;align-items:center;gap:11px;padding:9px 0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.chk .bx{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);flex:none;
+         display:flex;align-items:center;justify-content:center;}
+.chk.on .bx{background:var(--teal);border-color:var(--teal);}
+.chk .bx svg{width:13px;height:13px;stroke:#04201E;stroke-width:3;fill:none;opacity:0;}
+.chk.on .bx svg{opacity:1;}
+.chk .nm{flex:1;font-family:'Inter';font-size:12.5px;color:#fff;}
+.chk.off .nm{opacity:.5;}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(9,22,37,.96);border-top:1px solid rgba(255,255,255,.08);
+     padding:12px 18px calc(12px + env(safe-area-inset-bottom));display:flex;gap:10px;}
+.bar .b{flex:1;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;
+        font-family:'Nunito';font-weight:900;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;text-decoration:none;}
+.bar .prev{border:1px solid var(--line);color:var(--gold-lt);}
+.bar .send{background:linear-gradient(120deg,#E4CB8E,#C6A662);color:#22180A;}
+.hint{font-family:'Inter';font-size:10px;line-height:1.55;color:var(--muted);margin-top:8px;}
+.hint a{color:var(--gold-lt);}
+
+.logorow{display:flex;gap:14px;align-items:flex-start;}
+.logobox{width:96px;height:96px;flex:none;border-radius:14px;border:1px dashed rgba(255,255,255,.25);
+  background:rgba(8,20,34,.5);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logobox span{font-family:'Inter';font-size:9.5px;color:var(--muted);text-align:center;padding:0 6px;}
+.logobox img{max-width:100%;max-height:100%;object-fit:contain;display:none;}
+.logobox.has img{display:block;} .logobox.has span{display:none;} .logobox.has{border-style:solid;}
+.logoside{flex:1;min-width:0;}
+.logot{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;}
+.logop{font-family:'Inter';font-size:10.5px;line-height:1.55;color:var(--muted);margin:4px 0 9px;}
+.logobtns{display:flex;gap:8px;}
+.lb{display:inline-block;height:34px;line-height:34px;padding:0 14px;border-radius:10px;
+  background:linear-gradient(120deg,#E4CB8E,#C6A662);color:#22180A;font-family:'Nunito';
+  font-weight:900;font-size:11.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.lb.ghost{background:none;border:1px solid var(--line);color:var(--muted);}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="home.html"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div class="ti">Quotes<span></span></div>
+  </div>
+
+  <div class="intro">
+    <div class="k">measure it, price it, send it</div>
+    <div class="h">Your quote, <span>on your paper.</span></div>
+    <div class="p">Everything a FLOCO quote carries, in your company's name. Fill it in at the
+      house, send it before you leave. The areas you measure here become the blends you design later.</div>
+  </div>
+
+  <div class="sh"><div class="k">this is your paper</div><div class="h">Your <span>company.</span></div></div>
+  <div class="box">
+    <div class="logorow">
+      <div class="logobox" id="qLogoBox"><span id="qLogoHint">Your logo</span><img id="qLogoImg" alt=""></div>
+      <div class="logoside">
+        <div class="logot">Put your logo on it</div>
+        <div class="logop">This is your quote, in your name. Set it once and every quote and your
+          terms page carry it.</div>
+        <div class="logobtns">
+          <label class="lb" for="qLogoFile">Upload</label>
+          <span class="lb ghost" id="qLogoClear">Remove</span>
+        </div>
+        <input id="qLogoFile" type="file" accept="image/*" style="display:none">
+      </div>
+    </div>
+    <label style="margin-top:12px"><span class="cap">Company name</span><input id="pCompany" placeholder="Gulf Coast Surfacing"></label>
+    <div class="two">
+      <label><span class="cap">Your name</span><input id="pRepName" placeholder="Marcus Webb"></label>
+      <label><span class="cap">Phone</span><input id="pPhone" type="tel" placeholder="(239) 555-0100"></label>
+    </div>
+    <div class="two">
+      <label style="margin-bottom:0"><span class="cap">Email</span><input id="pEmail" type="email" placeholder="hello@yourcompany.com"></label>
+      <label style="margin-bottom:0"><span class="cap">Town / area</span><input id="pLocation" placeholder="Naples, FL"></label>
+    </div>
+  </div>
+
+  <div class="sh"><div class="k">who it's for</div><div class="h">The <span>customer.</span></div></div>
+  <div class="box">
+    <label><span class="cap">Customer name</span><input id="qName" placeholder="Sarah Mitchell"></label>
+    <label><span class="cap">Property address</span><input id="qAddr" placeholder="1234 Gulf Shore Blvd, Naples FL"></label>
+    <div class="two">
+      <label><span class="cap">Phone</span><input id="qPhone" type="tel" placeholder="&mdash;"></label>
+      <label><span class="cap">Email</span><input id="qEmail" type="email" placeholder="&mdash;"></label>
+    </div>
+    <label style="margin-bottom:0"><span class="cap">Project type</span><input id="qType" placeholder="Pool deck &amp; lanai"></label>
+  </div>
+
+  <div class="sh"><div class="k">measure up</div><div class="h">Areas <span>&amp; perimeter.</span></div></div>
+  <div class="box">
+    <div id="qAreas"></div>
+    <div class="add" id="qAddArea">+ Add an area</div>
+    <div class="tot"><span class="l">Total square feet</span><span class="v" id="qTotal">&mdash;</span></div>
+    <label style="margin-top:12px;margin-bottom:0"><span class="cap">Pool perimeter (linear feet)</span>
+      <input id="qPerim" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+    <div class="hint">Perimeter matters: if the coping isn't being surfaced, that area comes out of the material count.</div>
+  </div>
+
+  <div class="sh"><div class="k">what it takes</div><div class="h">Prep work <span>required.</span></div></div>
+  <div class="box">
+    <label><span class="cap">Drainage</span><input id="qDrain" placeholder="Correct all drainage issues on existing surface. Clean deck drains."></label>
+    <label><span class="cap">Grinding</span><input id="qGrind" placeholder="Yes, spot grind as needed"></label>
+    <label><span class="cap">Coping prep</span><input id="qCopePrep" placeholder="Cut behind bullnose coping"></label>
+    <label><span class="cap">Concrete prep</span><input id="qConc" placeholder="&mdash;"></label>
+    <label style="margin-bottom:0"><span class="cap">Self-levelling concrete</span><input id="qLevel" placeholder="&mdash;"></label>
+  </div>
+
+  <div class="sh"><div class="k">the good stuff</div><div class="h">Design choices <span>&amp; additions.</span></div></div>
+  <div class="box">
+    <div class="two">
+      <label><span class="cap">Rubber</span><select id="qRubber">
+        <option>Advanced TPV synthetic rubber with UV protection</option>
+        <option>EPDM</option></select></label>
+      <label><span class="cap">Thickness</span><select id="qThick">
+        <option>Minimum 1/2 in thick</option><option>3/8 in</option><option>5/8 in</option></select></label>
+    </div>
+    <label><span class="cap">Colour blend</span><input id="qBlend" placeholder="Multi colour blend of your design"></label>
+    <div id="qOpts"></div>
+    <label style="margin-top:4px;margin-bottom:0"><span class="cap">Anything else worth saying</span>
+      <textarea id="qNotes" rows="2" placeholder="Riser measurement, mosaic catalog, lighting…"></textarea></label>
+  </div>
+
+  <div class="sh"><div class="k">the number</div><div class="h">Your <span>price.</span></div></div>
+  <div class="box price">
+    <div class="two">
+      <label><span class="cap">Your rate ($ / sq ft)</span><input id="qRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="&mdash;"></label>
+      <label><span class="cap">Or enter a total</span><input id="qFlat" type="number" inputmode="decimal" min="0" placeholder="&mdash;"></label>
+    </div>
+    <div class="tot" style="border-top:0;padding-top:2px;margin-top:2px">
+      <span class="l">Project total</span><span class="big" id="qPrice">&mdash;</span>
+    </div>
+    <div class="note">You set your own rate for your market. FLOCO doesn't set it, and this
+      number never leaves your device until you send the quote.</div>
+  </div>
+
+  <div class="hint" style="margin-top:14px">
+    The quote links to <a href="terms.html">your terms &amp; conditions</a>, in your company's name.
+  </div>
+</div>
+
+<div class="bar">
+  <a class="b prev" id="qPreview" href="quote-view.html">Preview</a>
+  <div class="b send" id="qSend">Send the quote</div>
+</div>
+
+<script src="accounts.js?v=28"></script>
+<script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
+<script src="quotes.js?v=28"></script>
+</body></html>

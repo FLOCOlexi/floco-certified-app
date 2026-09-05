@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Your Quote</title>
+<style>
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Black.ttf');font-weight:900;}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-ExtraBold.ttf');font-weight:800;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-Regular.ttf');font-weight:400;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-SemiBold.ttf');font-weight:600;}
+@font-face{font-family:'Caveat';src:url('assets/fonts/Caveat-Bold.ttf');font-weight:700;}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0A1F35;--deep:#071A2E;--gold:#C6A662;--gold-lt:#E4CB8E;--teal:#3BBFB8;
+      --teal-d:#2A9D96;--ink:#12202B;--muted:#6C8296;--cream:#FBF8F3;--sand:#F2EBE0;}
+body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;}
+.sheet{max-width:760px;margin:0 auto;background:var(--cream);}
+
+/* ---- the hero ------------------------------------------------------- */
+.hero{background:linear-gradient(155deg,#0E2A47,#071A2E 62%);color:#fff;padding:34px 34px 30px;position:relative;overflow:hidden;}
+.hero:after{content:"";position:absolute;right:-70px;top:-70px;width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(198,166,98,.20),transparent 70%);}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;position:relative;z-index:1;}
+.hero .logo{max-width:190px;max-height:64px;object-fit:contain;display:none;margin-bottom:10px;}
+.hero .logo.has{display:block;}
+.hero .co{font-family:'Nunito';font-weight:900;font-size:20px;line-height:1.15;}
+.hero .meta{font-family:'Inter';font-size:10.5px;line-height:1.7;color:#9FB5C7;margin-top:5px;}
+.badge{flex:none;text-align:right;}
+.badge .b{display:inline-block;border:1px solid rgba(198,166,98,.55);border-radius:20px;
+  padding:5px 12px;font-family:'Inter';font-weight:600;font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold-lt);white-space:nowrap;}
+.hero .k{font-family:'Caveat';font-size:27px;color:var(--teal);margin-top:26px;line-height:1;position:relative;z-index:1;}
+.hero h1{font-family:'Nunito';font-weight:900;font-size:34px;line-height:1.08;margin-top:2px;position:relative;z-index:1;}
+.hero .for{display:flex;flex-wrap:wrap;gap:26px;margin-top:20px;position:relative;z-index:1;}
+.hero .for div{min-width:0;}
+.hero .for .l{font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#7C93A8;}
+.hero .for .v{font-family:'Nunito';font-weight:800;font-size:13px;color:#fff;margin-top:3px;line-height:1.35;}
+
+/* ---- the number ------------------------------------------------------ */
+.money{background:var(--sand);padding:24px 34px;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.money .l{font-family:'Inter';font-weight:600;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.money .v{font-family:'Nunito';font-weight:900;font-size:38px;color:var(--navy);line-height:1;}
+.money .sq{font-family:'Inter';font-size:11px;color:var(--muted);margin-top:5px;}
+.money .promise{max-width:250px;font-family:'Inter';font-size:10.5px;line-height:1.6;color:#4A6072;}
+.money .promise b{color:var(--navy);font-weight:600;}
+
+.body{padding:30px 34px 34px;}
+.sec{margin-bottom:26px;}
+.sec .k{font-family:'Caveat';font-size:19px;color:var(--teal-d);line-height:1;}
+.sec h2{font-family:'Nunito';font-weight:900;font-size:17px;color:var(--navy);margin:1px 0 11px;}
+.areas{border-top:1px solid #E3DACB;}
+.areas .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #E3DACB;
+  font-family:'Inter';font-size:12.5px;}
+.areas .r .n{color:var(--ink);}
+.areas .r .q{font-family:'Nunito';font-weight:900;color:var(--navy);}
+.areas .tot{display:flex;justify-content:space-between;padding:11px 0 0;
+  font-family:'Nunito';font-weight:900;font-size:14px;color:var(--navy);}
+.kv{display:flex;gap:11px;padding:7px 0;font-family:'Inter';font-size:12px;line-height:1.6;border-top:1px solid #EDE5D8;}
+.kv:first-child{border-top:0;}
+.kv .l{flex:none;width:118px;font-weight:600;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px;}
+.kv .v{flex:1;min-width:0;color:var(--ink);}
+.inc{background:#fff;border:1px solid #E7DFD1;border-radius:12px;padding:16px 18px;}
+.inc .t{font-family:'Nunito';font-weight:900;font-size:13px;color:var(--navy);margin-bottom:9px;}
+.inc ul{list-style:none;}
+.inc li{position:relative;padding-left:20px;margin-bottom:7px;font-family:'Inter';font-size:12px;line-height:1.55;}
+.inc li:before{content:"";position:absolute;left:0;top:5px;width:11px;height:6px;border-left:2px solid var(--teal-d);
+  border-bottom:2px solid var(--teal-d);transform:rotate(-45deg);}
+.quote-mark{background:var(--navy);color:#fff;border-radius:14px;padding:20px 22px;margin:24px 0;}
+.quote-mark .k{font-family:'Caveat';font-size:20px;color:var(--teal);line-height:1;}
+.quote-mark p{font-family:'Inter';font-size:12px;line-height:1.7;color:#CFDCE6;margin-top:6px;}
+.quote-mark p b{color:#fff;font-weight:600;}
+.sign{margin-top:28px;padding-top:20px;border-top:2px solid var(--navy);}
+.sign .th{font-family:'Caveat';font-size:24px;color:var(--teal-d);line-height:1;}
+.sign .nm{font-family:'Nunito';font-weight:900;font-size:15px;color:var(--navy);margin-top:5px;}
+.sign .ro{font-family:'Inter';font-size:11px;color:var(--muted);line-height:1.6;margin-top:2px;}
+.foot{background:var(--navy);color:#8FA6BA;padding:20px 34px;font-family:'Inter';font-size:9.5px;line-height:1.7;}
+.foot a{color:var(--gold-lt);}
+.foot .ind{color:#B9CAD8;}
+
+/* ---- screen-only controls ------------------------------------------- */
+.bar{position:sticky;top:0;z-index:5;background:rgba(9,22,37,.96);display:flex;gap:10px;
+     padding:11px 16px calc(11px + env(safe-area-inset-top)) 16px;}
+.bar a,.bar div{flex:1;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito';font-weight:900;font-size:13px;text-decoration:none;cursor:pointer;}
+.bar .back{border:1px solid rgba(198,166,98,.4);color:var(--gold-lt);}
+.bar .pdf{background:linear-gradient(120deg,#E4CB8E,#C6A662);color:#22180A;}
+@media print{
+  body{background:#fff;}
+  .bar{display:none;}
+  .sheet{max-width:none;}
+  .hero,.money,.foot,.quote-mark{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sec{break-inside:avoid;}
+}
+</style></head>
+<body>
+<div class="bar">
+  <a class="back" href="quotes.html">Back to edit</a>
+  <div class="pdf" id="toPdf">Save as PDF</div>
+</div>
+
+<div class="sheet">
+  <div class="hero">
+    <div class="row">
+      <div>
+        <img id="vLogo" class="logo" alt="">
+        <div class="co" id="vCo">Your Company</div>
+        <div class="meta" id="vCoMeta"></div>
+      </div>
+      <div class="badge"><span class="b">FLOCO Certified Specialist</span></div>
+    </div>
+    <div class="k">your space, reimagined</div>
+    <h1 id="vTitle">Rubber Surfacing Quote</h1>
+    <div class="for">
+      <div><div class="l">Prepared for</div><div class="v" id="vFor">—</div></div>
+      <div><div class="l">Property</div><div class="v" id="vAddr">—</div></div>
+      <div><div class="l">Date</div><div class="v" id="vDate">—</div></div>
+    </div>
+  </div>
+
+  <div class="money">
+    <div>
+      <div class="l">Your price</div>
+      <div class="v" id="vPrice">—</div>
+      <div class="sq" id="vSq"></div>
+    </div>
+    <div class="promise">The number you see here is <b>your actual price.</b>
+      No surprise fees, no sneaky add-ons later. Prep, installation and full site
+      clean-up are all in it.</div>
+  </div>
+
+  <div class="body">
+    <div class="sec" id="secAreas">
+      <div class="k">what we measured</div><h2>The space.</h2>
+      <div class="areas" id="vAreas"></div>
+    </div>
+
+    <div class="sec" id="secPrep">
+      <div class="k">before anything goes down</div><h2>Prep work included.</h2>
+      <div id="vPrep"></div>
+    </div>
+
+    <div class="sec" id="secDesign">
+      <div class="k">the good part</div><h2>Your design.</h2>
+      <div id="vDesign"></div>
+    </div>
+
+    <div class="sec" id="secInc">
+      <div class="inc">
+        <div class="t">Every quote includes</div>
+        <ul>
+          <li>Existing surface preparation, done properly rather than skipped</li>
+          <li>Installation of the rubber surface by a trained, certified specialist</li>
+          <li>Full site clean-up and pool clean-up on completion</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quote-mark">
+      <div class="k">why TPV, not EPDM</div>
+      <p>We use <b>premium TPV rubber</b> for outdoor projects because of its UV stability,
+      durability and long-term performance in this climate. It holds its colour, it stays
+      flexible instead of going brittle, and it leaves far less powder residue than EPDM,
+      so the binder coats the granule properly. <b>Half an inch thick</b>, hand-troweled,
+      never sprayed.</p>
+    </div>
+
+    <div class="sign">
+      <div class="th">thank you</div>
+      <div class="nm" id="vRep">Your FLOCO Certified Specialist</div>
+      <div class="ro" id="vRepMeta"></div>
+      <div class="ro" style="margin-top:9px">Thank you for supporting a small business with a big heart.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="ind" id="vIndep">This work is contracted with and paid to your company directly.</span><br>
+    Please make sure to read our <a href="terms.html">Terms &amp; Conditions</a>.<br>
+    Installed by an independent FLOCO Certified Specialist using genuine FLOCO materials.
+    FLOCO, FLOCO Certified and the FLOCO palm mark are trademarks of FLOCO Decking Systems.
+  </div>
+</div>
+
+<script src="accounts.js?v=28"></script>
+<script src="quote-view.js?v=28"></script>
+</body></html>
