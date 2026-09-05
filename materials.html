@@ -78,6 +78,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .pick .sq{flex:none;font-family:'Inter';font-size:10px;color:var(--muted);}
 .pick .bg{flex:none;width:52px;text-align:right;font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);}
 .pick.off .bg{opacity:.4;}
+.pickgrp{font-family:'Inter';font-weight:600;font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gold-lt);margin:13px 0 6px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);}
+.pickgrp:first-child{margin-top:2px;padding-top:0;border-top:0;}
+.pickhint{font-family:'Inter';font-size:9.5px;line-height:1.6;color:var(--muted);margin-top:9px;}
 .pickempty{font-family:'Inter';font-size:10px;line-height:1.55;color:var(--muted);padding:4px 0 2px;}
 
 .xadd{display:flex;gap:8px;align-items:center;margin-top:9px;}
@@ -101,10 +105,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=30"></script>
+<script src="accounts.js?v=31"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=30"></script>
+<script defer src="app.js?v=31"></script>
 </head>
 <body>
 <div class="screen">
@@ -129,6 +133,8 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
       </div>
       <div class="pickl">Which blends are you ordering for?</div>
       <div id="pickList"><div class="pickempty">No blends yet. Build them in the Design Studio and they show up here.</div></div>
+      <div class="pickhint">Your saved jobs appear here too — pick an old board and its bags drop
+        straight in. Nothing is ordered until you send the email, and you can change any of it below.</div>
 
       <div class="pickl">Anything else on this order?</div>
       <div id="extraList"></div>

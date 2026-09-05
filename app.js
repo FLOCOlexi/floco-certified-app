@@ -212,8 +212,39 @@
   }
   function ordSetPicked(ids){ localStorage.setItem(PICKKEY, JSON.stringify(ids)); }
 
+  /* Everything this installer could order material for:
+   *   1. the design open in the Studio right now, and
+   *   2. every design board saved in My Jobs.
+   * Before this, only (1) existed — so the moment you moved on to the next
+   * customer, the board you just built was gone from the order screen and the
+   * footage had to be retyped from memory. A saved job IS the design board.
+   * IDs are namespaced per source so two jobs with a "Pool deck" never collide. */
   function ordBlends(){
-    try { var v = JSON.parse(localStorage.getItem('floco_blends')); return (v && v.length) ? v : []; } catch(e){ return []; }
+    var out = [];
+    try {
+      var v = JSON.parse(localStorage.getItem('floco_blends'));
+      if (v && v.length) v.forEach(function(b){
+        out.push({ id:'now:'+b.id, name:b.name, sqft:b.sqft, cols:b.cols, group:'Open in the Design Studio' });
+      });
+    } catch(e){}
+    try {
+      var jobs = JSON.parse(localStorage.getItem('floco_jobs')) || [];
+      jobs.forEach(function(j){
+        (j.areas || []).forEach(function(a, i){
+          out.push({ id:'job:'+j.id+':'+i, name:a.name, sqft:a.sqft, cols:a.cols,
+                     group: j.name + (j.status === 'installed' ? ' · installed' : '') });
+        });
+      });
+    } catch(e){}
+    return out;
+  }
+
+  /* What is ticked when they have never chosen: the open design only.
+   * Defaulting to "everything" would quietly put months of finished jobs on
+   * one purchase order. */
+  function ordDefaultIds(all){
+    var now = all.filter(function(b){ return b.id.indexOf('now:') === 0; });
+    return (now.length ? now : []).map(function(b){ return b.id; });
   }
   /* THE ONE COPY OF THE SPLIT.
    * This was reimplemented here once, and a sweep of 1,600 blend/footage
@@ -250,9 +281,11 @@
 
   function ordLines(){
     var picked = ordPicked();
-    var list = ordBlends().filter(function(b){
+    var all = ordBlends();
+    if (!picked) picked = ordDefaultIds(all);
+    var list = all.filter(function(b){
       if (!(b.cols && b.cols.length && b.sqft > 0)) return false;
-      return picked ? picked.indexOf(b.id) > -1 : true;
+      return picked.indexOf(b.id) > -1;
     });
     if (!list.length) return null;
     var roll = {}, order = [], totalSq = 0, totalBags = 0;
@@ -275,8 +308,11 @@
       if (Object.prototype.hasOwnProperty.call(ov, c)) roll[c].bags = ov[c];
       totalBags += roll[c].bags;
     });
-    var lines = order.map(function(c){ return roll[c].code + '  ' + roll[c].n + '  ' + roll[c].bags + ' bags'; });
-    lines.push('Pre-Mark 80 binder  ' + buckets + ' pails');
+    var plural = function(n, one, many){ return n + ' ' + (n === 1 ? one : many); };
+    var lines = order.map(function(c){
+      return roll[c].code + '  ' + roll[c].n + '  ' + plural(roll[c].bags, 'bag', 'bags');
+    });
+    lines.push('Pre-Mark 80 binder  ' + plural(buckets, 'pail', 'pails'));
     /* Glitter rides on the order automatically when the job has it. */
     var jd = {};
     try { jd = JSON.parse(localStorage.getItem('floco_job_details')) || {}; } catch(e){}
@@ -370,22 +406,26 @@
       host.innerHTML = '<div class="pickempty">No blends with square footage yet. Build them in the Design Studio and they show up here.</div>';
       return;
     }
-    var picked = ordPicked();
-    host.innerHTML = all.map(function(b){
-      var on = picked ? picked.indexOf(b.id) > -1 : true;
-      return '<div class="pick ' + (on ? 'on' : 'off') + '" data-id="' + b.id + '">'
+    var picked = ordPicked() || ordDefaultIds(all);
+    /* Grouped by where the board came from, so it is obvious you are about to
+       order for a job you finished in March. */
+    var html = '', lastGroup = null;
+    all.forEach(function(b){
+      if (b.group !== lastGroup){ html += '<div class="pickgrp">' + b.group + '</div>'; lastGroup = b.group; }
+      var on = picked.indexOf(b.id) > -1;
+      html += '<div class="pick ' + (on ? 'on' : 'off') + '" data-id="' + b.id + '">'
         + '<span class="bx">' + CHECK + '</span>'
         + '<span class="nm">' + (b.name || 'Unnamed blend') + '</span>'
         + '<span class="sq">' + b.sqft + ' sq ft</span>'
         + '<span class="bg">' + Math.ceil(b.sqft / SQFT_PER_BAG) + '</span>'
         + '</div>';
-    }).join('');
+    });
+    host.innerHTML = html;
     host.querySelectorAll('.pick').forEach(function(row){
       row.addEventListener('click', function(){
-        var ids = ordPicked();
-        if (!ids) ids = all.map(function(b){ return b.id; });
+        var ids = ordPicked() || ordDefaultIds(all);
         var id = row.getAttribute('data-id'), i = ids.indexOf(id);
-        if (i > -1) { if (ids.length === 1) return; ids.splice(i,1); } else ids.push(id);
+        if (i > -1) ids.splice(i,1); else ids.push(id);
         ordSetPicked(ids);
         initOrdering();
       });
