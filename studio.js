@@ -171,7 +171,7 @@
     {id:'base-02', label:'Base 02', nm:'The Bachelor', ch:'Greys & black', fp:'03', cp:'04', inst:'base-02',
       f:[{code:'RH70',pct:70},{code:'RH60',pct:15},{code:'RH61',pct:15}],
       c:[{code:'RH61',pct:40},{code:'RH60',pct:40},{code:'RH65',pct:20}]},
-    {id:'base-03', label:'Base 03', ch:'Cream & brown', fp:'05', cp:'06',
+    {id:'base-03', label:'Base 03', ch:'Cream & brown', fp:'05', cp:'06', inst:'base-03',
       f:[{code:'RH31',pct:70},{code:'RH32',pct:15},{code:'RH30',pct:15}],
       c:[{code:'RH32',pct:80},{code:'RH30',pct:10},{code:'RH31',pct:10}]},
     {id:'base-04', label:'Base 04', ch:'Cream & dark grey', fp:'08', cp:'07', inst:'base-04',
