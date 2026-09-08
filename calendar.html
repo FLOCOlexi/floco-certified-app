@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Content Calendar</title>
+<style>
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Black.ttf');font-weight:900;}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-ExtraBold.ttf');font-weight:800;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-Regular.ttf');font-weight:400;}
+@font-face{font-family:'Inter';src:url('assets/fonts/Inter-SemiBold.ttf');font-weight:600;}
+@font-face{font-family:'Caveat';src:url('assets/fonts/Caveat-Bold.ttf');font-weight:700;}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0A1F35;--card:#132F4C;--gold:#C6A662;--gold-lt:#E4CB8E;--teal:#3BBFB8;
+      --ink:#EAF0F3;--muted:#8DA2B5;--line:rgba(198,166,98,.28);}
+body{background:#0B2036;font-family:'Inter',sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;}
+.wrap{max-width:560px;margin:0 auto;padding:22px 18px 110px;}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.back{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
+      display:flex;align-items:center;justify-content:center;flex:none;text-decoration:none;}
+.back svg{width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.ti{font-family:'Nunito';font-weight:900;font-size:19px;}
+.ti span{color:var(--gold-lt);}
+.k{font-family:'Caveat';font-size:22px;color:var(--teal);line-height:1;}
+.h{font-family:'Nunito';font-weight:900;font-size:25px;line-height:1.15;margin:2px 0 6px;}
+.h span{color:var(--gold-lt);}
+.p{font-family:'Inter';font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+
+.mixbox{border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  padding:15px 16px;margin-bottom:16px;}
+.mixbox .t{font-family:'Nunito';font-weight:900;font-size:13px;color:#fff;margin-bottom:3px;}
+.mixbox .s{font-family:'Inter';font-size:11px;line-height:1.55;color:var(--muted);margin-bottom:12px;}
+.mix{display:flex;flex-direction:column;gap:9px;}
+.mix .m{display:flex;gap:10px;align-items:flex-start;}
+.mix .dot{width:10px;height:10px;border-radius:3px;flex:none;margin-top:3px;}
+.mix .mt{font-family:'Nunito';font-weight:900;font-size:11.5px;color:#fff;}
+.mix .mc{font-family:'Inter';font-size:9.5px;color:var(--gold-lt);font-weight:600;}
+.mix .mw{font-family:'Inter';font-size:10.5px;line-height:1.5;color:var(--muted);margin-top:2px;}
+
+.prog{display:flex;align-items:center;gap:11px;border-radius:14px;padding:12px 14px;margin-bottom:16px;
+  background:linear-gradient(125deg,#123A5C,#0E2A47);border:1px solid var(--line);}
+.prog .n{font-family:'Nunito';font-weight:900;font-size:22px;color:var(--gold-lt);line-height:1;flex:none;}
+.prog .x{font-family:'Inter';font-size:10.5px;line-height:1.5;color:var(--muted);}
+.prog .rs{margin-left:auto;flex:none;font-family:'Nunito';font-weight:900;font-size:10px;
+  color:var(--muted);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:7px 10px;cursor:pointer;}
+
+.wk{font-family:'Inter';font-weight:600;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-lt);margin:20px 0 9px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);}
+.day{display:flex;gap:11px;border-radius:14px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);padding:12px 13px;margin-bottom:8px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;}
+.day.done{opacity:.45;}
+.day .num{width:26px;flex:none;font-family:'Nunito';font-weight:900;font-size:15px;color:var(--gold-lt);line-height:1.1;}
+.day.done .num{color:var(--teal);}
+.day .bd{flex:1;min-width:0;}
+.day .chip{display:inline-block;font-family:'Inter';font-weight:600;font-size:7.5px;letter-spacing:.1em;
+  text-transform:uppercase;border-radius:20px;padding:3px 8px;margin-bottom:5px;}
+.day .t{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;line-height:1.25;}
+.day .s{font-family:'Inter';font-size:11px;line-height:1.55;color:var(--muted);margin-top:4px;}
+.day .tick{width:20px;height:20px;flex:none;border-radius:6px;border:1.5px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.day.done .tick{background:var(--teal);border-color:var(--teal);}
+.day .tick svg{width:12px;height:12px;fill:none;stroke:#0B2036;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;display:none;}
+.day.done .tick svg{display:block;}
+.note{font-family:'Inter';font-size:10px;line-height:1.6;color:var(--muted);margin-top:18px;}
+.rule{border-radius:14px;background:rgba(198,166,98,.10);border:1px solid var(--line);padding:13px 15px;margin:16px 0;}
+.rule .t{font-family:'Nunito';font-weight:900;font-size:12.5px;color:var(--gold-lt);}
+.rule .s{font-family:'Inter';font-size:11px;line-height:1.55;color:var(--ink);margin-top:4px;}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="vault.html"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div class="ti">Content <span>Calendar</span></div>
+  </div>
+
+  <div class="k">thirty days, already planned</div>
+  <div class="h">Never stare at <span>a blank screen.</span></div>
+  <div class="p">Thirty days of posts, each one something you can actually shoot on a job site with
+    the phone in your pocket. Work through them in order or pick whatever suits the day you are having.</div>
+
+  <div class="mixbox">
+    <div class="t">The mix is the whole point</div>
+    <div class="s">Post nothing but finished decks and people scroll past. What sells is the
+      <b>mix</b>, because each kind of post does a different job. This month is built to balance
+      all five on purpose.</div>
+    <div class="mix" id="mixList"></div>
+  </div>
+
+  <div class="rule">
+    <div class="t">Never two of the same in a row</div>
+    <div class="s">If yesterday was a before and after, today is a face or a lesson. That one rule
+      keeps a feed from feeling like a catalogue, and it is already built into the order below.</div>
+  </div>
+
+  <div class="prog">
+    <div class="n" id="pN">0</div>
+    <div class="x" id="pX">of 30 posted. Tap a day when it goes out.</div>
+    <div class="rs" id="pReset">Reset</div>
+  </div>
+
+  <div id="days"></div>
+
+  <div class="note" id="foot"></div>
+</div>
+
+<script src="accounts.js?v=36"></script>
+<script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
+<script src="calendar.js?v=36"></script>
+</body></html>
