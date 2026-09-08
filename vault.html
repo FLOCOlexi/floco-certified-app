@@ -42,8 +42,9 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .clip .nm{position:absolute;left:10px;bottom:9px;right:10px;font-family:'Inter';font-weight:600;font-size:9px;color:#fff;}
 .clip .dl{position:absolute;right:8px;top:8px;width:24px;height:24px;border-radius:8px;background:rgba(198,166,98,.9);display:flex;align-items:center;justify-content:center;}
 .clip .dl svg{width:13px;height:13px;stroke:#0A1F35;stroke-width:2.2;fill:none;}
-.ov-tile{flex:1;height:96px;border-radius:14px;background:repeating-linear-gradient(45deg,#0e2a47,#0e2a47 8px,#12324f 8px,#12324f 16px);border:1px dashed rgba(255,255,255,.18);position:relative;display:flex;align-items:center;justify-content:center;}
+.ov-tile{flex:1;height:96px;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:14px;background:repeating-linear-gradient(45deg,#0e2a47,#0e2a47 8px,#12324f 8px,#12324f 16px);border:1px dashed rgba(255,255,255,.18);position:relative;display:flex;align-items:center;justify-content:center;}
 .ov-tile .logo{width:60px;opacity:.9;}
+.ovnote{font-family:'Inter';font-size:9.5px;line-height:1.6;color:var(--muted);margin-top:10px;}
 .ov-tile .lg{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:'Inter';font-weight:600;font-size:8px;color:var(--muted);}
 .cal{margin-top:20px;border-radius:16px;background:linear-gradient(135deg,rgba(198,166,98,.13),rgba(58,191,184,.09));border:1px solid var(--line);padding:16px 16px;display:flex;align-items:center;gap:14px;}
 .cal .ic{width:44px;height:44px;border-radius:12px;background:rgba(198,166,98,.16);display:flex;align-items:center;justify-content:center;flex:none;}
@@ -69,6 +70,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
 <script defer src="app.js?v=37"></script>
+<script defer src="overlays.js?v=37"></script>
 </head>
 <body>
 <div class="screen">
@@ -94,12 +96,14 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     </div>
 
     <div class="sec">
-      <div class="lb"><div class="t">Transparent overlays <span style="font-weight:400;font-size:9px;color:var(--muted);text-transform:none;">· drop on your own videos</span></div><div class="e">See all</div></div>
+      <div class="lb"><div class="t">Transparent overlays <span style="font-weight:400;font-size:9px;color:var(--muted);text-transform:none;">· tap to save, then drop on your own video</span></div></div>
       <div class="row">
-        <div class="ov-tile"><img class="logo" src="assets/img/floco-logo-white.png"><div class="lg">Logo lower-third</div></div>
-        <div class="ov-tile"><div style="width:44px;height:44px;border-radius:50%;background:url('assets/img/certified-badge.png') center/cover;opacity:.95;"></div><div class="lg">Certified badge</div></div>
-        <div class="ov-tile"><div style="font-family:Caveat;font-size:20px;color:var(--teal);">★★★★★</div><div class="lg">5-star frame</div></div>
+        <div class="ov-tile" data-ov="lower-third"><img class="logo" src="assets/img/floco-logo-white.png"><div class="lg">Logo lower-third</div></div>
+        <div class="ov-tile" data-ov="badge"><div style="width:44px;height:44px;border-radius:50%;background:url('assets/img/certified-badge.png') center/cover;opacity:.95;"></div><div class="lg">Certified badge</div></div>
+        <div class="ov-tile" data-ov="stars"><div style="font-family:Caveat;font-size:20px;color:var(--teal);">★★★★★</div><div class="lg">5-star frame</div></div>
       </div>
+      <div class="ovnote">Saved at 1080 &times; 1920 with a genuinely transparent background, so they sit
+        straight over a reel. The lower-third and the star frame carry <b>your</b> company name, not ours.</div>
     </div>
 
     <a class="cal" href="calendar.html" style="text-decoration:none">

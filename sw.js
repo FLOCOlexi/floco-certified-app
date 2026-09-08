@@ -2,7 +2,7 @@
    Network-first for pages/scripts (so updates ALWAYS show), cache-first for images/fonts. */
 var CACHE = 'floco-certified-v37';
 var CORE = [
-  'home.html', 'calendar.html', 'calendar.js', 'jobs.html', 'jobs.js', 'colors.js', 'quotes.html', 'quote-view.html', 'terms.html', 'quotes.js', 'quote-view.js', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
+  'home.html', 'calendar.html', 'calendar.js', 'overlays.js', 'jobs.html', 'jobs.js', 'colors.js', 'quotes.html', 'quote-view.html', 'terms.html', 'quotes.js', 'quote-view.js', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
   'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',
   'app.css', 'app.js', 'studio.js', 'accounts.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png'
