@@ -338,7 +338,7 @@
   }
 
   /* Everything on Mike's order sheet that a blend can't supply: extra bags of
-   * a colour, more primer, buffings, binder. His sheet lists them as
+   * a colour or more binder. His sheet lists them as
    * item / quantity, so this does the same.
    * 🚫 No prices. Mike's sheet carries FLOCO's negotiated per-bag rates; a
    * partner's rates are their own, so the order asks for the total with
