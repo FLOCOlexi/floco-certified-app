@@ -53,6 +53,14 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .nav .item.on svg{stroke:var(--gold);}.nav .item.on .l{color:var(--gold-lt);}
 .nav .item.on{position:relative;}.nav .item.on:before{content:"";position:absolute;top:-12px;width:26px;height:3px;border-radius:3px;background:var(--gold);}
 .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);}
+.decgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dec{display:block;border-radius:14px;padding:12px 11px 10px;text-decoration:none;
+  background:repeating-linear-gradient(45deg,#0e2a47,#0e2a47 8px,#12324f 8px,#12324f 16px);
+  border:1px solid rgba(255,255,255,.10);}
+.dec img{width:100%;height:62px;object-fit:contain;display:block;}
+.dec .dn{font-family:'Nunito';font-weight:800;font-size:10.5px;color:#fff;margin-top:9px;line-height:1.25;}
+.dec .du{font-family:'Inter';font-size:8px;color:var(--muted);margin-top:2px;}
+.decnote{font-family:'Inter';font-size:9.5px;line-height:1.6;color:var(--muted);margin-top:10px;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -61,10 +69,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=36"></script>
+<script src="accounts.js?v=37"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=36"></script>
+<script defer src="app.js?v=37"></script>
 </head>
 <body>
 <div class="screen">
@@ -91,6 +99,36 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
       <div class="ba g"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 3l4 3 4-3 3 4-3 2v9H8v-9L5 7z"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Apparel Art</div><div class="sub2">Shirts · hats</div></div>
       <div class="ba"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 13l2-6h10l3 4h3v4M3 13v3h2M19 15v1"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Vehicle Decal</div><div class="sub2">Truck-ready art</div></div>
     </div>
+
+    <div class="slb">Decals &amp; Print Files</div>
+    <div class="decgrid">
+        <a class="dec" href="assets/decals/FLOCO-Certified-Specialist-Badge.png" download>
+          <img src="assets/decals/FLOCO-Certified-Specialist-Badge.png" alt="Certified Specialist badge">
+          <div class="dn">Certified Specialist badge</div><div class="du">Window &middot; truck &middot; print</div>
+        </a>
+        <a class="dec" href="assets/decals/FLOCO-Get-Flocofied.png" download>
+          <img src="assets/decals/FLOCO-Get-Flocofied.png" alt="Get FLOCOFIED">
+          <div class="dn">Get FLOCOFIED</div><div class="du">Rear window &middot; social</div>
+        </a>
+        <a class="dec" href="assets/decals/FLOCO-Barefoot-Outdoor-Living.png" download>
+          <img src="assets/decals/FLOCO-Barefoot-Outdoor-Living.png" alt="Barefoot Outdoor Living">
+          <div class="dn">Barefoot Outdoor Living</div><div class="du">Van side &middot; yard sign</div>
+        </a>
+        <a class="dec" href="assets/decals/FLOCO-Proud-To-Offer.png" download>
+          <img src="assets/decals/FLOCO-Proud-To-Offer.png" alt="Proud to Offer FLOCO">
+          <div class="dn">Proud to Offer FLOCO</div><div class="du">Shop window &middot; trailer</div>
+        </a>
+        <a class="dec" href="assets/decals/FLOCO-Softer-Safer-Brighter.png" download>
+          <img src="assets/decals/FLOCO-Softer-Safer-Brighter.png" alt="A Softer, Safer, Brighter">
+          <div class="dn">A Softer, Safer, Brighter</div><div class="du">Yard sign &middot; social</div>
+        </a>
+        <a class="dec" href="assets/decals/FLOCO-Transform-Your-Outdoors.png" download>
+          <img src="assets/decals/FLOCO-Transform-Your-Outdoors.png" alt="Transform Your Outdoors">
+          <div class="dn">Transform Your Outdoors</div><div class="du">Trailer wrap &middot; booth</div>
+        </a>
+    </div>
+    <div class="decnote">Tap any one to download it. Real transparency, so they go straight onto a window,
+      a truck, a yard sign, or over your own video. Printed copies are in your certification bag.</div>
 
   </div>
 
