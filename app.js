@@ -350,10 +350,12 @@
     ['RH12','Dark Green'],['RH10','Standard Green'],['RH11','Bright Green'],
     ['RH65','Pale Grey'],['RH61','Light Grey'],['RH60','Dark Grey'],['RH70','Black']
   ];
+  /* Only what FLOCO actually orders. "Buffings" and "Aliphatic 80 binder" were
+   * in here and could not be sourced to a single real order, email or note —
+   * every sheet lists Pre-Mark 80 and nothing else. Put either back the moment
+   * someone confirms it is a real line item. */
   var ARC_OTHER = [
-    ['PM80','Pre-Mark 80','buckets'],
-    ['BUFF','Buffings','bags'],
-    ['ALI80','Aliphatic 80 binder','pails']
+    ['PM80','Pre-Mark 80','buckets']
   ];
   var XKEY = 'floco_order_extra', SHIPKEY = 'floco_order_ship';
   function ordExtras(){ try { var v=JSON.parse(localStorage.getItem(XKEY)); return Array.isArray(v)?v:[]; } catch(e){ return []; } }
