@@ -190,6 +190,14 @@
    * the numbers are already done. Nothing is sent automatically — this
    * only opens their mail app with a draft they check and send.
    * ================================================================== */
+  /* Glitter has its own supplier. Mike buys direct from Meadowbrook in New
+   * Jersey, and a certified company can open its own account with a card on
+   * file — so this is the partner's order to place, not FLOCO's. */
+  var GLIT_EMAIL = 'joecolleran@meadowbrookinventions.com';
+  var GLIT_TEL   = '+19087660606';
+  var OZ_PER_LB  = 16;
+  var GLIT_BOX_LB = 40;          // the biggest box that still ships UPS standard rate
+
   var ARC_EMAIL = 'Kaylee.Arellano@americanrecycling.com';
   var ARC_TEL   = '+19897255100';
   /* Pre-Mark 80 is the BINDER, not a primer. 150 sq ft per 5-gallon pail —
@@ -313,13 +321,21 @@
       return roll[c].code + '  ' + roll[c].n + '  ' + plural(roll[c].bags, 'bag', 'bags');
     });
     lines.push('Pre-Mark 80 binder  ' + plural(buckets, 'pail', 'pails'));
-    /* Glitter rides on the order automatically when the job has it. */
-    var jd = {};
-    try { jd = JSON.parse(localStorage.getItem('floco_job_details')) || {}; } catch(e){}
-    if (jd.jdGlitter) lines.push('Glitter  ' + (totalBags * GLITTER_OZ_PER_BAG) + ' oz');
+    /* Glitter is deliberately NOT on this order. American Recycling supplies
+     * the granule and the binder; glitter comes direct from Meadowbrook, on
+     * the installer's own account. It has its own order button below. */
     return { lines: lines, sqft: totalSq, bags: totalBags, buckets: buckets, colors: order.length };
   }
 
+
+  /* Glitter is sold by the POUND, so the order has to be in pounds even though
+   * the job is worked out in ounces. Rounded up: nobody sells 4.4 lb. */
+  function glitNeed(){
+    var data = ordLines();
+    if (!data) return null;
+    var oz = data.bags * GLITTER_OZ_PER_BAG;
+    return { oz: oz, lb: Math.ceil(oz / OZ_PER_LB), bags: data.bags };
+  }
 
   /* Everything on Mike's order sheet that a blend can't supply: extra bags of
    * a colour, more primer, buffings, binder. His sheet lists them as
@@ -454,6 +470,49 @@
         + '<br>' + data.sqft + ' sq ft total, already worked out.';
       else if (nx) sum.innerHTML = '<b>' + nx + '</b> extra item' + (nx===1?'':'s') + '. Tick a blend above to add its bag counts.';
     }
+
+    /* ---- glitter: its own supplier, its own order ---- */
+    var g = glitNeed();
+    var jdG = '';
+    try { jdG = (JSON.parse(localStorage.getItem('floco_job_details')) || {}).jdGlitter || ''; } catch(e){}
+    var gs = document.getElementById('glitSummary');
+    if (gs){
+      if (g && jdG) gs.innerHTML = '<b>' + g.lb + ' lb</b> of Chrome Silver Hex &middot; '
+        + g.oz + ' oz for ' + g.bags + ' bags, at 2 oz a bag<br>Rounded up to the pound, because that is how it is sold.';
+      else if (g) gs.innerHTML = 'Glitter is off for this job. Turn it on in the Design Studio and '
+        + g.bags + ' bags would need <b>' + g.lb + ' lb</b>.';
+    }
+    var gb = document.getElementById('glitEmail');
+    if (gb) wire(gb, function(){
+      var p = ordProfile();
+      var need = glitNeed();
+      var lb = need ? need.lb : 0;
+      var body = [
+        'Joe,',
+        '',
+        'I am a FLOCO Certified installer and I would like to place an order.',
+        '',
+        'Polyester Jewels (Glitter)',
+        'Part P0140HX  ·  Chrome Silver Hex (.040)',
+        'Quantity: ' + (lb ? lb + ' lb' : '[HOW MANY] lb'),
+        '',
+        'Ship to: [ADDRESS]',
+        'Contact for this order: [YOUR NAME] · [YOUR PHONE]',
+        '',
+        'Could you confirm the price and the lead time? If I do not have an account with you yet,',
+        'let me know what you need from me to set one up.',
+        '',
+        'Thank you!',
+        '',
+        '[YOUR NAME]',
+        'FLOCO Certified Installer'
+      ];
+      if (p.company) body.push(p.company);
+      location.href = 'mailto:' + GLIT_EMAIL + '?subject=' + encodeURIComponent('Glitter order — FLOCO Certified installer')
+        + '&body=' + encodeURIComponent(body.join('\r\n'));
+    });
+    var gc = document.getElementById('glitCall');
+    if (gc) wire(gc, function(){ location.href = 'tel:' + GLIT_TEL; });
 
     /* initOrdering re-runs on every tick, and wire() only ever binds once —
      * so read the current selection at click time, not at bind time. */

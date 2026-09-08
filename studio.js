@@ -598,8 +598,8 @@
     html += '<div class="matline glit' + (jdG ? '' : ' off') + '">'
       + '<span class="chip" style="width:30px;height:30px;background:#DCD6C6"></span>'
       + '<div class="code">GLIT</div>'
-      + '<div class="nm">Glitter<i class="was">' + (jdG ? jdG + ' &middot; 2 oz per bag' : 'not on this job') + '</i></div>'
-      + '<div class="bags">' + (jdG ? oz + '<i>oz</i>' : '<span class="glitoff">add</span>') + '</div>'
+      + '<div class="nm">Glitter<i class="was">' + (jdG ? jdG + ' &middot; ' + oz + ' oz at 2 oz per bag' : 'not on this job') + '</i></div>'
+      + '<div class="bags">' + (jdG ? Math.ceil(oz/16) + '<i>lb</i>' : '<span class="glitoff">add</span>') + '</div>'
       + '</div>';
     html += '<div class="mattot">' + shownTotal + ' bags &middot; ' + buckets + ' pails &middot; ' + totalSq + ' sq ft</div>';
     if (edited) html += '<div class="matedit">Bag counts edited by hand. <span id="matReset">Put them back to the calculated numbers</span></div>';
