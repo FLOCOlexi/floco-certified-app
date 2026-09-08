@@ -161,7 +161,7 @@
    * Photos are deep crops into the granules so the sample bag disappears.
    * ============================================================== */
   var BASES = [
-    {id:'base-01', label:'Base 01', ch:'Pale grey & cream', fp:'02', cp:'01',
+    {id:'base-01', label:'Base 01', ch:'Pale grey & cream', fp:'02', cp:'01', inst:'base-01',
       f:[{code:'RH65',pct:45},{code:'RH31',pct:40},{code:'RH61',pct:10},{code:'RH60',pct:5}],
       c:[{code:'RH60',pct:60},{code:'RH31',pct:15},{code:'RH65',pct:15},{code:'RH70',pct:10}]},
     /* Floor and companion were SWAPPED on 2026-09-04. Katie's two bags for this
@@ -174,23 +174,21 @@
     {id:'base-03', label:'Base 03', ch:'Cream & brown', fp:'05', cp:'06',
       f:[{code:'RH31',pct:70},{code:'RH32',pct:15},{code:'RH30',pct:15}],
       c:[{code:'RH32',pct:80},{code:'RH30',pct:10},{code:'RH31',pct:10}]},
-    {id:'base-04', label:'Base 04', ch:'Cream & dark grey', fp:'08', cp:'07',
+    {id:'base-04', label:'Base 04', ch:'Cream & dark grey', fp:'08', cp:'07', inst:'base-04',
       f:[{code:'RH31',pct:45},{code:'RH65',pct:40},{code:'RH60',pct:15}],
       c:[{code:'RH60',pct:70},{code:'RH65',pct:20},{code:'RH31',pct:10}]},
-    /* The installed shot argues for "companion" over "coping blend": the same
-     * darker mix runs the band round the pool AND the mermaid inlay. */
     {id:'base-05', label:'Base 05', nm:'Sanibel', ch:'Cream, turquoise & green', fp:'10', cp:'09', inst:'base-05',
       f:[{code:'RH31',pct:50},{code:'RH65',pct:30},{code:'RH26',pct:10},{code:'RH12',pct:10}],
       c:[{code:'RH12',pct:50},{code:'RH26',pct:30},{code:'RH70',pct:20}]},
-    {id:'base-06', label:'Base 06', ch:'Warm greige & earth', fp:'12', cp:'11',
+    {id:'base-06', label:'Base 06', ch:'Warm greige & earth', fp:'12', cp:'11', inst:'base-06',
       /* RH32 — Katie's label read RH35, which does not exist; she confirmed the
        * correction herself on 2026-09-04. */
       f:[{code:'RH30',pct:30},{code:'RH32',pct:25},{code:'RH60',pct:20},{code:'RH65',pct:15},{code:'RH31',pct:10}],
       c:[{code:'RH60',pct:30},{code:'RH70',pct:30},{code:'RH32',pct:30},{code:'RH30',pct:10}]},
-    {id:'base-07', label:'Base 07', ch:'Light sand & beige', fp:'13', cp:'14',
+    {id:'base-07', label:'Base 07', ch:'Light sand & beige', fp:'13', cp:'14', inst:'base-07',
       f:[{code:'RH31',pct:50},{code:'RH30',pct:30},{code:'RH65',pct:10},{code:'RH61',pct:10}],
       c:[{code:'RH30',pct:45},{code:'RH31',pct:25},{code:'RH61',pct:20},{code:'RH65',pct:10}]},
-    {id:'base-08', label:'Base 08', ch:'Cream & coastal blue', fp:'15', cp:'16',
+    {id:'base-08', label:'Base 08', ch:'Cream & coastal blue', fp:'15', cp:'16', inst:'base-08',
       f:[{code:'RH31',pct:80},{code:'RH30',pct:10},{code:'RH65',pct:5},{code:'RH20',pct:5}],
       c:[{code:'RH31',pct:65},{code:'RH20',pct:20},{code:'RH30',pct:10},{code:'RH65',pct:5}]}
   ];
