@@ -41,6 +41,21 @@ b{font-weight:600;color:#fff;}
 .yours p{font-size:12px;line-height:1.65;}
 .fill{display:block;border-bottom:1px solid rgba(198,166,98,.5);min-height:1.15em;margin:9px 0 3px;}
 .fill i{font-family:'Inter';font-style:normal;font-size:10.5px;color:var(--muted);}
+/* ---- the installer fills these in once, on their own device -----------
+   Nobody has to chase them for it by email, and a customer never sees a
+   blank line where the payment terms should be. */
+.tf{display:block;border-bottom:1px solid rgba(198,166,98,.5);margin:11px 0 3px;padding-bottom:3px;}
+.tf .tl{display:block;font-family:'Inter';font-size:10px;letter-spacing:.04em;color:var(--muted);margin-bottom:3px;}
+.tf textarea{width:100%;background:rgba(255,255,255,.55);border:1px solid rgba(198,166,98,.45);
+  border-radius:7px;padding:8px 9px;font-family:'Inter';font-size:12px;line-height:1.55;
+  color:var(--ink,#12202B);resize:vertical;min-height:38px;outline:none;}
+.tf textarea:focus{border-color:var(--gold);background:#fff;}
+.tf .tv{font-family:'Inter';font-size:12px;line-height:1.65;white-space:pre-wrap;}
+.tf .tv.empty{color:#B0453B;font-style:italic;}
+.tbanner{border-radius:10px;padding:11px 13px;margin:0 0 14px;font-family:'Inter';font-size:11.5px;line-height:1.6;}
+.tbanner.todo{background:rgba(176,69,59,.10);border:1px solid rgba(176,69,59,.45);color:#8A3A32;}
+.tbanner.done{background:rgba(42,157,150,.10);border:1px solid rgba(42,157,150,.45);color:#1B6E69;}
+.tbanner b{font-weight:700;}
 .foot{margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,255,255,.09);
       font-family:'Inter';font-size:10.5px;line-height:1.6;color:var(--muted);}
 a{color:var(--gold-lt);}
@@ -80,20 +95,22 @@ a{color:var(--gold-lt);}
     <span id="coName7">Your Company</span>.</b></p>
   </div>
 
-  <h2>Your payment and cancellation terms</h2>
-  <p><b>FLOCO does not set these, and does not want to.</b> How you take payment, what deposit
+  <h2 data-repl="Payment and cancellation">Your payment and cancellation terms</h2>
+  <p data-repos><b>FLOCO does not set these, and does not want to.</b> How you take payment, what deposit
   you ask for, what happens if a customer pays late, and what you do about a cancellation are
   decisions for your own business. They are not ours to write, and we are not part of them.</p>
+  <p data-only-customer style="display:none">These terms are set by <span id="coName8">Your Company</span>,
+  the company doing your installation. FLOCO Decking Systems is not a party to them.</p>
   <div class="yours">
-    <div class="l">Fill in your own terms here</div>
-    <p>Put your company's actual payment and cancellation terms in this space before you send
+    <div class="l" data-repl="">Fill in your own terms here</div>
+    <p data-repos>Put your company's actual payment and cancellation terms in this space before you send
     this to a customer. If you already have terms that work, use those instead of this page.</p>
-    <span class="fill"><i>Deposit required</i></span>
-    <span class="fill"><i>Balance due</i></span>
-    <span class="fill"><i>Accepted payment methods</i></span>
-    <span class="fill"><i>Late payment</i></span>
-    <span class="fill"><i>Cancellation and refunds</i></span>
-    <p style="margin-top:11px"><b>Have your own attorney check them against your state.</b>
+    <span class="fill" data-t="deposit"><i>Deposit required</i></span>
+    <span class="fill" data-t="balance"><i>Balance due</i></span>
+    <span class="fill" data-t="methods"><i>Accepted payment methods</i></span>
+    <span class="fill" data-t="late"><i>Late payment</i></span>
+    <span class="fill" data-t="cancel"><i>Cancellation and refunds</i></span>
+    <p style="margin-top:11px" data-repos><b>Have your own attorney check them against your state.</b>
     Deposit limits, cancellation rights and late-fee caps for home improvement work differ from
     state to state, and your contract is yours.</p>
   </div>
@@ -128,12 +145,12 @@ a{color:var(--gold-lt);}
   <p>There are <b>two separate warranties</b> on this project, they come from two different
   places, and neither of them is FLOCO Decking Systems.</p>
   <div class="yours">
-    <div class="l">1 &middot; Workmanship &mdash; yours</div>
+    <div class="l" data-repl="1 &middot; Workmanship">1 &middot; Workmanship &mdash; yours</div>
     <p><span id="coName5">Your Company</span> warrants its own installation workmanship,
-    on terms it sets itself. Write the length and the conditions in below. This warranty is
+    on terms it sets itself.<span data-repos> Write the length and the conditions in below.</span> This warranty is
     between you and <span id="coName6">Your Company</span>. <b>FLOCO Decking Systems does not
     provide, administer, back or guarantee it.</b></p>
-    <span class="fill"><i>Workmanship warranty period and what it covers</i></span>
+    <span class="fill" data-t="warranty"><i>Workmanship warranty period and what it covers</i></span>
   </div>
   <ul>
     <li><b>2 &middot; The material.</b> The rubber granule and binder are covered by the
@@ -174,7 +191,7 @@ a{color:var(--gold-lt);}
   </div>
 </div>
 
-<script src="accounts.js?v=50"></script>
+<script src="accounts.js?v=51"></script>
 <script>
 /* The company name is stamped in from the installer's own profile, because the
    whole point of this page is that the customer is contracting with THEM. */
@@ -192,7 +209,7 @@ a{color:var(--gold-lt);}
     }catch(e){} }
   }
   if(!name) return;                     /* leave the placeholder if unset */
-  ['coName','coName2','coName3','coName4','coName5','coName6','coName7'].forEach(function(id){
+  ['coName','coName2','coName3','coName4','coName5','coName6','coName7','coName8'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.textContent=name;
   });
   document.title=name+' — Terms & Conditions';
@@ -201,6 +218,126 @@ a{color:var(--gold-lt);}
   if(lg&&el){ el.src=lg; el.style.display='block'; }
 })();
 </script>
+<script>
+/* ---- the installer's own terms --------------------------------------------
+ * FLOCO does not write these and does not want to, but leaving six blank
+ * lines on a customer-facing page is worse than not having the page. So the
+ * installer fills them in here, once, on their own device — no chasing them
+ * by email, and nothing about their contract passes through us.
+ *
+ * A customer opening this from an emailed quote has none of that storage, so
+ * the filled text travels in the link (see quotes.js shareLink) and is shown
+ * read-only.
+ */
+(function(){
+  var TKEY = 'floco_terms';
+  var LABELS = {
+    deposit:'Deposit required', balance:'Balance due',
+    methods:'Accepted payment methods', late:'Late payment',
+    cancel:'Cancellation and refunds',
+    warranty:'Workmanship warranty period and what it covers'
+  };
+  var HINTS = {
+    deposit:'e.g. 50% to reserve your install date',
+    balance:'e.g. due on completion, before we leave site',
+    methods:'e.g. card, check, bank transfer, financing',
+    late:'e.g. what happens if an invoice runs past due',
+    cancel:'e.g. notice required, what a deposit covers',
+    warranty:'e.g. 2 years on our workmanship, covering…'
+  };
+
+  function stored(){ try { return JSON.parse(localStorage.getItem(TKEY)) || {}; } catch(e){ return {}; } }
+  function save(v){ try { localStorage.setItem(TKEY, JSON.stringify(v)); } catch(e){} }
+
+  /* Terms carried in from a customer's emailed quote. */
+  function fromLink(){
+    var m = (location.hash||'').match(/[#&]t=([^&]+)/);
+    if(!m) return null;
+    try {
+      var b=m[1].replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4) b+='=';
+      return JSON.parse(decodeURIComponent(escape(atob(b))));
+    } catch(e){ return null; }
+  }
+
+  var shared = fromLink();
+  var readOnly = !!shared || /[#&]co=/.test(location.hash||'');
+  var vals = shared || stored();
+
+  var fills = document.querySelectorAll('.fill[data-t]');
+  var filled = 0;
+
+  fills.forEach(function(el){
+    var key = el.getAttribute('data-t');
+    var val = (vals[key] || '').trim();
+    if (val) filled++;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'tf';
+    var lab = document.createElement('span');
+    lab.className = 'tl';
+    lab.textContent = LABELS[key] || key;
+    wrap.appendChild(lab);
+
+    if (readOnly){
+      var v = document.createElement('div');
+      v.className = 'tv' + (val ? '' : ' empty');
+      v.textContent = val || 'Not specified — ask us and we will confirm in writing.';
+      wrap.appendChild(v);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = val;
+      ta.rows = key === 'warranty' ? 3 : 2;
+      ta.placeholder = HINTS[key] || '';
+      ta.addEventListener('input', function(){
+        var all = stored(); all[key] = ta.value; save(all); paint();
+      });
+      wrap.appendChild(ta);
+    }
+    el.parentNode.replaceChild(wrap, el);
+  });
+
+  function paint(){
+    var v = readOnly ? vals : stored();
+    var done = Object.keys(LABELS).filter(function(k){ return (v[k]||'').trim(); }).length;
+    var b = document.getElementById('tBanner');
+    if (!b) return;
+    if (readOnly){ b.style.display='none'; return; }
+    b.className = 'tbanner ' + (done === 6 ? 'done' : 'todo');
+    b.innerHTML = done === 6
+      ? '<b>Your terms are set.</b> They travel with every quote you send from now on.'
+      : '<b>' + done + ' of 6 filled in.</b> These are your terms, not ours &mdash; write them '
+        + 'in below and they will appear on every quote you send. Have your own attorney '
+        + 'check them against your state.';
+  }
+
+  /* A customer must not read instructions written for the installer. Headings
+     get their customer wording, and the "fill this in before you send it"
+     notes come out entirely. Same rule as the Studio's lighting section. */
+  if (readOnly){
+    document.querySelectorAll('[data-repl]').forEach(function(el){
+      var t = el.getAttribute('data-repl');
+      /* An empty replacement means the heading only existed for the installer
+         and the section above already says it. */
+      if (t) { el.innerHTML = t; } else { el.remove(); }
+    });
+    document.querySelectorAll('[data-repos]').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('[data-only-customer]').forEach(function(el){ el.style.display=''; });
+    document.querySelectorAll('.yours').forEach(function(el){
+      el.style.borderStyle = 'solid';
+      el.style.borderColor = 'rgba(198,166,98,.35)';
+    });
+  }
+
+  if (!readOnly && fills.length){
+    var b = document.createElement('div');
+    b.id = 'tBanner';
+    var host = document.querySelector('.yours');
+    if (host && host.parentNode) host.parentNode.insertBefore(b, host);
+  }
+  paint();
+})();
+</script>
+
 <script>
 /* Terms is reached from two places: the quote builder, and the small link on
    the quote itself. Sending everyone to the builder would strand a customer

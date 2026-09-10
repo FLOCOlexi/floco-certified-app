@@ -205,7 +205,11 @@
         b: blends().filter(function(x){ return x.sqft > 0; })
                    .map(function(x){ return { name:x.name, sqft:x.sqft }; }),
         p: { company:pr.company||'', repName:pr.repName||'', location:pr.location||'',
-             phone:pr.phone||'', email:pr.email||'' }
+             phone:pr.phone||'', email:pr.email||'' },
+        /* Their own payment and warranty terms ride along, so the customer
+           reads the real thing rather than six blank lines. */
+        t: (function(){ try { return JSON.parse(localStorage.getItem('floco_terms')) || {}; }
+                        catch(e){ return {}; } })()
       };
       var base = location.origin + location.pathname.replace(/[^/]*$/, '') + 'quote-view.html';
       var url  = base + '#q=' + b64url(JSON.stringify(payload));

@@ -147,9 +147,15 @@
     var tc = document.querySelector('.tc');
     if (tc && (p.company || '').trim()) {
       try {
-        tc.setAttribute('href', 'terms.html#co=' +
-          btoa(unescape(encodeURIComponent(p.company.trim())))
-            .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));
+        function pack(o){
+          return btoa(unescape(encodeURIComponent(typeof o === 'string' ? o : JSON.stringify(o))))
+            .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+        }
+        var href = 'terms.html#co=' + pack(p.company.trim());
+        /* Their own payment and warranty terms came through in the quote link,
+           so hand them on rather than showing the customer blank lines. */
+        if (shared.t && Object.keys(shared.t).length) href += '&t=' + pack(shared.t);
+        tc.setAttribute('href', href);
       } catch (e) {}
     }
   }
