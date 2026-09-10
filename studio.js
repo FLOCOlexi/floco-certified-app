@@ -29,6 +29,36 @@
     'pineapple','manatee','butterfly','crab','seahorse','heron','pelican','seal',
     'american-flag','bear-paws','custom-logo','custom-phrase'
   ];
+  /* Mosaic tile inlays are a different product from a moulded inlay: the
+     CUSTOMER buys the tile from a shop, and the crew sets the surface around
+     it. So these are examples of what is possible, not a catalogue we supply. */
+  var M = 'assets/photos/mosaic/';
+  var MOSAICS = [
+    {f:'shoreline-turtles', t:'Turtles & shells',  d:'Set into the shoreline'},
+    {f:'turtle-pair',       t:'Turtle pair',       d:'Straddling the colour break'},
+    {f:'compass-rose',      t:'Compass rose',      d:'A centrepiece on open deck'},
+    {f:'resort-logo',       t:'Their own logo',    d:'Commercial & club work'}
+  ];
+
+  /* Lighting. Two genuinely different products, and the difference decides
+     the SCHEDULE, not just the price:
+       pieces  — a sign or shape. Goes INTO the surface or on a wall. Their call.
+       strips  — 24V run in sealed channels under the rubber, perimeter or zone.
+     Anything going into the surface has to be decided before prep day, because
+     the wire runs before the pour and cannot be added afterwards without
+     opening the surface back up. Wall-mounted has no such deadline, which is
+     what makes it an easy second sale months later. */
+  var LED = 'assets/photos/led/';
+  var LIGHTS = [
+    {f:'piece-custom-last-name', t:'Their family name', d:'Custom, any wording'},
+    {f:'piece-paradise',         t:'Welcome to Paradise', d:'Green'},
+    {f:'piece-pool-life',        t:'Pool Life',         d:'Blue'},
+    {f:'piece-stay-poolside',    t:'Stay Poolside',     d:'Violet'},
+    {f:'piece-tiki-time',        t:'Tiki Time',         d:'Aqua'},
+    {f:'piece-happy-place',      t:'The Happy Place',   d:'Warm amber'},
+    {f:'piece-floco-sign-blue',  t:'Their own logo',    d:'Commercial & club work'}
+  ];
+
   function title(slug){ return slug.split('-').map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join(' '); }
   function vibeName(key){ for (var i=0;i<VIBES.length;i++) if (VIBES[i].key===key) return VIBES[i].name; return key; }
   function vibeOf(file){ for (var i=0;i<VIBES.length;i++) if (file.indexOf(VIBES[i].key+'-')===0) return VIBES[i].key; return ''; }
@@ -117,6 +147,56 @@
         var item = { type:'inlay', id:'inlay:'+s, title:title(s)+' inlay', img:I+s+'.jpg' };
         var added = toggle(item); c.classList.toggle('sel', added);
         toast(added ? title(s)+' inlay added' : 'Removed'); renderBoard();
+      });
+    });
+  }
+
+  function renderMosaics(){
+    var el = document.getElementById('mosaics'); if (!el) return;
+    el.innerHTML = MOSAICS.map(function(m){
+      var id = 'mosaic:'+m.f, sel = inBoard(id) ? ' sel' : '';
+      return '<div class="inlay'+sel+'" data-id="'+id+'" data-f="'+m.f+'">'
+        + '<img src="'+M+m.f+'.jpg" loading="lazy" alt="'+m.t+'"><div class="g"></div>'
+        + '<div class="nm">'+m.t+'<span>'+m.d+'</span></div></div>';
+    }).join('');
+    el.querySelectorAll('.inlay').forEach(function(c){
+      c.addEventListener('click', function(){
+        var f = c.getAttribute('data-f'), m = null;
+        MOSAICS.forEach(function(x){ if (x.f===f) m = x; });
+        var item = { type:'mosaic', id:'mosaic:'+f, title:m.t+' (mosaic tile)', img:M+f+'.jpg' };
+        var added = toggle(item); c.classList.toggle('sel', added);
+        toast(added ? m.t+' added' : 'Removed'); renderBoard();
+      });
+    });
+  }
+
+  function renderLights(){
+    var el = document.getElementById('lights'); if (!el) return;
+    el.innerHTML = LIGHTS.map(function(m){
+      var id = 'light:'+m.f, sel = inBoard(id) ? ' sel' : '';
+      return '<div class="inlay'+sel+'" data-id="'+id+'" data-f="'+m.f+'">'
+        + '<img src="'+LED+m.f+'.jpg" loading="lazy" alt="'+m.t+'"><div class="g"></div>'
+        + '<div class="nm">'+m.t+'<span>'+m.d+'</span></div></div>';
+    }).join('');
+    el.querySelectorAll('.inlay').forEach(function(c){
+      c.addEventListener('click', function(){
+        var f = c.getAttribute('data-f'), m = null;
+        LIGHTS.forEach(function(x){ if (x.f===f) m = x; });
+        var item = { type:'light', id:'light:'+f, title:m.t+' (light piece)', img:LED+f+'.jpg' };
+        var added = toggle(item); c.classList.toggle('sel', added);
+        toast(added ? m.t+' added' : 'Removed'); renderBoard();
+      });
+    });
+
+    /* The two ways a piece can be fitted, and the strips, are choices in
+       their own right — they go on the board so the crew sees them. */
+    document.querySelectorAll('#ledOpts .ledopt').forEach(function(c){
+      var id = c.getAttribute('data-id');
+      c.classList.toggle('sel', inBoard(id));
+      c.addEventListener('click', function(){
+        var item = { type:'light', id:id, title:c.getAttribute('data-title') };
+        var added = toggle(item); c.classList.toggle('sel', added);
+        toast(added ? c.getAttribute('data-title')+' added' : 'Removed'); renderBoard();
       });
     });
   }
@@ -698,7 +778,7 @@
       L.push({ id:uid(), name: L.length? 'Blend '+(L.length+1) : 'Floor blend',
                cols:[{code:'RH31',n:'Cream',c:'#CCC6B4',pct:100}], sqft:0 });
       saveBlends(L); renderBlends();
-    }); renderVibes(); renderGallery(); renderInlays(); renderCoping(); renderBoard();
+    }); renderVibes(); renderGallery(); renderInlays(); renderMosaics(); renderLights(); renderCoping(); renderBoard();
     var pc = document.getElementById('paletteClose'); if (pc) pc.addEventListener('click', closePalette);
     var scr = document.getElementById('scrim'); if (scr) scr.addEventListener('click', closePalette);
 
@@ -709,13 +789,43 @@
       renderGallery();
     });
 
+    /* Button and copy tell the truth about who is about to receive this. */
     var send = document.getElementById('sendBtn');
+    function sendLabel(){
+      var c = ((document.getElementById('custEmail')||{}).value || '').trim();
+      return c ? 'Send to Both' : 'Send to Me';
+    }
+    function paintSend(){
+      if (!send) return;
+      var c = ((document.getElementById('custEmail')||{}).value || '').trim();
+      send.querySelector('span').textContent = sendLabel();
+      var sub = document.getElementById('sendSub');
+      if (sub) sub.textContent = c
+        ? 'Goes to you and your customer at the same time.'
+        : 'Goes straight to your inbox, ready to attach to the job.';
+      var both = document.getElementById('sendBoth');
+      if (both) both.innerHTML = c
+        ? '📩 A copy lands in <b>both</b> inboxes instantly — no more chasing.'
+        : '📩 Leave the customer’s email blank and it just comes to <b>you</b>.';
+    }
+    var ce = document.getElementById('custEmail');
+    if (ce) ce.addEventListener('input', paintSend);
+    paintSend();
+
     if (send) send.addEventListener('click', function(){
       var cust = ((document.getElementById('custEmail')||{}).value || '').trim();
       var inst = ((document.getElementById('installerEmail')||{}).value || '').trim();
       var b = board();
       if (!b.length){ toast('Save a few designs first 🎨'); return; }
-      if (!/.+@.+\..+/.test(cust)){ toast('Add your customer’s email to send'); return; }
+
+      /* The customer's address is OPTIONAL. Plenty of design meetings end with
+         the rep wanting the board in their own inbox to attach to the job, and
+         the customer either not wanting it or not having given an address yet.
+         The installer's own address is the one we genuinely need. */
+      var ok = function(e){ return /.+@.+\..+/.test(e); };
+      if (!ok(inst)){ toast('Add your email so the board has somewhere to go'); return; }
+      var toCustomer = cust !== '';
+      if (toCustomer && !ok(cust)){ toast('That customer email doesn’t look right'); return; }
 
       // build the board summary
       var lines = [];
@@ -783,21 +893,38 @@
       if (vibes.length){ lines.push('— THE VIBE —'); lines = lines.concat(vibes, ['']); }
       if (photos.length){ lines.push('— SAVED LOOKS ('+photos.length+') —'); lines = lines.concat(photos, ['']); }
       if (inlays.length){ lines.push('— INLAYS —'); lines = lines.concat(inlays, ['']); }
+      var lights = group('light');
+      if (lights.length){
+        lines.push('— LIGHTING —');
+        lines = lines.concat(lights);
+        lines.push('⚡ Anything set INTO the surface must be on the build sheet');
+        lines.push('   before prep day — the wire runs before the pour.');
+        lines.push('');
+      }
+      var mosaics = group('mosaic');
+      if (mosaics.length){
+        lines.push('— MOSAIC TILE INLAYS —');
+        lines = lines.concat(mosaics);
+        lines.push('(Customer supplies the tile; we set the surface around it.)');
+        lines.push('');
+      }
       if (coping.length){ lines.push('— COPING & EDGES —'); lines = lines.concat(coping, ['']); }
       lines.push('Built in the FLOCO Certified Design Studio.');
       lines.push('Questions? Just reply here or call (239) 426-8045.');
 
       var subject = 'Your FLOCO Design Board 🎨';
       var body = 'Hi! Here’s the design board we put together for your FLOCO rubber surfacing project.\n\n' + lines.join('\n');
-      var url = 'mailto:' + encodeURIComponent(cust)
-        + '?cc=' + encodeURIComponent(inst)
-        + '&bcc=' + encodeURIComponent('studio@flocodeckingsystems.com')
-        + '&subject=' + encodeURIComponent(subject)
+      /* With a customer address it goes to them, copying the installer.
+         Without one it goes to the installer alone. */
+      var url = 'mailto:' + encodeURIComponent(toCustomer ? cust : inst)
+        + '?' + (toCustomer ? 'cc=' + encodeURIComponent(inst) + '&' : '')
+        + 'subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(body);
 
+      var label = sendLabel();
       toast('Opening your email to send ✓');
       send.querySelector('span').textContent = 'Sent ✓';
-      setTimeout(function(){ send.querySelector('span').textContent = 'Send to Both'; }, 2600);
+      setTimeout(function(){ send.querySelector('span').textContent = label; }, 2600);
       window.location.href = url;
     });
   });

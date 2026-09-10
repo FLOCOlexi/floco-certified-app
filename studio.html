@@ -140,6 +140,53 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .frow svg{width:16px;height:16px;stroke:var(--gold-lt);stroke-width:1.8;fill:none;flex:none;}
 .frow .txt{display:flex;flex-direction:column;justify-content:center;flex:1;}
 .frow .cap{font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
+.frow .cap em{font-style:normal;color:var(--muted);letter-spacing:.5px;}
+/* mosaic tiles carry a second line of caption, unlike the mould inlays */
+.inlaygrid .nm span{display:block;font-family:'Inter';font-weight:400;font-size:8.5px;
+  color:rgba(255,255,255,.72);margin-top:1px;letter-spacing:0;text-transform:none;}
+.mosnote{font-family:'Inter';font-size:9.5px;line-height:1.65;color:var(--muted);margin:9px 2px 0;}
+.mosnote b{color:var(--gold-lt);font-weight:600;}
+
+/* ---- lighting -------------------------------------------------------- */
+.ledhero{position:relative;border-radius:18px;overflow:hidden;margin-bottom:12px;
+  border:1px solid rgba(96,190,255,.28);box-shadow:0 14px 34px rgba(0,0,0,.45);}
+.ledhero img{display:block;width:100%;height:172px;object-fit:cover;}
+.ledhero .ov{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,18,32,.15),rgba(6,18,32,.55) 52%,rgba(6,18,32,.94));}
+.ledhero .cap{position:absolute;left:15px;right:15px;bottom:13px;}
+.ledhero .cap .h{font-family:'Nunito';font-weight:900;font-size:16px;color:#fff;
+  text-shadow:0 0 18px rgba(96,190,255,.55);}
+.ledhero .cap .p{font-family:'Inter';font-size:9.5px;line-height:1.5;color:#C6DCEE;margin-top:2px;}
+.ledopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ledopt{position:relative;border-radius:15px;padding:13px 13px 12px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  background:linear-gradient(140deg,rgba(96,190,255,.10),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.10);}
+.ledopt.sel{border-color:rgba(96,190,255,.75);background:linear-gradient(140deg,rgba(96,190,255,.22),rgba(96,190,255,.06));
+  box-shadow:0 0 0 1px rgba(96,190,255,.35),0 0 24px rgba(96,190,255,.22);}
+.ledopt .ic{width:30px;height:30px;border-radius:9px;background:rgba(96,190,255,.16);
+  display:flex;align-items:center;justify-content:center;margin-bottom:8px;}
+.ledopt .ic svg{width:16px;height:16px;fill:none;stroke:#7FCBFF;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.ledopt .t{font-family:'Nunito';font-weight:900;font-size:12.5px;color:#fff;}
+.ledopt .d{font-family:'Inter';font-size:9px;line-height:1.5;color:var(--muted);margin-top:3px;}
+.ledopt .tick{position:absolute;top:11px;right:11px;width:17px;height:17px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;}
+.ledopt.sel .tick{background:#7FCBFF;border-color:#7FCBFF;}
+.ledopt .tick svg{width:9px;height:9px;fill:none;stroke:#06212F;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;opacity:0;}
+.ledopt.sel .tick svg{opacity:1;}
+.ledwarn{display:flex;gap:9px;border-radius:13px;padding:12px 13px;margin-top:11px;
+  background:rgba(198,166,98,.11);border:1px solid rgba(198,166,98,.38);}
+.ledwarn .b{flex:none;font-size:13px;line-height:1.3;}
+.ledwarn .x{font-family:'Inter';font-size:9.5px;line-height:1.65;color:#D8CEB8;}
+.ledwarn .x b{color:var(--gold-lt);font-weight:600;}
+.ledspec{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+/* neon artwork is far brighter than a photo, so the caption needs a
+   heavier scrim under it than the mould-inlay tiles use */
+#lights .inlay .g{background:linear-gradient(180deg,transparent 34%,rgba(4,12,22,.72) 62%,rgba(4,12,22,.94));}
+#lights .inlay .nm{text-shadow:0 1px 6px rgba(0,0,0,.9);}
+.ledspec span{font-family:'Inter';font-size:8.5px;letter-spacing:.04em;color:#9FB8CC;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;padding:5px 9px;}
 .frow .val{font-family:'Inter';font-size:13px;color:#fff;margin-top:1px;}
 .frow input{background:transparent;border:0;outline:none;color:#fff;font-family:'Inter';font-size:13px;margin-top:1px;width:100%;}
 .frow input::placeholder{color:var(--muted);}
@@ -274,12 +321,12 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=42"></script>
+<script src="accounts.js?v=43"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="colors.js?v=42"></script>
-<script defer src="app.js?v=42"></script>
-<script defer src="studio.js?v=42"></script>
+<script defer src="colors.js?v=43"></script>
+<script defer src="app.js?v=43"></script>
+<script defer src="studio.js?v=43"></script>
 </head>
 <body>
 <div class="screen">
@@ -385,6 +432,59 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="sh"><div class="k">make it theirs</div><div class="h">Add an <span>inlay.</span></div></div>
     <div class="inlaygrid" id="inlays"></div>
 
+    <!-- Mosaic tile inlays -->
+    <div class="sh"><div class="k">the customer's own tile</div><div class="h">Mosaic <span>tile inlays.</span></div></div>
+    <div class="inlaygrid" id="mosaics"></div>
+    <div class="mosnote"><b>How this one works:</b> the customer buys the mosaic from a tile shop
+      and you set the surface around it. It is their piece, so there is no catalogue to pick from
+      &mdash; these are examples to show what is possible. Tap any that they love and it goes on the board.</div>
+
+    <!-- Lighting -->
+    <div class="sh"><div class="k">after dark</div><div class="h">Light it <span>up.</span></div></div>
+    <div class="ledhero">
+      <img src="assets/photos/led/hero-sunset-glow.jpg" alt="Lit surface at dusk">
+      <div class="ov"></div>
+      <div class="cap"><div class="h">The upsell that only shows up after dark</div>
+        <div class="p">Half the year they use this space at night. Show them what it looks like then.</div></div>
+    </div>
+    <div class="ledopts" id="ledOpts">
+      <div class="ledopt" data-id="light:strips" data-title="Custom LED strips — under the surface">
+        <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h18M6 9v6M12 9v6M18 9v6"/></svg></div>
+        <div class="t">Lighting strips</div>
+        <div class="d">24V in sealed channels, run under the rubber. Perimeter, steps, or a zone.</div>
+      </div>
+      <div class="ledopt" data-id="light:inlay" data-title="Light piece set INTO the surface">
+        <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3 11v3h6v-3a6 6 0 0 0-3-11zM10 21h4"/></svg></div>
+        <div class="t">Lighting inlay</div>
+        <div class="d">A piece set into the rubber itself, glowing out of the floor.</div>
+      </div>
+      <div class="ledopt" data-id="light:wall" data-title="Light piece mounted on the wall">
+        <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/></svg></div>
+        <div class="t">Wall mounted</div>
+        <div class="d">Same pieces, hung instead of poured. Can be added any time later.</div>
+      </div>
+      <div class="ledopt" data-id="light:custom" data-title="Custom light piece — their own wording">
+        <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/></svg></div>
+        <div class="t">Made to order</div>
+        <div class="d">Their family name, their phrase, their logo. Any colour.</div>
+      </div>
+    </div>
+    <div class="inlaygrid" id="lights"></div>
+    <div class="ledwarn"><div class="b">⚡</div><div class="x">
+      <b>Anything going INTO the surface has to be decided before prep day.</b>
+      The wire runs before the pour, and it cannot be added afterwards without
+      opening the surface back up. Wall-mounted pieces have no deadline, which
+      makes them an easy second sale months after you finish.</div></div>
+    <div class="ledspec">
+      <span>24 volt</span><span>Sealed waterproof channels</span><span>Wire under the rubber</span>
+      <span>110 transformer &middot; 90 linear ft</span><span>Remote controlled</span>
+      <span>Fitted by a licensed electrician</span>
+    </div>
+
     <!-- Coping & Edges -->
     <div class="sh"><div class="k">frame it</div><div class="h">Coping <span>&amp; edges.</span></div></div>
     <div class="subk">The cut · how the edge is finished</div>
@@ -395,13 +495,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <!-- Send -->
     <div class="send">
       <div class="h">Send the <span>design board</span></div>
-      <div class="s">Goes to you and your customer at the same time.</div>
+      <div class="s" id="sendSub">Goes to you and your customer at the same time.</div>
       <div class="frow"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
         <div class="txt"><div class="cap">Your email (installer)</div><input id="installerEmail" type="email" placeholder="your business email" inputmode="email" autocomplete="off"></div></div>
       <div class="frow"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        <div class="txt"><div class="cap">Customer's email</div><input id="custEmail" type="email" placeholder="enter your customer's email…" inputmode="email" autocomplete="off"></div></div>
+        <div class="txt"><div class="cap">Customer's email <em>&middot; optional</em></div><input id="custEmail" type="email" placeholder="leave blank to send only to yourself" inputmode="email" autocomplete="off"></div></div>
       <div class="sbtn" id="sendBtn"><span>Send to Both</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="both">📩 A copy lands in <b>both</b> inboxes instantly — no more chasing.</div>
+      <div class="both" id="sendBoth">📩 A copy lands in <b>both</b> inboxes instantly &mdash; no more chasing.</div>
     </div>
     <div class="pad"></div>
   </div>
