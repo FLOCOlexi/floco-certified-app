@@ -553,9 +553,47 @@
   else initOrdering();
 
   // service worker
+  /* Registering the worker was never the problem — taking the update was.
+   * sw.js calls skipWaiting/claim, so a new worker takes over straight away,
+   * but the page that is ALREADY open keeps running the JavaScript it loaded
+   * on open. Installed to a home screen, a phone can sit on that same page for
+   * days, which is how someone ends up looking at a bug that was fixed hours
+   * ago and reasonably concluding it was never fixed.
+   *
+   * So when a new worker takes control, reload once. The guard is what stops
+   * that becoming a loop.
+   */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        reg.addEventListener('updatefound', function () {
+          var sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener('statechange', function () {
+            /* controller present == this page was already being served by an
+               older worker, so this really is an update and not a first run. */
+            if (sw.state === 'activated' && navigator.serviceWorker.controller) {
+              if (!sessionStorage.getItem('floco_reloaded_for_update')) {
+                sessionStorage.setItem('floco_reloaded_for_update', '1');
+                location.reload();
+              }
+            }
+          });
+        });
+        /* Check on every open, and again if the app is left running. */
+        reg.update();
+        setInterval(function () { reg.update(); }, 30 * 60 * 1000);
+      }).catch(function () {});
+    });
+
+    var reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (reloading) return;
+      reloading = true;
+      if (!sessionStorage.getItem('floco_reloaded_for_update')) {
+        sessionStorage.setItem('floco_reloaded_for_update', '1');
+        location.reload();
+      }
     });
   }
 })();
