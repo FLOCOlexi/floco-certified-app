@@ -48,6 +48,27 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .ov-tile.ready{border-style:solid;border-color:rgba(198,166,98,.4);text-decoration:none;overflow:hidden;}
 .ov-tile.ready .frame{height:72px;width:auto;opacity:1;}
 .ovnote{font-family:'Inter';font-size:9.5px;line-height:1.6;color:var(--muted);margin-top:10px;}
+/* Real links now, so they need link resets and a real hit area. */
+.feat{display:block;text-decoration:none;}
+.clip .hit{position:absolute;inset:0;display:block;text-decoration:none;}
+.clip .dl{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:8px;background:rgba(198,166,98,.92);
+  display:flex;align-items:center;justify-content:center;z-index:2;text-decoration:none;}
+.clip .dl svg{width:13px;height:13px;stroke:#0A1F35;stroke-width:2.2;fill:none;}
+.getbtn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;height:42px;
+  border-radius:13px;background:rgba(198,166,98,.16);border:1px solid var(--line);text-decoration:none;
+  font-family:'Nunito';font-weight:900;font-size:12.5px;color:var(--gold-lt);}
+.getbtn svg{width:15px;height:15px;stroke:var(--gold-lt);stroke-width:2.2;fill:none;}
+.drive{display:flex;align-items:center;gap:14px;margin-top:20px;padding:16px;border-radius:16px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(198,166,98,.15),rgba(58,191,184,.10));border:1px solid var(--line);}
+.drive .ic{width:44px;height:44px;flex:none;border-radius:12px;background:rgba(198,166,98,.18);
+  display:flex;align-items:center;justify-content:center;}
+.drive .ic svg{width:22px;height:22px;stroke:var(--gold-lt);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.drive .h{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;}
+.drive .p{font-family:'Inter';font-size:9.5px;line-height:1.5;color:#B9C6D2;margin-top:2px;}
+.nolink{border:1px dashed rgba(198,166,98,.45);border-radius:16px;padding:18px 16px;background:rgba(198,166,98,.06);}
+.nolink .h{font-family:'Nunito';font-weight:900;font-size:13px;color:var(--gold-lt);}
+.nolink .p{font-family:'Inter';font-size:10px;line-height:1.6;color:var(--muted);margin-top:5px;}
+.nolink code{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;color:var(--teal);}
 .ov-tile .lg{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:'Inter';font-weight:600;font-size:8px;color:var(--muted);}
 .cal{margin-top:20px;border-radius:16px;background:linear-gradient(135deg,rgba(198,166,98,.13),rgba(58,191,184,.09));border:1px solid var(--line);padding:16px 16px;display:flex;align-items:center;gap:14px;}
 .cal .ic{width:44px;height:44px;border-radius:12px;background:rgba(198,166,98,.16);display:flex;align-items:center;justify-content:center;flex:none;}
@@ -69,11 +90,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=41"></script>
+<script src="accounts.js?v=42"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=41"></script>
-<script defer src="overlays.js?v=41"></script>
+<script defer src="app.js?v=42"></script>
+<script defer src="library.js?v=42"></script>
+<script defer src="overlays.js?v=42"></script>
+<script defer src="vault.js?v=42"></script>
 </head>
 <body>
 <div class="screen">
@@ -82,20 +105,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
   <div class="top"><div class="back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ti">Marketing <span>Vault</span></div></div>
 
   <div class="wrap">
-    <div class="feat">
-      <img src="assets/img/cover.jpg"><div class="ov"></div>
-      <div class="tagd">Show at every measure</div>
-      <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
-      <div class="cap"><div class="h">The FLOCO Story — customer video 🎬</div><div class="p">Play it while you measure the job, or post it on your socials. It explains what FLOCO rubber surfacing is, the process, and the craft — so your customer already gets it before you quote.</div></div>
-    </div>
+    <div id="vaultHero"></div>
 
     <div class="sec">
-      <div class="lb"><div class="t">Ready to post</div><div class="e">See all</div></div>
-      <div class="row">
-        <div class="clip"><img src="assets/img/detail-charcoal.jpg"><div class="g"></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="pl"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div><div class="nm">Before / After reel</div></div>
-        <div class="clip"><img src="assets/img/home.jpg"><div class="g"></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="pl"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div><div class="nm">Pool deck reveal</div></div>
-        <div class="clip"><img src="assets/img/commercial.jpg"><div class="g"></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="pl"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div><div class="nm">Why FLOCO</div></div>
-      </div>
+      <div class="lb"><div class="t">Ready to post</div><a class="e" id="vaultSeeAll" href="#" target="_blank" rel="noopener">See all</a></div>
+      <div class="row" id="vaultClips"></div>
     </div>
 
     <div class="sec">
@@ -113,6 +127,12 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
         onto a vertical reel. <b>Full reel frame</b> is ready-made and branded FLOCO. The other three are built
         on the spot and carry <b>your</b> company name, not ours.</div>
     </div>
+
+    <a class="drive" id="vaultDrive" href="#" target="_blank" rel="noopener" style="display:none">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M8 3h8l5 9-4 9H7l-4-9z"/><path d="M8 3l4 9h9M12 12L7 21M12 12L3 12"/></svg></div>
+      <div><div class="h">The whole video library</div>
+        <div class="p">Every reel, every before &amp; after, every raw clip &mdash; in one Google Drive folder. Open it, download what you need.</div></div>
+    </a>
 
     <a class="cal" href="calendar.html" style="text-decoration:none">
       <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>

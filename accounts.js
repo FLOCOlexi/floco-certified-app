@@ -17,7 +17,60 @@ window.FLOCO_PASSWORD = "FLOCOFAM";
 /* Certified companies we already know. Key is the sign-in email, lowercased.
    Add a company here and their next sign-in fills itself in.
    Logos are uploaded once on the company's own device, under Quotes. */
+/* Every FLOCO teammate shares the same company details, so build the record
+   from just a name and a role rather than repeating the address twelve times. */
+function fam(name, role) {
+  return { company: "FLOCO Decking Systems", repName: name, title: role,
+           location: "Southwest Florida", phone: "", family: true };
+}
+
 window.FLOCO_COMPANIES = {
+  /* ── THE FLOCO FAMILY ──────────────────────────────────────────────────
+     FLOCO's own team. Anyone can already sign in with any email, so this is
+     not about granting access. It is about being RECOGNISED: without an entry
+     here, Brett signing in would be treated as an unknown certified company
+     and the app would put a blank letterhead on his quotes. With one, the app
+     knows he is FLOCO.
+     role:"family" also unlocks the family-only bits of the app (see below).
+     To add someone, copy a line. Nothing else needs changing. */
+  "lexi@flocodeckingsystems.com":    fam("Lexi Rivera",     "Owner"),
+  "brett@flocodeckingsystems.com":   fam("Brett Aarnes",    "Owner · Sales & Operations"),
+  "kelly@flocodeckingsystems.com":   fam("Kelly",           "Owner"),
+  "adamh@flocodeckingsystems.com":   fam("Adam Hodges",     "Head of Operations"),
+  "tyler@flocodeckingsystems.com":   fam("Tyler",           "Head of Cleaning & Maintenance"),
+  "katie@flocodeckingsystems.com":   fam("Katie",           "Sales Manager"),
+  "bill@flocodeckingsystems.com":    fam("Bill",            "Sales"),
+  "stacy@flocodeckingsystems.com":   fam("Stacy",           "Sales"),
+  "layton@flocodeckingsystems.com":  fam("Layton",          "Sales"),
+  "cristalh@flocodeckingsystems.com":fam("Cristal Hodges",  "Colour Blend Design"),
+  "sami@flocodeckingsystems.com":    fam("Sami Sposato",    "Client Care"),
+  "alysoni@flocodeckingsystems.com": fam("Alyson Innocenti","Client Care"),
+  /* ⚠️ Luis is missing because we do not have his address on file. Add the
+     line the moment we do; until then he can still sign in, he just will not
+     be recognised as family. */
+
+
+  /* ── DEMO ACCOUNTS (for video / screen recordings / showing the app off) ──
+     Password is the same FLOCOFAM. Two flavours so you can film both and pick
+     in the edit. Neither one shows a real certified company's details.
+       1. demo@     -> "YOUR COMPANY HERE"  (viewer projects themselves into it)
+       2. showcase@ -> a neutral demo company, so the app looks lived-in
+     To rename either, just edit the `company` line. Nothing else depends on it. */
+  "demo@flocodeckingsystems.com": {
+    company:  "YOUR COMPANY HERE",
+    repName:  "Your Name",
+    location: "Your Market",
+    phone:    "",
+    email:    "demo@flocodeckingsystems.com"
+  },
+  "showcase@flocodeckingsystems.com": {
+    company:  "Certified Surfacing Co.",
+    repName:  "Certified Specialist",
+    location: "Your Market",
+    phone:    "",
+    email:    "showcase@flocodeckingsystems.com"
+  },
+
   "marshall@honeydosllc.com": {
     company:  "Pro Surfacing Services",
     repName:  "Marshall E. Johnson Sr.",
@@ -57,11 +110,23 @@ window.FLOCOauth = {
     var mine  = this.edits()[email] || {};      /* their own corrections win */
     var pick  = function (k) { return mine[k] || known[k] || ""; };
 
-    var p = { company: pick("company"), location: pick("location"), role: "certified",
+    /* FLOCO's own team get role "family". Everyone else is a certified
+       company, including addresses we have never seen before. */
+    var isFam = !!known.family;
+    var p = { company: pick("company"), location: pick("location"),
+              role: isFam ? "family" : "certified", family: isFam,
+              title: known.title || "",
               email: email, phone: pick("phone"), repName: pick("repName") };
 
     localStorage.setItem(this.key, JSON.stringify(p));
     return p;
+  },
+
+  /* Is the person signed in one of ours? Used to show the family-only
+     shelf in the Vault and to label the header. */
+  isFamily: function () {
+    var p = this.profile();
+    return !!(p && p.family);
   },
 
   profile: function () {

@@ -69,10 +69,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=41"></script>
+<script src="accounts.js?v=42"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=41"></script>
+<script defer src="app.js?v=42"></script>
+<script defer src="brandkit.js?v=42"></script>
 </head>
 <body>
 <div class="screen">
@@ -85,19 +86,19 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="lock">
       <div class="sh"></div>
       <div class="badge"></div>
-      <div class="co">SprayRite USA</div>
+      <div class="co" id="lockCo">Your Company</div>
       <div class="cert">a FLOCO Certified Specialist</div>
-      <div class="btn"><span>Download Lockup</span><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div>
+      <div class="btn" data-brand="lockup"><span>Download Lockup</span><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div>
     </div>
 
     <div class="slb">Brand Assets</div>
     <div class="grid">
-      <div class="ba g"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Certified Badge</div><div class="sub2">PNG · SVG · print</div></div>
-      <div class="ba"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Logo Lockup</div><div class="sub2">Your name + FLOCO</div></div>
-      <div class="ba"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 21h10M12 18v3"/><path d="M7 9l3 3 5-5"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Website Badge</div><div class="sub2">Embed for your site</div></div>
-      <div class="ba"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Email Signature</div><div class="sub2">Copy & paste</div></div>
-      <div class="ba g"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 3l4 3 4-3 3 4-3 2v9H8v-9L5 7z"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Apparel Art</div><div class="sub2">Shirts · hats</div></div>
-      <div class="ba"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 13l2-6h10l3 4h3v4M3 13v3h2M19 15v1"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Vehicle Decal</div><div class="sub2">Truck-ready art</div></div>
+      <a class="ba g" href="assets/img/certified-badge.png" download><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Certified Badge</div><div class="sub2">PNG · transparent</div></a>
+      <div class="ba" data-brand="lockup"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Logo Lockup</div><div class="sub2">Your name + FLOCO</div></div>
+      <div class="ba" data-brand="embed"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 21h10M12 18v3"/><path d="M7 9l3 3 5-5"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Website Badge</div><div class="sub2">Copy embed code</div></div>
+      <div class="ba" data-brand="signature"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Email Signature</div><div class="sub2">Copy &amp; paste</div></div>
+      <a class="ba g" href="assets/decals/FLOCO-Proud-To-Offer.png" download><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 3l4 3 4-3 3 4-3 2v9H8v-9L5 7z"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Apparel Art</div><div class="sub2">Shirts · hats</div></a>
+      <a class="ba" href="assets/decals/FLOCO-Transform-Your-Outdoors.png" download><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 13l2-6h10l3 4h3v4M3 13v3h2M19 15v1"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg></div><div class="dl"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></div><div class="nm">Vehicle Decal</div><div class="sub2">Truck-ready art</div></a>
     </div>
 
     <div class="slb">Decals &amp; Print Files</div>

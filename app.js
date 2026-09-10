@@ -20,8 +20,9 @@
 
     // personalize the greeting only if a company profile is set (universal login leaves it generic)
     if (p && p.company) {
-      var co = document.querySelector('.greet .co');
-      if (co) co.textContent = p.company;
+      document.querySelectorAll('.greet .co, .lock .co').forEach(function (co) {
+        co.textContent = p.company;
+      });
       var chip = document.querySelector('.greet .chip');
       if (chip && p.location) chip.innerHTML = 'FLOCO Certified <b>·</b> ' + p.location;
     }
@@ -117,36 +118,19 @@
       else if (label.indexOf('email') > -1) wire(el, function () { location.href = 'mailto:' + MAIL + '?subject=FLOCO%20Certified%20%E2%80%94%20Support'; });
     });
 
-    // My Brand: badge/asset cards + Download Lockup button + email signature copy
-    document.querySelectorAll('.ba').forEach(function (el) {
-      var nm = txt(el.querySelector('.nm')).toLowerCase();
-      if (nm.indexOf('signature') > -1) {
-        wire(el, function () {
-          copy('Your Name\nFLOCO Certified Installer  |  Rubber Surfacing Experts\n' + MAIL + '  |  flocodeckingsystems.com', 'Signature copied — swap in your details');
-        });
-      } else {
-        wire(el, function () { toast('Brand asset delivery coming soon 🦩'); });
-      }
-    });
-    document.querySelectorAll('.btn').forEach(function (el) {
-      var t = txt(el).toLowerCase();
-      if (t.indexOf('download') > -1 || t.indexOf('lockup') > -1) wire(el, function () { toast('Brand asset delivery coming soon 🦩'); });
-    });
-
-    // Downloads (vault clips, inlay cut files, brand icons) → friendly notice
-    document.querySelectorAll('.dl').forEach(function (el) {
-      wire(el, function () { toast('Download opens here soon 🦩'); });
-    });
-    // Vault play buttons + overlay tiles
-    document.querySelectorAll('.pl, .play').forEach(function (el) {
-      wire(el, function () { toast('Video plays here soon 🦩'); });
-    });
-    document.querySelectorAll('.ov-tile').forEach(function (el) {
-      wire(el, function () { toast('Overlay coming soon 🦩'); });
-    });
-    // "See all" links
-    document.querySelectorAll('.e, .more').forEach(function (el) {
-      wire(el, function () { toast('Full library coming soon 🦩'); });
+    /* My Brand and the Vault used to answer every tap with a "coming soon"
+       toast. They are real now: brandkit.js generates the lockup, the embed
+       code and the signature, and everything else is a plain <a download> or
+       a real link in the markup. So the only thing left to do here is to NOT
+       intercept those. Anything that is already a link, or that carries its
+       own data-* handler, is left strictly alone. */
+    function unclaimed(el) {
+      return !el.closest('a[href]') && !el.closest('[data-brand]') &&
+             !el.closest('[data-ov]') && !el.closest('[data-link]');
+    }
+    document.querySelectorAll('.ba, .btn, .dl, .pl, .play').forEach(function (el) {
+      if (!unclaimed(el)) return;
+      wire(el, function () { toast('Not wired up yet — tell Lexi 🦩'); });
     });
 
     // Materials "Order" + Cleaning "Order the FLOCO cleaner" (by exact leaf text)

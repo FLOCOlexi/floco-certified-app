@@ -5,10 +5,10 @@
   var VIBES = [
     { key: 'warm-tans',      name: 'Warm Tans',     desc: 'Warm, earthy, sandy',   hero: 'warm-tans-02-lakefront-pool.jpg' },
     { key: 'cool-greys',     name: 'Cool Greys',    desc: 'Clean & modern',        hero: 'cool-greys-03-curved-pool.jpg' },
-    { key: 'beach-vibes',    name: 'Beach Vibes',   desc: 'Coastal & breezy',      hero: 'beach-vibes-04-poolside-landscape.jpg' },
+    { key: 'beach-vibes',    name: 'Beach Vibes',   desc: 'Coastal & breezy',      hero: 'beach-vibes-06-beach-blend-shore.jpg' },
     { key: 'bold-color',     name: 'Bold Color',    desc: 'Statement & fun',       hero: 'bold-color-05-butterfly-blue.jpg' },
-    { key: 'bright-airy',    name: 'Bright & Airy', desc: 'Light & fresh',         hero: 'bright-airy-01-white-sand-pool.jpg' },
-    { key: 'deep-moody',     name: 'Deep & Moody',  desc: 'Rich & dramatic',       hero: 'deep-moody-04-navy-edge.jpg' },
+    { key: 'bright-airy',    name: 'Bright & Airy', desc: 'Light & fresh',         hero: 'bright-airy-06-open-lanai.jpg' },
+    { key: 'deep-moody',     name: 'Deep & Moody',  desc: 'Rich & dramatic',       hero: 'deep-moody-06-charcoal-columns.jpg' },
     { key: 'earthy-organic', name: 'Earthy Organic',desc: 'Natural & grounded',    hero: 'earthy-organic-02-terracotta-lanai.jpg' },
     { key: 'layered-blend',  name: 'Layered Blend', desc: 'Multi-tone & zoned',    hero: 'layered-blend-02-teal-tile-modern.jpg' }
   ];
@@ -16,10 +16,10 @@
   var GALLERY = [
     'warm-tans-01-lakeview-lanai','warm-tans-02-lakefront-pool','warm-tans-03-meadow-lanai','warm-tans-04-canal-lanai','warm-tans-05-mermaid-patio','warm-tans-06-lake-pool','warm-tans-07-rose-sun-lounge','warm-tans-08-pool-life',
     'cool-greys-01-screened-pool','cool-greys-02-modern-lanai','cool-greys-03-curved-pool','cool-greys-04-tile-edge-spa','cool-greys-05-compass-deck','cool-greys-06-spa-stairs','cool-greys-07-screened-rectangle','cool-greys-08-butterfly-grey','cool-greys-09-poolside-grey','cool-greys-10-compass-sunset',
-    'beach-vibes-01-canal-dolphin','beach-vibes-02-waterfront-flag','beach-vibes-03-gazebo-lake','beach-vibes-04-poolside-landscape','beach-vibes-05-lake-screened',
+    'beach-vibes-06-beach-blend-shore','beach-vibes-07-shoreline-detail','beach-vibes-01-canal-dolphin','beach-vibes-02-waterfront-flag','beach-vibes-03-gazebo-lake','beach-vibes-04-poolside-landscape','beach-vibes-05-lake-screened',
     'bold-color-01-charcoal-stars','bold-color-02-koi-inlay','bold-color-03-flamingo-grey','bold-color-04-anchor-canal','bold-color-05-butterfly-blue','bold-color-06-red-turtle','bold-color-07-anchor-slate','bold-color-08-blue-tile-spa',
-    'bright-airy-01-white-sand-pool','bright-airy-02-blue-white-deck','bright-airy-03-lake-lanai','bright-airy-04-mermaid-white','bright-airy-05-clean-grey-patio',
-    'deep-moody-01-charcoal-stars','deep-moody-02-sunburst-charcoal','deep-moody-03-turtle-charcoal','deep-moody-04-navy-edge','deep-moody-05-charcoal-detail',
+    'bright-airy-06-open-lanai','bright-airy-01-white-sand-pool','bright-airy-02-blue-white-deck','bright-airy-03-lake-lanai','bright-airy-04-mermaid-white','bright-airy-05-clean-grey-patio',
+    'deep-moody-06-charcoal-columns','deep-moody-01-charcoal-stars','deep-moody-02-sunburst-charcoal','deep-moody-03-turtle-charcoal','deep-moody-05-charcoal-detail',
     'earthy-organic-01-jungle-screened','earthy-organic-02-terracotta-lanai','earthy-organic-03-earthy-close','earthy-organic-04-warm-earthy','earthy-organic-05-warm-sun-inlay',
     'layered-blend-01-sunflower-zone','layered-blend-02-teal-tile-modern','layered-blend-03-navy-teal-dual','layered-blend-04-multi-tone-detail','layered-blend-05-mermaid-layered'
   ];
@@ -84,7 +84,7 @@
     if (state.vibe) return GALLERY.filter(function(f){ return vibeOf(f)===state.vibe; });
     if (state.showAll) return GALLERY;
     // default curated mix (2 per vibe-ish, 10)
-    return ['warm-tans-02-lakefront-pool','cool-greys-03-curved-pool','bright-airy-01-white-sand-pool','bold-color-05-butterfly-blue','beach-vibes-04-poolside-landscape','deep-moody-04-navy-edge','layered-blend-02-teal-tile-modern','earthy-organic-02-terracotta-lanai','warm-tans-08-pool-life','cool-greys-05-compass-deck'];
+    return ['warm-tans-02-lakefront-pool','cool-greys-03-curved-pool','bright-airy-01-white-sand-pool','bold-color-05-butterfly-blue','beach-vibes-06-beach-blend-shore','deep-moody-06-charcoal-columns','layered-blend-02-teal-tile-modern','earthy-organic-02-terracotta-lanai','warm-tans-08-pool-life','cool-greys-05-compass-deck'];
   }
   function renderGallery(){
     var el = document.getElementById('gallery'); if (!el) return;
@@ -291,7 +291,21 @@
     if (d.jdInlay) bits.push('inlay');
     if (d.jdDeposit || d.jdBalance || d.jdPayNotes) bits.push('payment');
     if (d.jdNotes) bits.push('notes');
-    return bits.length ? bits.join(' · ') : 'Coping, steps, glitter, inlay & notes';
+    return bits.length ? bits.join(' · ') : 'Not filled in yet — the crew builds off this';
+  }
+
+  /* The header says out loud whether anything has been entered, because an
+     empty spec sheet that LOOKS filled in is how a crew ends up guessing. */
+  function jdPaint(){
+    var card = document.getElementById('jobDetails');
+    var sm   = document.getElementById('jdSummary');
+    if (!card || !sm) return;
+    var d = jobDetails();
+    var filled = JD_FIELDS.some(function(id){
+      return String(d[id] === undefined ? '' : d[id]).trim() !== '';
+    });
+    sm.textContent = jdSummaryText();
+    card.classList.toggle('jd-empty', !filled);
   }
 
   function initJobDetails(){
@@ -301,15 +315,13 @@
       var el = document.getElementById(id); if (!el) return;
       if (d[id] !== undefined) el.value = d[id];
       el.addEventListener('input', function(){
-        var v = jobDetails(); v[id] = el.value; saveJobDetails(v);
-        document.getElementById('jdSummary').textContent = jdSummaryText();
+        var v = jobDetails(); v[id] = el.value; saveJobDetails(v); jdPaint();
       });
       el.addEventListener('change', function(){
-        var v = jobDetails(); v[id] = el.value; saveJobDetails(v);
-        document.getElementById('jdSummary').textContent = jdSummaryText();
+        var v = jobDetails(); v[id] = el.value; saveJobDetails(v); jdPaint();
       });
     });
-    document.getElementById('jdSummary').textContent = jdSummaryText();
+    jdPaint();
     document.getElementById('jdToggle').addEventListener('click', function(){
       card.classList.toggle('open');
     });
@@ -613,7 +625,7 @@
       v.jdGlitter = v.jdGlitter ? '' : 'Yes';
       saveJobDetails(v);
       var sel = document.getElementById('jdGlitter'); if (sel) sel.value = v.jdGlitter;
-      var sm = document.getElementById('jdSummary'); if (sm) sm.textContent = jdSummaryText();
+      jdPaint();
       renderMaterials();
     });
 

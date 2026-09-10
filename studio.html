@@ -227,12 +227,32 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .matblend .bb{flex:none;width:56px;text-align:right;font-family:'Nunito';font-weight:900;font-size:14px;color:#fff;}
 .matblend .bb i{font-family:'Inter';font-style:normal;font-weight:600;font-size:8.5px;color:var(--muted);margin-left:3px;}
 
-/* ---- job details (the spec-sheet fields, folded away) ---------------- */
-.jd{border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);margin-bottom:8px;overflow:hidden;}
-.jdh{display:flex;align-items:center;gap:9px;padding:14px 15px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.jdh .t{font-family:'Nunito';font-weight:900;font-size:13.5px;color:#fff;flex:none;}
-.jdh .s{flex:1;min-width:0;font-family:'Inter';font-size:9.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.jdh .c{flex:none;font-family:'Nunito';font-weight:900;font-size:17px;color:var(--gold-lt);line-height:1;}
+/* ---- job details (the spec-sheet fields) -----------------------------
+   This is what the crew builds off, so it must not read as a minor
+   accordion tucked under the blends. It gets the gold treatment, an icon,
+   and a state line that says out loud whether anything has been captured. */
+.jd{border-radius:18px;border:1px solid var(--line);margin:16px 0 10px;overflow:hidden;
+    background:linear-gradient(125deg,rgba(198,166,98,.14),rgba(58,191,184,.06));
+    box-shadow:0 8px 22px rgba(0,0,0,.30);}
+.jd.jd-empty{border-color:rgba(198,166,98,.55);}
+.jdh{display:flex;align-items:center;gap:12px;padding:15px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.jdh .ic{width:40px;height:40px;flex:none;border-radius:12px;background:rgba(198,166,98,.18);
+         display:flex;align-items:center;justify-content:center;}
+.jdh .ic svg{width:20px;height:20px;fill:none;stroke:var(--gold-lt);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.jdh .tx{flex:1;min-width:0;}
+.jdh .t{display:block;font-family:'Nunito';font-weight:900;font-size:15px;color:#fff;}
+.jdh .s{display:block;font-family:'Inter';font-size:9.5px;color:var(--muted);
+        margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* the state dot is an inline ::before, not a flex child - text-overflow
+   does not apply to flex containers, which clipped this mid-word */
+.jdh .s:before{content:"";display:inline-block;vertical-align:middle;
+        width:6px;height:6px;border-radius:50%;background:var(--teal);margin-right:5px;}
+.jd.jd-empty .jdh .s{color:var(--gold-lt);}
+.jd.jd-empty .jdh .s:before{background:var(--gold-lt);}
+.jdh .c{flex:none;width:28px;height:28px;border-radius:50%;background:rgba(198,166,98,.18);
+        display:flex;align-items:center;justify-content:center;
+        font-family:'Nunito';font-weight:900;font-size:16px;color:var(--gold-lt);line-height:1;
+        transition:transform .18s ease;}
 .jd.open .jdh .c{transform:rotate(45deg);}
 .jdb{display:none;padding:0 15px 15px;}
 .jd.open .jdb{display:block;}
@@ -254,12 +274,12 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=41"></script>
+<script src="accounts.js?v=42"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="colors.js?v=41"></script>
-<script defer src="app.js?v=41"></script>
-<script defer src="studio.js?v=41"></script>
+<script defer src="colors.js?v=42"></script>
+<script defer src="app.js?v=42"></script>
+<script defer src="studio.js?v=42"></script>
 </head>
 <body>
 <div class="screen">
@@ -298,7 +318,14 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="addblend" id="addBlend"><span class="p">+</span> Add another blend</div>
 
     <div class="jd" id="jobDetails">
-      <div class="jdh" id="jdToggle"><span class="t">Job details</span><span class="s" id="jdSummary">Coping, steps, glitter, inlay &amp; notes</span><span class="c">+</span></div>
+      <div class="jdh" id="jdToggle">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span class="tx">
+          <span class="t">Job details</span>
+          <span class="s" id="jdSummary">Coping, steps, glitter, inlay &amp; notes</span>
+        </span>
+        <span class="c">+</span>
+      </div>
       <div class="jdb" id="jdBody">
         <div class="jdl">Coping &amp; edges</div>
         <div class="jdg">
