@@ -65,6 +65,21 @@
 
   // ---- board state (localStorage) ----
   var BKEY = 'floco_board';
+
+  /* What this board is called. Defaults to the customer's name off the quote
+     if one has been typed there, because that is what a rep would write
+     anyway, and it means the field is rarely blank. */
+  var NKEY = 'floco_board_name';
+  function boardName(){ return (localStorage.getItem(NKEY) || '').trim(); }
+  function saveBoardName(v){ localStorage.setItem(NKEY, v); }
+  function suggestedName(){
+    try {
+      var q = JSON.parse(localStorage.getItem('floco_quote')) || {};
+      var who = (q.qName || '').trim();
+      if (who) return who + ' — design board';
+    } catch (e) {}
+    return '';
+  }
   function board(){ try { return JSON.parse(localStorage.getItem(BKEY)) || []; } catch(e){ return []; } }
   function saveBoard(b){ localStorage.setItem(BKEY, JSON.stringify(b)); }
   function inBoard(id){ return board().some(function(x){ return x.id===id; }); }
@@ -200,6 +215,8 @@
       });
     });
   }
+
+  function nmTop(){ return boardName(); }
 
   function renderBoard(){
     var b = board();
@@ -779,6 +796,13 @@
                cols:[{code:'RH31',n:'Cream',c:'#CCC6B4',pct:100}], sqft:0 });
       saveBlends(L); renderBlends();
     }); renderVibes(); renderGallery(); renderInlays(); renderMosaics(); renderLights(); renderCoping(); renderBoard();
+    var bn = document.getElementById('boardName');
+    if (bn) {
+      bn.value = boardName() || suggestedName();
+      if (bn.value) saveBoardName(bn.value);
+      bn.addEventListener('input', function(){ saveBoardName(bn.value); });
+    }
+
     var pc = document.getElementById('paletteClose'); if (pc) pc.addEventListener('click', closePalette);
     var scr = document.getElementById('scrim'); if (scr) scr.addEventListener('click', closePalette);
 
@@ -829,6 +853,7 @@
 
       // build the board summary
       var lines = [];
+      if (nmTop()) { lines.push(nmTop().toUpperCase()); lines.push(''); }
       /* Every named blend, each with its own footage and bag split, then one
        * rolled-up order — the same shape the materials panel shows. */
       var list = blends().filter(function(x){ return x.cols.length; });
@@ -912,7 +937,8 @@
       lines.push('Built in the FLOCO Certified Design Studio.');
       lines.push('Questions? Just reply here or call (239) 426-8045.');
 
-      var subject = 'Your FLOCO Design Board 🎨';
+      var nm = boardName();
+      var subject = nm ? (nm + ' 🎨') : 'Your FLOCO Design Board 🎨';
       var body = 'Hi! Here’s the design board we put together for your FLOCO rubber surfacing project.\n\n' + lines.join('\n');
       /* With a customer address it goes to them, copying the installer.
          Without one it goes to the installer alone. */

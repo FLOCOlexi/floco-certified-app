@@ -40,7 +40,14 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
   background:linear-gradient(135deg,#123A5C,#0E2A47);box-shadow:0 12px 30px rgba(0,0,0,.35);}
 .board .bh{display:flex;align-items:center;justify-content:space-between;padding:15px 16px 12px;}
 .board .bh .l .s{font-family:'Inter';font-weight:600;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
-.board .bh .l .t{font-family:'Didot';font-style:italic;font-size:19px;color:#fff;margin-top:2px;}
+.board .bh .l{min-width:0;flex:1;}
+/* The board is the customer's, so it should carry the customer's name. This
+   is an input dressed as the heading it replaced — tap the words, type. */
+.board .bh .l .t{font-family:'Didot';font-style:italic;font-size:19px;color:#fff;margin-top:2px;
+  background:transparent;border:0;outline:none;padding:0;width:100%;
+  border-bottom:1px dashed rgba(255,255,255,.18);}
+.board .bh .l .t:focus{border-bottom-color:var(--gold);}
+.board .bh .l .t::placeholder{color:rgba(255,255,255,.34);font-style:italic;}
 .board .bh .meta{font-family:'Inter';font-size:9px;color:var(--muted);text-align:right;}
 .board .bh .meta b{color:var(--teal);}
 .board .strip{display:flex;gap:6px;padding:0 12px 14px;overflow-x:auto;}
@@ -319,12 +326,12 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=49"></script>
+<script src="accounts.js?v=50"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="colors.js?v=49"></script>
-<script defer src="app.js?v=49"></script>
-<script defer src="studio.js?v=49"></script>
+<script defer src="colors.js?v=50"></script>
+<script defer src="app.js?v=50"></script>
+<script defer src="studio.js?v=50"></script>
 </head>
 <body>
 <div class="screen">
@@ -420,7 +427,9 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <!-- Design Board -->
     <div class="board">
       <div class="bh">
-        <div class="l"><div class="s">Their design board</div><div class="t">This session</div></div>
+        <div class="l"><div class="s">Their design board</div>
+          <input class="t" id="boardName" type="text" placeholder="Name this board&hellip;"
+                 autocomplete="off" maxlength="60"></div>
         <div class="meta" id="boardMeta">0 saves</div>
       </div>
       <div class="strip" id="boardStrip"><div class="empty">Nothing saved yet — tap the hearts below to build the board.</div></div>
