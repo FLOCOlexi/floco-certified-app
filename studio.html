@@ -148,15 +148,13 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .mosnote b{color:var(--gold-lt);font-weight:600;}
 
 /* ---- lighting -------------------------------------------------------- */
-.ledhero{position:relative;border-radius:18px;overflow:hidden;margin-bottom:12px;
-  border:1px solid rgba(96,190,255,.28);box-shadow:0 14px 34px rgba(0,0,0,.45);}
-.ledhero img{display:block;width:100%;height:172px;object-fit:cover;}
-.ledhero .ov{position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(6,18,32,.15),rgba(6,18,32,.55) 52%,rgba(6,18,32,.94));}
-.ledhero .cap{position:absolute;left:15px;right:15px;bottom:13px;}
-.ledhero .cap .h{font-family:'Nunito';font-weight:900;font-size:16px;color:#fff;
-  text-shadow:0 0 18px rgba(96,190,255,.55);}
-.ledhero .cap .p{font-family:'Inter';font-size:9.5px;line-height:1.5;color:#C6DCEE;margin-top:2px;}
+/* Wordless on purpose. The rep is holding this screen in front of the
+   customer, so anything written here is read by the customer too. Let the
+   photographs do it: a whole deck lit at dusk, and the strip up close. */
+.ledshots{display:grid;grid-template-columns:1.55fr 1fr;gap:10px;margin-bottom:13px;}
+.ledshots figure{position:relative;border-radius:16px;overflow:hidden;
+  border:1px solid rgba(96,190,255,.26);box-shadow:0 12px 30px rgba(0,0,0,.45);}
+.ledshots img{display:block;width:100%;height:186px;object-fit:cover;}
 .ledopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .ledopt{position:relative;border-radius:15px;padding:13px 13px 12px;cursor:pointer;
   -webkit-tap-highlight-color:transparent;
@@ -321,12 +319,12 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=44"></script>
+<script src="accounts.js?v=45"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="colors.js?v=44"></script>
-<script defer src="app.js?v=44"></script>
-<script defer src="studio.js?v=44"></script>
+<script defer src="colors.js?v=45"></script>
+<script defer src="app.js?v=45"></script>
+<script defer src="studio.js?v=45"></script>
 </head>
 <body>
 <div class="screen">
@@ -435,17 +433,15 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <!-- Mosaic tile inlays -->
     <div class="sh"><div class="k">the customer's own tile</div><div class="h">Mosaic <span>tile inlays.</span></div></div>
     <div class="inlaygrid" id="mosaics"></div>
-    <div class="mosnote"><b>How this one works:</b> the customer buys the mosaic from a tile shop
-      and you set the surface around it. It is their piece, so there is no catalogue to pick from
-      &mdash; these are examples to show what is possible. Tap any that they love and it goes on the board.</div>
+    <div class="mosnote"><b>How this one works:</b> the mosaic is bought from a tile shop and the
+      surface is laid around it, so the piece is genuinely yours rather than something off our list.
+      These are examples of what is possible. Tap any you love and it goes on the board.</div>
 
     <!-- Lighting -->
     <div class="sh"><div class="k">after dark</div><div class="h">Light it <span>up.</span></div></div>
-    <div class="ledhero">
-      <img src="assets/photos/led/hero-sunset-glow.jpg" alt="Lit surface at dusk">
-      <div class="ov"></div>
-      <div class="cap"><div class="h">The upsell that only shows up after dark</div>
-        <div class="p">Half the year they use this space at night. Show them what it looks like then.</div></div>
+    <div class="ledshots">
+      <figure><img src="assets/photos/led/deck-lit-night.jpg" alt="A pool deck lit at dusk"></figure>
+      <figure><img src="assets/photos/led/strip-edge-detail.jpg" alt="Lighting strip along the deck edge"></figure>
     </div>
     <div class="ledopts" id="ledOpts">
       <div class="ledopt" data-id="light:strips" data-title="Custom LED strips — under the surface">
@@ -470,15 +466,15 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
         <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/></svg></div>
         <div class="t">Made to order</div>
-        <div class="d">Their family name, their phrase, their logo. Any colour.</div>
+        <div class="d">Your family name, your phrase, your logo. Any colour.</div>
       </div>
     </div>
     <div class="inlaygrid" id="lights"></div>
     <div class="ledwarn"><div class="b">⚡</div><div class="x">
-      <b>Anything going INTO the surface has to be decided before prep day.</b>
-      The wire runs before the pour, and it cannot be added afterwards without
-      opening the surface back up. Wall-mounted pieces have no deadline, which
-      makes them an easy second sale months after you finish.</div></div>
+      <b>Anything set into the surface has to be decided before prep day.</b>
+      The wire runs before the rubber is poured, so it cannot be added later
+      without opening the surface back up. Wall-mounted pieces are different
+      &mdash; those can go up at any time, even years afterwards.</div></div>
     <div class="ledspec">
       <span>24 volt</span><span>Sealed waterproof channels</span><span>Wire under the rubber</span>
       <span>110 transformer &middot; 90 linear ft</span><span>Remote controlled</span>

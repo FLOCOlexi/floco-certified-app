@@ -37,7 +37,7 @@
     {f:'shoreline-turtles', t:'Turtles & shells',  d:'Set into the shoreline'},
     {f:'turtle-pair',       t:'Turtle pair',       d:'Straddling the colour break'},
     {f:'compass-rose',      t:'Compass rose',      d:'A centrepiece on open deck'},
-    {f:'resort-logo',       t:'Their own logo',    d:'Commercial & club work'}
+    {f:'resort-logo',       t:'Your own logo',     d:'Commercial & club work'}
   ];
 
   /* Lighting. Two genuinely different products, and the difference decides
@@ -47,16 +47,16 @@
      Anything going into the surface has to be decided before prep day, because
      the wire runs before the pour and cannot be added afterwards without
      opening the surface back up. Wall-mounted has no such deadline, which is
-     what makes it an easy second sale months later. */
+     wall-mounted pieces can still go up years later. */
   var LED = 'assets/photos/led/';
   var LIGHTS = [
-    {f:'piece-custom-last-name', t:'Their family name', d:'Custom, any wording'},
+    {f:'piece-custom-last-name', t:'Your family name', d:'Custom, any wording'},
     {f:'piece-paradise',         t:'Welcome to Paradise', d:'Green'},
     {f:'piece-pool-life',        t:'Pool Life',         d:'Blue'},
     {f:'piece-stay-poolside',    t:'Stay Poolside',     d:'Violet'},
     {f:'piece-tiki-time',        t:'Tiki Time',         d:'Aqua'},
     {f:'piece-happy-place',      t:'The Happy Place',   d:'Warm amber'},
-    {f:'piece-floco-sign-blue',  t:'Their own logo',    d:'Commercial & club work'}
+    {f:'piece-floco-sign-blue',  t:'Your own logo',    d:'Commercial & club work'}
   ];
 
   function title(slug){ return slug.split('-').map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join(' '); }
