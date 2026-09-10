@@ -57,7 +57,7 @@ a{color:var(--gold-lt);}
 <body>
 <div class="wrap">
   <div class="top">
-    <a class="back" href="quotes.html"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <a class="back" href="quotes.html" id="tBack"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></a>
     <div class="ti">Terms &amp; <span>Conditions</span></div>
   </div>
 
@@ -174,7 +174,7 @@ a{color:var(--gold-lt);}
   </div>
 </div>
 
-<script src="accounts.js?v=43"></script>
+<script src="accounts.js?v=44"></script>
 <script>
 /* The company name is stamped in from the installer's own profile, because the
    whole point of this page is that the customer is contracting with THEM. */
@@ -189,6 +189,18 @@ a{color:var(--gold-lt);}
   var lg=localStorage.getItem('floco_logo');
   var el=document.getElementById('tLogo');
   if(lg&&el){ el.src=lg; el.style.display='block'; }
+})();
+</script>
+<script>
+/* Terms is reached from two places: the quote builder, and the small link on
+   the quote itself. Sending everyone to the builder would strand a customer
+   in the installer's tools, so go back the way they came when we can. */
+(function(){
+  var b = document.getElementById('tBack');
+  if (!b) return;
+  b.addEventListener('click', function(ev){
+    if (document.referrer && history.length > 1){ ev.preventDefault(); history.back(); }
+  });
 })();
 </script>
 </body></html>

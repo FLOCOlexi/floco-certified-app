@@ -109,6 +109,34 @@
     + 'Specialist. Your agreement for this work is with ' + esc(co) + ', and payment is made to '
     + esc(co) + ' directly, not to FLOCO Decking Systems.');
 
+  /* window.print() is the honest way to make a real PDF from a static app,
+     but inside an INSTALLED iOS app there is no browser chrome to fall back
+     on if the print sheet misbehaves, and the page can look frozen. So we
+     say what is happening, and we never leave the screen without a way out. */
   var btn = document.getElementById('toPdf');
-  if(btn) btn.addEventListener('click', function(){ window.print(); });
+  if(btn) btn.addEventListener('click', function(){
+    var standalone = window.navigator.standalone === true ||
+                     (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    try {
+      window.print();
+    } catch (e) {
+      alert('Your device blocked the print sheet. Open this quote in Safari or '
+          + 'Chrome and use Share \u2192 Print to save it as a PDF.');
+      return;
+    }
+    if (standalone) {
+      /* If the sheet never appears the person is left staring at the quote
+         wondering whether it worked. One short nudge, then it clears itself. */
+      setTimeout(function(){
+        var t = document.createElement('div');
+        t.textContent = 'No print sheet? Use Share \u2192 Print, or tap Home to go back.';
+        t.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99;'
+          + 'background:#0A1F35;color:#EAF0F3;border:1px solid rgba(198,166,98,.5);border-radius:12px;'
+          + "padding:11px 15px;font-family:'Inter',sans-serif;font-size:12px;max-width:86%;text-align:center;"
+          + 'box-shadow:0 10px 30px rgba(0,0,0,.5)';
+        document.body.appendChild(t);
+        setTimeout(function(){ t.remove(); }, 6000);
+      }, 1200);
+    }
+  });
 })();
