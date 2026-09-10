@@ -214,6 +214,35 @@
     } catch (e) { return ''; }
   }
 
+  /* app.js keeps its toast private to its own closure, so this file needs one
+     of its own — calling toast() here would just have thrown. */
+  function qToast(msg){
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:9999;'
+      + 'background:#0A1F35;color:#EAF0F3;border:1px solid rgba(198,166,98,.5);border-radius:12px;'
+      + "padding:11px 16px;font-family:'Inter',sans-serif;font-size:12.5px;max-width:86%;text-align:center;"
+      + 'box-shadow:0 10px 30px rgba(0,0,0,.45)';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2800);
+  }
+
+  /* The same link the email carries, on a button you can see. Paste it in a
+     browser, text it to a customer, or just check with your own eyes what the
+     email is actually sending — no need to take anyone's word for it. */
+  document.addEventListener('DOMContentLoaded', function(){
+    var c = document.getElementById('qCopy');
+    if (!c) return;
+    c.addEventListener('click', function(){
+      var link = shareLink();
+      if (!link){ qToast('This quote is too detailed to travel in a link — send the PDF instead'); return; }
+      function done(){ qToast('Quote link copied'); }
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(link).then(done, function(){ prompt('Your quote link:', link); });
+      } else { prompt('Your quote link:', link); }
+    });
+  });
+
   /* ---- their company: name, contact and LOGO --------------------------
    * The universal FLOCOFAM login leaves the profile blank, so without this
    * every installer's quote would go out reading "Your Company". Set once,

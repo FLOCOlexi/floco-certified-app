@@ -219,10 +219,16 @@ textarea{height:auto;padding:11px;font-family:'Inter';font-weight:400;font-size:
 
 <div class="bar">
   <a class="b prev" id="qPreview" href="quote-view.html">Preview</a>
+  <div class="b copy" id="qCopy" title="Copy the customer's quote link">
+    <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></div>
   <div class="b send" id="qSend">Send the quote</div>
 </div>
 
-<script src="accounts.js?v=47"></script>
+<style>
+.bar .b.copy{flex:none;width:52px;padding:0;display:flex;align-items:center;justify-content:center;}
+.bar .b.copy svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<script src="accounts.js?v=48"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
-<script src="quotes.js?v=47"></script>
+<script src="quotes.js?v=48"></script>
 </body></html>
