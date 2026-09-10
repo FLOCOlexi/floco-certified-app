@@ -23,7 +23,12 @@
  */
 window.FLOCO_LIBRARY = {
 
-  DRIVE_FOLDER: "",
+  /* The URL Lexi sent had "/u/1/" in it, which means "the SECOND Google
+     account signed in on THIS browser". On a partner's phone that resolves
+     to THEIR second account, not ours, so it is stripped here.
+     The id starts 0A, which makes this a SHARED DRIVE rather than an
+     ordinary folder — see the sharing note in the app's README. */
+  DRIVE_FOLDER: "https://drive.google.com/drive/folders/0AOUi9Jkayf7KUk9PVA",
 
   videos: [
     { title: "The FLOCO Story",
