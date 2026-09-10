@@ -348,6 +348,22 @@
 
   function boot(){
     bindProfile(); renderAreas(); renderOptions(); bindFields(); refreshTotals();
+
+    /* "+ Add an area" was markup with nothing behind it — the one control on
+       this screen that had no handler at all. Areas are the same list the
+       Design Studio names its blends from, so a new one starts blank and gets
+       named in place, exactly like the rows already there. */
+    var add = document.getElementById('qAddArea');
+    if (add) add.addEventListener('click', function(){
+      var L = blends();
+      L.push({ id: uid(), name: '', cols: [], sqft: 0 });
+      saveBlends(L);
+      renderAreas();
+      /* Land the cursor in the new row so they can just type. */
+      var rows = document.querySelectorAll('#qAreas input[data-an]');
+      var last = rows[rows.length - 1];
+      if (last) { last.focus(); }
+    });
     var s = document.getElementById('qSend'); if(s) s.addEventListener('click', sendQuote);
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
