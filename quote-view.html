@@ -85,6 +85,10 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
    bar. "Back to edit" only reaches the builder, so without this the quote is
    a room with one door. */
 .bar .home{flex:none;width:44px;border:1px solid rgba(255,255,255,.16);}
+/* Opened from an emailed link, this is the customer's copy: no "Back to
+   edit", no Home into the installer's app. Just the quote and a way to keep it. */
+html.shared .bar .back,html.shared .bar .home{display:none;}
+html.shared .bar .pdf{flex:1;}
 .bar .home svg{width:18px;height:18px;fill:none;stroke:#EAF0F3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .bar .pdf{background:linear-gradient(120deg,#E4CB8E,#C6A662);color:#22180A;}
 /* ---- phone ------------------------------------------------------------
@@ -228,6 +232,6 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
   </div>
 </div>
 
-<script src="accounts.js?v=45"></script>
-<script src="quote-view.js?v=45"></script>
+<script src="accounts.js?v=46"></script>
+<script src="quote-view.js?v=46"></script>
 </body></html>

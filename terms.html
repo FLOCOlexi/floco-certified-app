@@ -174,13 +174,23 @@ a{color:var(--gold-lt);}
   </div>
 </div>
 
-<script src="accounts.js?v=45"></script>
+<script src="accounts.js?v=46"></script>
 <script>
 /* The company name is stamped in from the installer's own profile, because the
    whole point of this page is that the customer is contracting with THEM. */
 (function(){
   var p={}; try{ p=JSON.parse(localStorage.getItem('floco_auth_v1'))||{}; }catch(e){}
   var name=(p.company||'').trim();
+  /* Opened from a customer's emailed quote there is no local profile, so the
+     name travels in the link instead. Without this the customer would read
+     terms with a placeholder where the company should be. */
+  if(!name){
+    var m=(location.hash||'').match(/[#&]co=([^&]+)/);
+    if(m){ try{
+      var b=m[1].replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4) b+='=';
+      name=decodeURIComponent(escape(atob(b)));
+    }catch(e){} }
+  }
   if(!name) return;                     /* leave the placeholder if unset */
   ['coName','coName2','coName3','coName4','coName5','coName6','coName7'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.textContent=name;

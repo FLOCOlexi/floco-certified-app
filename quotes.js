@@ -151,8 +151,21 @@
       picked.forEach(function(o){ L.push('   ' + o[1]); });
       L.push('');
     }
-    L.push('The full quote with every detail is attached, and our terms are here:');
-    L.push(location.origin + location.pathname.replace(/[^/]*$/, '') + 'terms.html');
+    /* The old version claimed the quote was "attached" and then linked to the
+       terms page. A mailto cannot attach anything, so nothing ever arrived,
+       and the one link went to the wrong document.
+       The link now carries the quote itself. See shareLink(). */
+    var link = shareLink();
+    if (link) {
+      L.push('Here is your full quote, with every detail:');
+      L.push(link);
+    } else {
+      /* Too big to travel in a link — tell the truth rather than promise an
+         attachment that a mailto cannot produce. */
+      L.push('Your full quote is attached to this email.');
+      L.push('(Open the quote in the app, tap Save as PDF, and attach it here');
+      L.push('before you send.)');
+    }
     L.push('');
     L.push('Any questions at all, just reply or give me a call.');
     L.push('');
@@ -165,6 +178,41 @@
       + '&body=' + encodeURIComponent(L.join('\r\n'));
   }
 
+
+  /* ---- the shareable quote link ---------------------------------------
+   * The quote lives in the installer's own browser storage, so a bare link to
+   * quote-view.html would show the customer a blank document. The link
+   * therefore carries the quote with it, base64 in the hash.
+   *
+   * The hash is never sent to the server, so this works on plain GitHub Pages
+   * with no backend and nothing about the job is stored anywhere but in the
+   * email the two of them already share.
+   *
+   * The logo is deliberately left out: it is a data URL and would multiply the
+   * link length. The company name stands in for it, which the quote already
+   * falls back to.
+   */
+  function b64url(str){
+    var b = btoa(unescape(encodeURIComponent(str)));
+    return b.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  function shareLink(){
+    try {
+      var q = quote(), pr = profile();
+      var payload = {
+        q: q,
+        b: blends().filter(function(x){ return x.sqft > 0; })
+                   .map(function(x){ return { name:x.name, sqft:x.sqft }; }),
+        p: { company:pr.company||'', repName:pr.repName||'', location:pr.location||'',
+             phone:pr.phone||'', email:pr.email||'' }
+      };
+      var base = location.origin + location.pathname.replace(/[^/]*$/, '') + 'quote-view.html';
+      var url  = base + '#q=' + b64url(JSON.stringify(payload));
+      /* Some mail clients mangle very long URLs. Past this, fall back. */
+      return url.length > 6000 ? '' : url;
+    } catch (e) { return ''; }
+  }
 
   /* ---- their company: name, contact and LOGO --------------------------
    * The universal FLOCOFAM login leaves the profile blank, so without this

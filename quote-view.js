@@ -11,9 +11,36 @@
  */
 (function(){
   function j(k){ try { return JSON.parse(localStorage.getItem(k)) || null; } catch(e){ return null; } }
-  var q = j('floco_quote') || {};
-  var p = j('floco_auth_v1') || {};
-  var blends = (j('floco_blends') || []).filter(function(b){ return (b.sqft||0) > 0; });
+
+  /* A quote emailed to a customer arrives with the whole document packed into
+     the link (see shareLink() in quotes.js), because the customer has none of
+     the installer's storage. When that is present it wins; otherwise this is
+     the installer previewing their own draft. */
+  function fromLink(){
+    var m = (location.hash || '').match(/[#&]q=([^&]+)/);
+    if (!m) return null;
+    try {
+      var b = m[1].replace(/-/g,'+').replace(/_/g,'/');
+      while (b.length % 4) b += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(b))));
+    } catch (e) { return null; }
+  }
+
+  var shared = fromLink();
+  var q, p, blends;
+  if (shared) {
+    q = shared.q || {};
+    p = shared.p || {};
+    blends = (shared.b || []).filter(function(b){ return (b.sqft||0) > 0; });
+    /* The top bar is the installer's toolkit — "Back to edit" would drop a
+       customer into the quote builder. They get a clean document and a way to
+       save it, nothing else. */
+    document.documentElement.classList.add('shared');
+  } else {
+    q = j('floco_quote') || {};
+    p = j('floco_auth_v1') || {};
+    blends = (j('floco_blends') || []).filter(function(b){ return (b.sqft||0) > 0; });
+  }
   var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
   var set = function(id, html){ var el=document.getElementById(id); if(el) el.innerHTML = html; };
@@ -22,7 +49,7 @@
   var co = (p.company || '').trim() || 'Your Company';
   set('vCo', esc(co));
   /* Their logo leads, with the company name underneath it. */
-  var lg = localStorage.getItem('floco_logo') || '';
+  var lg = shared ? '' : (localStorage.getItem('floco_logo') || '');
   var lgEl = document.getElementById('vLogo');
   if(lg && lgEl){ lgEl.src = lg; lgEl.className = 'logo has'; }
   /* Each item is nowrap so a phone number never breaks across two lines
@@ -113,6 +140,20 @@
      but inside an INSTALLED iOS app there is no browser chrome to fall back
      on if the print sheet misbehaves, and the page can look frozen. So we
      say what is happening, and we never leave the screen without a way out. */
+  /* A customer reading a shared quote has none of the installer's storage, so
+     the Terms page would stamp a placeholder where the company name belongs.
+     Carry the name across in the link. */
+  if (shared) {
+    var tc = document.querySelector('.tc');
+    if (tc && (p.company || '').trim()) {
+      try {
+        tc.setAttribute('href', 'terms.html#co=' +
+          btoa(unescape(encodeURIComponent(p.company.trim())))
+            .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));
+      } catch (e) {}
+    }
+  }
+
   var btn = document.getElementById('toPdf');
   if(btn) btn.addEventListener('click', function(){
     var standalone = window.navigator.standalone === true ||
