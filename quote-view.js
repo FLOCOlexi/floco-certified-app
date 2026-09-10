@@ -25,11 +25,15 @@
   var lg = localStorage.getItem('floco_logo') || '';
   var lgEl = document.getElementById('vLogo');
   if(lg && lgEl){ lgEl.src = lg; lgEl.className = 'logo has'; }
+  /* Each item is nowrap so a phone number never breaks across two lines
+     ("(407) / 555-0148" is how the header looked on a narrow screen). */
   var meta = [];
   if(p.location) meta.push(esc(p.location));
   if(p.phone) meta.push(esc(p.phone));
   if(p.email) meta.push(esc(p.email));
-  set('vCoMeta', meta.join(' &nbsp;·&nbsp; '));
+  set('vCoMeta', meta.map(function(m){
+    return '<span style="white-space:nowrap">' + m + '</span>';
+  }).join(' &nbsp;·&nbsp; '));
 
   set('vTitle', esc(q.qType || 'Rubber Surfacing') + ' Quote');
   set('vFor', esc(q.qName || '—'));

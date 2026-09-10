@@ -82,6 +82,46 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
   font-family:'Nunito';font-weight:900;font-size:13px;text-decoration:none;cursor:pointer;}
 .bar .back{border:1px solid rgba(198,166,98,.4);color:var(--gold-lt);}
 .bar .pdf{background:linear-gradient(120deg,#E4CB8E,#C6A662);color:#22180A;}
+/* ---- phone ------------------------------------------------------------
+   The layout above is the one in the deck screenshot, and it holds up fine
+   at 760px and in the PDF. On a phone it fell apart: the certified badge
+   ran off the right edge, the phone number broke across two lines, and the
+   price fought the promise text for a 150px column. Same design, rebuilt to
+   fit the screen a rep actually shows it on. */
+.tcbar{background:var(--sand);padding:0 34px 18px;display:flex;justify-content:flex-end;}
+.tc{display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  font-family:'Inter';font-weight:600;font-size:10px;letter-spacing:.04em;
+  color:var(--muted);border-bottom:1px solid rgba(108,130,150,.35);padding-bottom:2px;}
+.tc svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+@media (max-width:560px){
+  .hero{padding:22px 20px 24px;}
+  .hero .row{flex-direction:column-reverse;align-items:flex-start;gap:12px;}
+  .badge{text-align:left;}
+  .badge .b{font-size:7.5px;letter-spacing:.13em;padding:4px 10px;}
+  .hero .logo{max-width:150px;max-height:52px;}
+  .hero .co{font-size:18px;}
+  .hero .meta{font-size:10px;line-height:1.75;}
+  .hero .k{font-size:22px;margin-top:20px;}
+  .hero h1{font-size:26px;}
+  .hero .for{gap:14px 22px;margin-top:16px;}
+  .hero .for>div{flex:1 1 40%;}
+  .hero .for .v{font-size:12px;}
+
+  .money{padding:20px;flex-direction:column;align-items:flex-start;gap:14px;}
+  .money .v{font-size:34px;}
+  .money .promise{max-width:none;padding-top:14px;border-top:1px solid #E0D6C6;}
+  .tcbar{padding:0 20px 16px;}
+
+  .body{padding:24px 20px 28px;}
+  .sec{margin-bottom:22px;}
+  /* the 118px label column left almost nothing for the value */
+  .kv{display:block;padding:9px 0;}
+  .kv .l{width:auto;padding-top:0;margin-bottom:3px;}
+  .quote-mark{padding:17px 18px;}
+  .foot{padding:18px 20px;}
+}
+
 @media print{
   body{background:#fff;}
   .bar{display:none;}
@@ -116,7 +156,7 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
   </div>
 
   <div class="money">
-    <div>
+    <div class="mnum">
       <div class="l">Your price</div>
       <div class="v" id="vPrice">—</div>
       <div class="sq" id="vSq"></div>
@@ -124,6 +164,10 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
     <div class="promise">The number you see here is <b>your actual price.</b>
       No surprise fees, no sneaky add-ons later. Prep, installation and full site
       clean-up are all in it.</div>
+  </div>
+  <div class="tcbar">
+    <a class="tc" href="terms.html">Terms &amp; Conditions
+      <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
   </div>
 
   <div class="body">
@@ -172,7 +216,6 @@ body{background:#243040;font-family:'Inter',sans-serif;color:var(--ink);-webkit-
 
   <div class="foot">
     <span class="ind" id="vIndep">This work is contracted with and paid to your company directly.</span><br>
-    Please make sure to read our <a href="terms.html">Terms &amp; Conditions</a>.<br>
     Installed by an independent FLOCO Certified Specialist using genuine FLOCO materials.
     FLOCO, FLOCO Certified and the FLOCO palm mark are trademarks of FLOCO Decking Systems.
   </div>
