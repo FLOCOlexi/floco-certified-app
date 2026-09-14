@@ -52,6 +52,17 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .nav .item.on svg{stroke:var(--gold);}.nav .item.on .l{color:var(--gold-lt);}
 .nav .item.on{position:relative;}.nav .item.on:before{content:"";position:absolute;top:-12px;width:26px;height:3px;border-radius:3px;background:var(--gold);}
 .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);}
+/* ---- the manual is a real file now (added 2026-09) ------------------
+   The chapter rows used to be inert divs with a fake "22% complete" bar
+   above them. Each one opens the PDF at the page that chapter starts on. */
+.hero .meta{font-family:'Inter';font-size:9.5px;color:var(--muted);margin-top:7px;letter-spacing:.02em;}
+.cont,.save{text-decoration:none;}
+.save{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px;height:42px;
+  border-radius:13px;border:1px solid rgba(255,255,255,.16);
+  font-family:'Nunito';font-weight:900;font-size:12.5px;color:var(--ink);}
+.save svg{width:15px;height:15px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+a.ch{text-decoration:none;}
+.ch .pg{margin-left:auto;font-family:'Inter';font-weight:600;font-size:9.5px;color:var(--muted);white-space:nowrap;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -60,10 +71,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=52"></script>
+<script src="accounts.js?v=53"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=52"></script>
+<script defer src="app.js?v=53"></script>
 </head>
 <body>
 <div class="screen">
@@ -78,21 +89,36 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
         <div class="k">The Complete Guide</div>
         <div class="h">FLOCO Rubber Surfacing</div>
         <div class="p">Your certified specialist handbook — every answer, in your pocket.</div>
-        <div class="prog"><div class="bar"><i></i></div><div class="lb">Chapter 3 of 13 · 22% complete</div></div>
+        <div class="meta">102 pages &nbsp;&middot;&nbsp; 13 chapters &nbsp;&middot;&nbsp; First edition</div>
       </div>
     </div>
-    <div class="cont"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg><span>Continue Reading</span></div>
+    <a class="cont" href="assets/FLOCO-Certified-Installer-Manual.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg><span>Open the manual</span></a>
+    <a class="save" href="assets/FLOCO-Certified-Installer-Manual.pdf" download="FLOCO-Certified-Installer-Manual.pdf">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg><span>Save it to this device</span></a>
 
     <div class="slb"><div class="t">Chapters</div><div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></div></div>
 
     <div class="part">Part I · The Foundation</div>
-    <div class="ch done"><div class="n">1</div><div class="tt">Welcome &amp; The FLOCO Standard</div><div class="mk"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div></div>
-    <div class="ch done"><div class="n">2</div><div class="tt">What Being FLOCO Certified Means</div><div class="mk"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div></div>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=6" target="_blank" rel="noopener"><div class="n">1</div><div class="tt">Welcome &amp; The FLOCO Standard</div><div class="pg">p.&nbsp;6</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=10" target="_blank" rel="noopener"><div class="n">2</div><div class="tt">What Being FLOCO Certified Means</div><div class="pg">p.&nbsp;10</div></a>
     <div class="part">Part II · The Craft</div>
-    <div class="ch on"><div class="n">3</div><div class="tt">Genuine Materials &amp; How to Order</div><div class="mk"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div></div>
-    <div class="ch"><div class="n">4</div><div class="tt">The Prep Nobody Else Does</div><div class="mk"></div></div>
-    <div class="ch"><div class="n">5</div><div class="tt">The Install System</div><div class="mk"></div></div>
-    <div class="ch"><div class="n">6</div><div class="tt">Color Blends &amp; Custom Inlays</div><div class="mk"></div></div>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=14" target="_blank" rel="noopener"><div class="n">3</div><div class="tt">Genuine Materials &amp; How to Order</div><div class="pg">p.&nbsp;14</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=19" target="_blank" rel="noopener"><div class="n">4</div><div class="tt">The Prep Nobody Else Does</div><div class="pg">p.&nbsp;19</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=23" target="_blank" rel="noopener"><div class="n">5</div><div class="tt">The Install System</div><div class="pg">p.&nbsp;23</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=28" target="_blank" rel="noopener"><div class="n">6</div><div class="tt">Color Blends &amp; Custom Inlays</div><div class="pg">p.&nbsp;28</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=45" target="_blank" rel="noopener"><div class="n">7</div><div class="tt">Production &amp; Problem-Solving</div><div class="pg">p.&nbsp;45</div></a>
+    <div class="part">Part III · The Business of FLOCO</div>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=49" target="_blank" rel="noopener"><div class="n">8</div><div class="tt">Pricing &amp; Profit</div><div class="pg">p.&nbsp;49</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=53" target="_blank" rel="noopener"><div class="n">9</div><div class="tt">Selling FLOCO Rubber Surfacing</div><div class="pg">p.&nbsp;53</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=61" target="_blank" rel="noopener"><div class="n">10</div><div class="tt">How to Market FLOCO</div><div class="pg">p.&nbsp;61</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=69" target="_blank" rel="noopener"><div class="n">11</div><div class="tt">The Cleaning &amp; Reseal Division</div><div class="pg">p.&nbsp;69</div></a>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=82" target="_blank" rel="noopener"><div class="n">12</div><div class="tt">Customer Experience</div><div class="pg">p.&nbsp;82</div></a>
+    <div class="part">Part IV · Your Toolkit &amp; The Standard</div>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=89" target="_blank" rel="noopener"><div class="n">13</div><div class="tt">Your Toolkit &amp; Upholding the Standard</div><div class="pg">p.&nbsp;89</div></a>
+    <div class="part">The Fine Print</div>
+    <a class="ch" href="assets/FLOCO-Certified-Installer-Manual.pdf#page=98" target="_blank" rel="noopener"><div class="n">&sect;</div><div class="tt">Terms, Warranty &amp; Legal Notices</div><div class="pg">p.&nbsp;98</div></a>
+  <div class="mk"></div></div>
   </div>
 
   <div class="nav">
