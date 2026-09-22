@@ -825,12 +825,12 @@
       send.querySelector('span').textContent = sendLabel();
       var sub = document.getElementById('sendSub');
       if (sub) sub.textContent = c
-        ? 'Goes to you and your customer at the same time.'
-        : 'Goes straight to your inbox, ready to attach to the job.';
+        ? 'Opens your email with you and your customer already on it.'
+        : 'Opens your email with the board ready, addressed to you.';
       var both = document.getElementById('sendBoth');
       if (both) both.innerHTML = c
-        ? '📩 A copy lands in <b>both</b> inboxes instantly — no more chasing.'
-        : '📩 Leave the customer’s email blank and it just comes to <b>you</b>.';
+        ? '📩 Your mail app opens with it written out. <b>Press send and it is away.</b>'
+        : '📩 Leave the customer’s email blank and it just comes to <b>you</b>. Your mail app opens: <b>press send.</b>';
     }
     var ce = document.getElementById('custEmail');
     if (ce) ce.addEventListener('input', paintSend);
@@ -958,7 +958,7 @@
         + '&body=' + encodeURIComponent(body);
 
       var label = sendLabel();
-      toast('Opening your email to send ✓');
+      toast('Your email is open — now press send ✓');
       send.querySelector('span').textContent = 'Sent ✓';
       setTimeout(function(){ send.querySelector('span').textContent = label; }, 2600);
       window.location.href = url;
