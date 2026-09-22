@@ -483,7 +483,8 @@
         'Quantity: ' + (lb ? lb + ' lb' : '[HOW MANY] lb'),
         '',
         'Ship to: [ADDRESS]',
-        'Contact for this order: [YOUR NAME] · [YOUR PHONE]',
+        'Contact for this order: ' + (p.repName || '[YOUR NAME]')
+          + ' · ' + (p.phone || '[YOUR PHONE]'),
         '',
         'Could you confirm the price and the lead time? If I do not have an account with you yet,',
         'let me know what you need from me to set one up.',
@@ -532,7 +533,7 @@
       body.push('');
       body.push('Thank you!');
       body.push('');
-      body.push('[YOUR NAME]');
+      body.push(p.repName || '[YOUR NAME]');
       body.push('FLOCO Certified Installer');
       /* Their own company reads under the certification, not instead of it —
        * the certification is the part that means something to the supplier. */
