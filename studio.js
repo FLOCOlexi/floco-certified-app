@@ -840,7 +840,17 @@
       var cust = ((document.getElementById('custEmail')||{}).value || '').trim();
       var inst = ((document.getElementById('installerEmail')||{}).value || '').trim();
       var b = board();
-      if (!b.length){ toast('Save a few designs first 🎨'); return; }
+      /* What counts as "something to send" is NOT just hearted items.
+       * A rep can finish a whole design meeting with three named blends and a
+       * full spec sheet and never tap a single heart, and that board is the
+       * most valuable thing the crew gets. Blocking it on hearts meant the
+       * Send button did nothing except scold them. */
+      var haveBlends = blends().some(function(x){ return x.cols && x.cols.length; });
+      var jdNow = jobDetails();
+      var haveDetails = JD_FIELDS.some(function(k){ return (jdNow[k] || '').toString().trim(); });
+      if (!b.length && !haveBlends && !haveDetails){
+        toast('Build a blend or save a design first 🎨'); return;
+      }
 
       /* The customer's address is OPTIONAL. Plenty of design meetings end with
          the rep wanting the board in their own inbox to attach to the job, and
