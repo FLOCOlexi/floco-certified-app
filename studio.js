@@ -958,10 +958,32 @@
         + '&body=' + encodeURIComponent(body);
 
       var label = sendLabel();
-      toast('Your email is open — now press send ✓');
-      send.querySelector('span').textContent = 'Sent ✓';
-      setTimeout(function(){ send.querySelector('span').textContent = label; }, 2600);
-      window.location.href = url;
+      var lab = send.querySelector('span');
+
+      /* With the relay configured this really sends and FLOCO gets a copy.
+       * Without it, or with no signal, it opens their mail app exactly as
+       * before. The wording only claims a send once one has happened. */
+      lab.textContent = 'Sending…';
+      window.FLOCOrelay.deliver(
+        { kind: 'design-board',
+          to: toCustomer ? cust : inst,
+          cc: toCustomer ? inst : '',
+          subject: subject,
+          body: body,
+          company: (p && p.company) || '',
+          repName: (p && p.repName) || '' },
+        url,
+        function (how) {
+          if (how === 'relay') {
+            toast(toCustomer ? 'Sent to you both ✓' : 'Sent to your inbox ✓');
+            lab.textContent = 'Sent ✓';
+          } else {
+            toast('Your email is open — now press send ✓');
+            lab.textContent = 'Opened ✓';
+          }
+          setTimeout(function(){ lab.textContent = label; }, 2800);
+        }
+      );
     });
   });
 })();
