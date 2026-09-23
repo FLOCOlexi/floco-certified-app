@@ -1,6 +1,6 @@
 /* FLOCO Certified — service worker.
    Network-first for pages/scripts (so updates ALWAYS show), cache-first for images/fonts. */
-var CACHE = 'floco-certified-v65';
+var CACHE = 'floco-certified-v66';
 var CORE = [
   'home.html', 'calendar.html', 'calendar.js', 'overlays.js', 'assets/overlays/FLOCO-Reel-Frame.png', 'jobs.html', 'jobs.js', 'colors.js', 'quotes.html', 'quote-view.html', 'terms.html', 'quotes.js', 'quote-view.js', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
   'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',
@@ -31,6 +31,10 @@ function isFresh(req) {
 self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
   var req = e.request;
+  /* The repair page is the escape hatch. If a bad cache is what is stopping
+   * the app loading, serving the repair page FROM that cache would trap
+   * someone with no way out. Always go to the network for it. */
+  if (req.url.indexOf('reset.html') > -1) { return; }
   if (isFresh(req)) {
     // network-first: always try to get the latest page/script
     e.respondWith(

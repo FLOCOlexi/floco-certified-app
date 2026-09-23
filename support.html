@@ -49,6 +49,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .nav .item.on svg{stroke:var(--gold);}.nav .item.on .l{color:var(--gold-lt);}
 .nav .item.on{position:relative;}.nav .item.on:before{content:"";position:absolute;top:-12px;width:26px;height:3px;border-radius:3px;background:var(--gold);}
 .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);}
+.repair{display:block;margin:18px 20px 0;padding:14px;border-radius:14px;text-align:center;border:1px solid rgba(255,255,255,.14);color:#8DA2B5;text-decoration:none;font-family:'Inter';font-size:12.5px;font-weight:600;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -57,10 +58,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=65"></script>
+<script src="accounts.js?v=66"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=65"></script>
+<script defer src="app.js?v=66"></script>
 </head>
 <body>
 <div class="screen">
@@ -93,6 +94,11 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     <div class="faq"><svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7"/></svg><div class="q">How do I set up my American Recycling account?</div><svg class="ar" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
     <div class="faq"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg><div class="q">Who warrants the work, and the material?</div><svg class="ar" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
   </div>
+
+  
+  <!-- Escape hatch. A partner whose app will not load cannot be walked
+       through Safari settings on the phone; they can be sent one link. -->
+  <a class="repair" href="reset.html">App not loading? Repair it &rarr;</a>
 
   <div class="nav">
     <div class="item"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><div class="l">Home</div></div>

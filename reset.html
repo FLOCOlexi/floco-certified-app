@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Repair the app</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0B2036;color:#EAF0F3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;}
+.card{max-width:440px;width:100%;}
+.k{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:#3BBFB8;font-weight:800;}
+h1{font-size:27px;font-weight:800;margin-top:9px;line-height:1.2;}
+p{font-size:15px;line-height:1.65;color:#8DA2B5;margin-top:12px;}
+#log{margin-top:20px;font-size:13px;line-height:1.9;color:#CFE4E1;}
+#log div:before{content:"✓ ";color:#3BBFB8;font-weight:800;}
+#log div.work:before{content:"… ";color:#8DA2B5;}
+#log div.fail:before{content:"! ";color:#E0A03C;}
+a.btn{display:block;margin-top:24px;background:#3BBFB8;color:#0B2036;text-align:center;
+  padding:16px;border-radius:14px;font-weight:800;text-decoration:none;font-size:15px;}
+.note{margin-top:18px;font-size:12.5px;line-height:1.6;color:#6E8399;}
+</style></head>
+<body>
+<div class="card">
+  <div class="k">FLOCO Certified</div>
+  <h1>Repairing the app.</h1>
+  <p>This clears the stored copy on this device and pulls a fresh one. Your
+     login and any saved jobs stay exactly where they are.</p>
+  <div id="log"></div>
+  <a class="btn" id="go" href="home.html">Open the app</a>
+  <div class="note">If it still will not load after this, you are offline or the
+    network is blocking it. Try mobile data instead of wi-fi.</div>
+</div>
+<script>
+/* Deliberately dependency-free and ES5: this page has to run even when every
+ * other file on the origin is a broken cached copy. It is also the one page
+ * the service worker never serves from cache — see sw.js. */
+(function () {
+  var log = document.getElementById('log');
+  function say(msg, cls) {
+    var d = document.createElement('div');
+    if (cls) d.className = cls;
+    d.textContent = msg;
+    log.appendChild(d);
+    return d;
+  }
+  var step = say('Clearing the stored copy', 'work');
+
+  function done() {
+    step.className = '';
+    step.textContent = 'Stored copy cleared';
+    say('Ready — tap Open the app');
+  }
+
+  var jobs = [];
+
+  if ('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations) {
+    jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+      return Promise.all(rs.map(function (r) { return r.unregister(); }));
+    }).then(function () { say('Background worker removed'); })
+      .catch(function () { say('Could not remove the worker', 'fail'); }));
+  }
+
+  if (window.caches && caches.keys) {
+    jobs.push(caches.keys().then(function (keys) {
+      return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+    }).then(function () { say('Cached files deleted'); })
+      .catch(function () { say('Could not delete cached files', 'fail'); }));
+  }
+
+  /* localStorage is left alone on purpose — it holds their login, their quote
+   * and their saved jobs, and wiping it to fix a display problem would be a
+   * cure worse than the illness. */
+
+  Promise.all(jobs).then(done, done);
+
+  document.getElementById('go').addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = 'home.html?fresh=' + Date.now();
+  });
+})();
+</script>
+</body></html>
