@@ -39,8 +39,9 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 
 /* greeting */
 .greet{position:relative;padding:16px 22px 6px;}
-.greet .k{font-family:'Caveat';font-size:26px;color:var(--teal);line-height:.7;}
-.greet .co{font-family:'Nunito';font-weight:900;font-size:27px;color:#fff;letter-spacing:-.3px;margin-top:6px;}
+.greet .k{font-family:'Caveat';font-size:25px;color:var(--teal);line-height:1;display:inline;margin-right:7px;}
+.greet .co{font-family:'Nunito';font-weight:900;font-size:26px;color:#fff;letter-spacing:-.3px;display:inline;}
+.greet .line{line-height:1.25;}
 .greet .chip{display:inline-block;margin-top:9px;font-family:'Inter';font-weight:600;font-size:9px;letter-spacing:2px;text-transform:uppercase;
   color:var(--gold-lt);border:1px solid var(--line);border-radius:30px;padding:5px 12px;}
 .greet .chip b{color:var(--teal);}
@@ -101,10 +102,10 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FLOCO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<script src="accounts.js?v=64"></script>
+<script src="accounts.js?v=65"></script>
 <script>if(!localStorage.getItem('floco_auth_v1'))location.replace('login.html');</script>
 <link rel="stylesheet" href="app.css">
-<script defer src="app.js?v=64"></script>
+<script defer src="app.js?v=65"></script>
 </head>
 <body>
 <div class="screen">
@@ -121,8 +122,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 
   <!-- greeting -->
   <div class="greet">
-    <div class="k">welcome to</div>
-    <div class="co">the FLOCO Family</div>
+    <div class="line"><span class="k">welcome to</span> <span class="co">the FLOCO Family</span></div>
     <div class="chip">FLOCO Certified <b>·</b> Rubber Surfacing Experts</div>
   </div>
 
