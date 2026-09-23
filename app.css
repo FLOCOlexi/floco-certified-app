@@ -24,3 +24,45 @@ body{display:block !important;-webkit-font-smoothing:antialiased;}
 /* top safe-area breathing room on notched devices */
 .screen>.status+*,.screen>.glowtop~.status+*{}
 .screen{padding-top:env(safe-area-inset-top) !important;}
+
+/* ===================================================================
+   DESKTOP  (2026-09-23)
+   -------------------------------------------------------------------
+   The app is phone-first and app.css already caps the shell at 480px,
+   which on a laptop renders as a narrow phone-shaped column floating in
+   grey. Reps and partners do use this on a desktop, so above 900px the
+   shell widens and the two-up tile grids become four-up. Nothing below
+   900px changes.
+   =================================================================== */
+@media (min-width: 900px) {
+  body { background: #081625 !important; }
+
+  .screen {
+    max-width: 1080px !important;
+    padding-bottom: 120px !important;
+  }
+
+  /* Two-up tiles are right on a phone and wasteful on a laptop. */
+  .grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+  /* The bottom bar stops being a phone tab bar and sits against the
+     viewport, centred on the shell, so it reads as app chrome. */
+  .nav {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    width: 100% !important;
+    max-width: 1080px !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  /* Give the reading pages a comfortable measure rather than letting
+     body copy run the full 1080px. */
+  .wrap, .intro, .thanks { max-width: 760px; margin-left: auto; margin-right: auto; }
+}
+
+@media (min-width: 900px) and (max-width: 1180px) {
+  .grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
