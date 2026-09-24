@@ -61,6 +61,22 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 .dec .dn{font-family:'Nunito';font-weight:800;font-size:10.5px;color:#fff;margin-top:9px;line-height:1.25;}
 .dec .du{font-family:'Inter';font-size:8px;color:var(--muted);margin-top:2px;}
 .decnote{font-family:'Inter';font-size:9.5px;line-height:1.6;color:var(--muted);margin-top:10px;}
+/* Ready-to-post videos. 9:16 thumbs, three across, so a phone shows the whole
+   set without scrolling. Posters are tiny JPGs; the mp4 itself only downloads
+   when the installer actually taps it. */
+.vidgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+.vid{display:block;text-decoration:none;}
+.vth{position:relative;border-radius:12px;overflow:hidden;background:#0c1c2e;
+  border:1px solid var(--line);aspect-ratio:9/16;}
+.vth img{width:100%;height:100%;object-fit:cover;display:block;}
+.vth .pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:30px;height:30px;border-radius:999px;background:rgba(10,31,53,.58);
+  border:1px solid rgba(250,245,239,.5);display:grid;place-items:center;}
+.vth .pl svg{width:10px;height:10px;fill:#fff;margin-left:2px;}
+.vth .vln{position:absolute;right:5px;bottom:5px;font-family:'Inter';font-size:7.5px;
+  color:#fff;background:rgba(10,31,53,.74);padding:2px 5px;border-radius:999px;}
+.vid .dn{font-family:'Nunito';font-weight:800;font-size:10.5px;color:#fff;margin-top:8px;line-height:1.25;}
+.vid .du{font-family:'Inter';font-size:8px;color:var(--muted);margin-top:2px;line-height:1.4;}
 </style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A1F35">
@@ -74,6 +90,7 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
 <link rel="stylesheet" href="app.css">
 <script defer src="app.js?v=66"></script>
 <script defer src="brandkit.js?v=66"></script>
+<script defer src="installervideos.js?v=66"></script>
 </head>
 <body>
 <div class="screen">
@@ -130,6 +147,14 @@ body{background:#2a2a2a;font-family:'Inter',sans-serif;}
     </div>
     <div class="decnote">Tap any one to download it. Real transparency, so they go straight onto a window,
       a truck, a yard sign, or over your own video. Printed copies are in your certification bag.</div>
+
+    <div id="vidWrap" hidden>
+      <div class="slb">Ready-to-Post Videos</div>
+      <div class="vidgrid" id="vidGrid"></div>
+      <div class="decnote">Your name and logo are already on the end of every one. Tap to download,
+        then post it as your own. They are <strong style="color:#fff">deliberately silent</strong> so you
+        can drop a trending sound on top in Instagram or TikTok, which is what actually carries reach.</div>
+    </div>
 
   </div>
 

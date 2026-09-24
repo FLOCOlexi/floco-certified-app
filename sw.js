@@ -5,7 +5,7 @@ var CORE = [
   'home.html', 'calendar.html', 'calendar.js', 'overlays.js', 'assets/overlays/FLOCO-Reel-Frame.png', 'jobs.html', 'jobs.js', 'colors.js', 'quotes.html', 'quote-view.html', 'terms.html', 'quotes.js', 'quote-view.js', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
   'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',
   'app.css', 'app.js', 'studio.js', 'accounts.js',
-  'relay.js', 'library.js', 'vault.js', 'brandkit.js', 'manifest.webmanifest',
+  'relay.js', 'library.js', 'vault.js', 'brandkit.js', 'installervideos.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png'
 ];
 
@@ -35,6 +35,10 @@ self.addEventListener('fetch', function (e) {
    * the app loading, serving the repair page FROM that cache would trap
    * someone with no way out. Always go to the network for it. */
   if (req.url.indexOf('reset.html') > -1) { return; }
+  /* Ready-to-post reels are tens of megabytes each and the browser is already
+   * saving them to the installer's Files app. Caching them too would store the
+   * same video twice on a phone. Let the network have these untouched. */
+  if (req.url.indexOf('assets/videos/') > -1) { return; }
   if (isFresh(req)) {
     // network-first: always try to get the latest page/script
     e.respondWith(

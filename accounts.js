@@ -72,7 +72,7 @@ window.FLOCO_COMPANIES = {
   },
 
   "marshall@honeydosllc.com": {
-    company:  "Pro Surfacing Services",
+    company:  "Pro Surfacing",
     repName:  "Marshall E. Johnson Sr.",
     location: "Central Florida",
     phone:    "",
