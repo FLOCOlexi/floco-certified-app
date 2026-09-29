@@ -30,22 +30,19 @@ window.FLOCO_LIBRARY = {
      ordinary folder — see the sharing note in the app's README. */
   DRIVE_FOLDER: "https://drive.google.com/drive/folders/0AOUi9Jkayf7KUk9PVA",
 
-  /* RAW FOOTAGE — the shoot library, separate from the finished reels above.
-     Finished reels are cut and ready to post; this is the source material for
-     a partner who edits their own.
+  /* RAW FOOTAGE — the clip library a partner cuts their own reels from.
+     "Social Media Videos and Footage", inside the same FLOCO Certified shared
+     drive as DRIVE_FOLDER above, so a partner who can open one can open this.
+     21 clips, FLOCO's own, no third-party ownership.
 
-     ⚠️ TWO THINGS TO KNOW BEFORE THIS GOES WIDE (flagged to Lexi 2026-09-29):
-       1. The folder is owned by swillisphotography@gmail.com — Sheldon's own
-          account, not FLOCO's. Sharing it hands outside companies access to
-          the videographer's working drive.
-       2. Part of it carries a baked-in "THE RUBBER SURFACING EXPERTS" + FLOCO
-          watermark that cannot be cropped off. A partner posting those is
-          posting OUR branding on THEIR marketing, which is the opposite of
-          what this program sells them.
+     NOT Sheldon's drive. That one is owned by his personal account and
+     carries a baked-in FLOCO watermark on much of it — a partner posting
+     those would be posting OUR branding on THEIR marketing, which is the
+     opposite of what this program sells them. Do not point this at it.
+
      Leave "" and the card hides itself rather than sending anyone to a
-     request-access wall. A curated copy owned by FLOCO, watermark-free, is
-     the version that should eventually live here. */
-  RAW_FOOTAGE: "",
+     request-access wall. */
+  RAW_FOOTAGE: "https://drive.google.com/drive/folders/1J-9U4JFW8GS8QRcgnm-G_9okygXv_Jpc",
 
   videos: [
     { title: "The FLOCO Story",
