@@ -65,6 +65,13 @@
     var h = document.getElementById('vaultHero');
     var r = document.getElementById('vaultClips');
     var d = document.getElementById('vaultDrive');
+    /* Raw footage is its own link and its own on/off — a partner can have the
+       finished reels without the shoot library. */
+    var raw = document.getElementById('vaultRaw');
+    if (raw) {
+      if (L.rawLinked()) { raw.href = L.raw(); raw.style.display = ''; }
+      else { raw.style.display = 'none'; }
+    }
 
     var live = L.linked();
     /* Set both states explicitly. Only hiding on the unlinked branch left the

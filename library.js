@@ -30,6 +30,23 @@ window.FLOCO_LIBRARY = {
      ordinary folder — see the sharing note in the app's README. */
   DRIVE_FOLDER: "https://drive.google.com/drive/folders/0AOUi9Jkayf7KUk9PVA",
 
+  /* RAW FOOTAGE — the shoot library, separate from the finished reels above.
+     Finished reels are cut and ready to post; this is the source material for
+     a partner who edits their own.
+
+     ⚠️ TWO THINGS TO KNOW BEFORE THIS GOES WIDE (flagged to Lexi 2026-09-29):
+       1. The folder is owned by swillisphotography@gmail.com — Sheldon's own
+          account, not FLOCO's. Sharing it hands outside companies access to
+          the videographer's working drive.
+       2. Part of it carries a baked-in "THE RUBBER SURFACING EXPERTS" + FLOCO
+          watermark that cannot be cropped off. A partner posting those is
+          posting OUR branding on THEIR marketing, which is the opposite of
+          what this program sells them.
+     Leave "" and the card hides itself rather than sending anyone to a
+     request-access wall. A curated copy owned by FLOCO, watermark-free, is
+     the version that should eventually live here. */
+  RAW_FOOTAGE: "",
+
   videos: [
     { title: "The FLOCO Story",
       note:  "Play it while you measure. It explains the product, the process and the craft, so the customer already gets it before you quote.",
@@ -57,6 +74,8 @@ window.FLOCO_LIBRARY = {
 
   folder: function () { return (this.DRIVE_FOLDER || "").trim(); },
   linked: function () { return this.folder() !== ""; },
+  raw: function () { return (this.RAW_FOOTAGE || "").trim(); },
+  rawLinked: function () { return this.raw() !== ""; },
 
   /* A file id gives a real download link. Without one we fall back to the
      folder, so a card is never a dead end. */
