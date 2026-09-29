@@ -36,6 +36,13 @@
       document.querySelectorAll('.greet .co, .lock .co').forEach(function (co) {
         co.textContent = p.company;
       });
+      /* "Welcome TO Pro Surfacing" reads like the app belongs to them. It is
+         a greeting, so once we know who they are it becomes "Welcome, Pro
+         Surfacing". The default keeps "welcome to" because "welcome the FLOCO
+         Family" is not English. */
+      document.querySelectorAll('.greet .k, .lock .k').forEach(function (k) {
+        k.textContent = 'welcome,';
+      });
       var chip = document.querySelector('.greet .chip');
       if (chip && p.location) chip.innerHTML = 'FLOCO Certified <b>·</b> ' + p.location;
     }
