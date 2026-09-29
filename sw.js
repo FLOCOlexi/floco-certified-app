@@ -1,6 +1,6 @@
 /* FLOCO Certified — service worker.
    Network-first for pages/scripts (so updates ALWAYS show), cache-first for images/fonts. */
-var CACHE = 'floco-certified-v69';
+var CACHE = 'floco-certified-v70';
 var CORE = [
   'home.html', 'calendar.html', 'calendar.js', 'overlays.js', 'assets/overlays/FLOCO-Reel-Frame.png', 'jobs.html', 'jobs.js', 'colors.js', 'quotes.html', 'quote-view.html', 'terms.html', 'quotes.js', 'quote-view.js', 'studio.html', 'vault.html', 'inlays.html', 'materials.html',
   'cleaning.html', 'playbook.html', 'mybrand.html', 'support.html', 'login.html',
@@ -47,13 +47,24 @@ self.addEventListener('fetch', function (e) {
         caches.open(CACHE).then(function (c) { c.put(req, copy); });
         return res;
       }).catch(function () {
-        return caches.match(req).then(function (hit) { return hit || caches.match('home.html'); });
+        /* ignoreSearch, or every cache lookup misses.
+           CORE precaches 'app.css'; the pages request 'app.css?v=69'. Without
+           this the offline lookup does not match, and the old fallback then
+           answered a CSS request with home.html — so offline at a customer's
+           house the app came up completely unstyled. */
+        return caches.match(req, { ignoreSearch: true }).then(function (hit) {
+          if (hit) return hit;
+          /* Only a page navigation may fall back to a page. Answering a script
+             or stylesheet with HTML is worse than failing honestly. */
+          if (req.mode === 'navigate') return caches.match('home.html');
+          return Response.error();
+        });
       })
     );
   } else {
     // cache-first for images/fonts (static, big)
     e.respondWith(
-      caches.match(req).then(function (hit) {
+      caches.match(req, { ignoreSearch: true }).then(function (hit) {
         return hit || fetch(req).then(function (res) {
           var copy = res.clone();
           caches.open(CACHE).then(function (c) { c.put(req, copy); });
