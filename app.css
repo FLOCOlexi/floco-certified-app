@@ -1,5 +1,11 @@
 /* FLOCO Certified app — real-device overrides (loaded after each screen's inline styles) */
 html,body{background:#0A1F35 !important;margin:0 !important;padding:0 !important;}
+/* Decorative glows are positioned past the edges on purpose. On a phone the
+   .screen frame clipped them; this file deliberately unclips .screen for real
+   devices, and the sign-in and list pages have no .screen at all — so on a
+   wide window they pushed the page sideways. Nothing here scrolls
+   horizontally by design. */
+html,body{overflow-x:hidden !important;max-width:100% !important;}
 body{display:block !important;-webkit-font-smoothing:antialiased;}
 .screen{
   width:100% !important;max-width:480px !important;
@@ -60,9 +66,44 @@ body{display:block !important;-webkit-font-smoothing:antialiased;}
 
   /* Give the reading pages a comfortable measure rather than letting
      body copy run the full 1080px. */
-  .wrap, .intro, .thanks { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .wrap, .intro, .thanks { max-width: 760px !important; margin-left: auto; margin-right: auto; }
 }
 
 @media (min-width: 900px) and (max-width: 1180px) {
   .grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* ===================================================================
+   TABLET  (2026-09-29)
+   -------------------------------------------------------------------
+   iPad portrait is 768 wide, which falls UNDER the 900px desktop
+   breakpoint, so an iPad was getting the 480px phone column with a wide
+   grey margin either side. Partners work off iPads, so the shell grows
+   to fill a tablet without jumping all the way to the desktop layout.
+   Landscape (1024) is already covered by the desktop rules above.
+   =================================================================== */
+@media (min-width: 680px) and (max-width: 899px) {
+  .screen { max-width: 680px !important; }
+  .nav    { max-width: 680px !important; }
+  .wrap   { max-width: 640px !important; }
+}
+
+/* ===================================================================
+   TOUCH  (2026-09-29)
+   -------------------------------------------------------------------
+   The bottom nav items are 37px tall and as little as 23px wide — fine
+   for a cursor, under the ~44px a fingertip reliably hits, and this is
+   the control every single screen depends on. Keyed off (hover:none)
+   rather than width, because an iPad Pro is 1366 across and still has
+   no pointer.
+   =================================================================== */
+@media (hover: none) {
+  .nav .item {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
 }
