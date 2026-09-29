@@ -44,27 +44,41 @@ window.FLOCO_LIBRARY = {
      request-access wall. */
   RAW_FOOTAGE: "https://drive.google.com/drive/folders/1J-9U4JFW8GS8QRcgnm-G_9okygXv_Jpc",
 
+  /* What is ACTUALLY in the Certified drive, with real file ids.
+     ------------------------------------------------------------------
+     This list used to name four videos — "The FLOCO Story", "Before /
+     After reel", "Pool deck reveal", "Why FLOCO" — that do not exist as
+     files anywhere. Every one had file:"" so every download fell through to
+     opening the raw-footage folder. Four cards promising four different
+     things and delivering the same folder.
+     Indexed the drive 2026-09-29; these are the files that are really there.
+     A `file` id gives a genuine one-tap download. */
   videos: [
-    { title: "The FLOCO Story",
-      note:  "Play it while you measure. It explains the product, the process and the craft, so the customer already gets it before you quote.",
+    { title: "FLOCO Certified brochure film",
+      note:  "The programme explained end to end. Play it for a customer who asks what being FLOCO Certified actually means.",
       poster: "assets/img/cover.jpg",
-      file:  "",
+      file:  "1xG7ANn29wgMaRUjn0oClEzW64beUj8O_",
       hero:  true },
 
-    { title: "Before / After reel",
-      note:  "The tear-out to the reveal. The single best-performing thing you can post.",
-      poster: "assets/img/detail-charcoal.jpg",
-      file:  "" },
-
-    { title: "Pool deck reveal",
-      note:  "A finished pool surround, start to finish.",
-      poster: "assets/img/home.jpg",
-      file:  "" },
-
-    { title: "Why FLOCO",
-      note:  "The short version of what makes a FLOCO surface different.",
+    { title: "FLOCO Certified catalog",
+      note:  "The full product catalogue as a PDF. Leave it with a customer, or print it.",
       poster: "assets/img/commercial.jpg",
-      file:  "" }
+      file:  "1PVxl93wuJePdzN5xuI3cb0kpqykGRF55" },
+
+    { title: "Certified tri-folds",
+      note:  "Print-ready leave-behinds for a doorstep, a showroom counter or a trade stand.",
+      poster: "assets/img/detail-charcoal.jpg",
+      file:  "1R5kFeI1jkSiAi7MLuOD9b6vLwesfh4Mp" },
+
+    { title: "Social reel overlay",
+      note:  "Drop it over your own vertical footage. Transparent background.",
+      poster: "assets/img/home.jpg",
+      file:  "1qkKXodVHOfzyrPbtwGVeZrk6XsryU-M-" },
+
+    { title: "FLOCO Certified badge",
+      note:  "Transparent PNG for your website, your truck and your quotes. You earned it.",
+      poster: "assets/img/cover.jpg",
+      file:  "1WrWei7gzyxIotbgPiwecE2DXWPubxi09" }
   ],
 
   /* ---- helpers used by vault.js -------------------------------------- */

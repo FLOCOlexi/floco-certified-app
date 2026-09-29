@@ -11,6 +11,19 @@
     'Quotes': 'quotes.html', 'My Jobs': 'jobs.html',
     'My Brand': 'mybrand.html', 'Support': 'support.html'
   };
+  /* Territory leads. Keyed per company the same way installervideos.js keys
+     reel sets — a partner only ever sees their own patch, and a company with
+     no list never sees the tile at all rather than an empty page.
+     Adding one: drop the PDF in assets/leads/ and add a line here. */
+  var LEADS = {
+    'pro surfacing': { file: 'assets/leads/Pro-Surfacing-Central-Florida-Leads.pdf',
+                       sub:  '80 in Central Florida' }
+  };
+  function leadsFor(p) {
+    var c = (p && p.company ? String(p.company) : '').toLowerCase().trim();
+    return c ? LEADS[c] || null : null;
+  }
+
   function go(url) { if (url) location.href = url; }
   function txt(el) { return el ? el.textContent.trim() : ''; }
   function profile() { try { return (window.FLOCOauth && FLOCOauth.profile()) || null; } catch (e) { return null; } }
@@ -37,6 +50,16 @@
       var nm = txt(t.querySelector('.nm'));
       if (tiles[nm]) t.addEventListener('click', function () { go(tiles[nm]); });
     });
+
+    // territory leads — shown only to a company that has a list
+    var lead = leadsFor(p);
+    var lt = document.getElementById('tileLeads');
+    if (lt && lead) {
+      lt.style.display = '';
+      var sub = document.getElementById('leadsSub');
+      if (sub && lead.sub) sub.textContent = lead.sub;
+      lt.addEventListener('click', function () { window.open(lead.file, '_blank'); });
+    }
     // back buttons
     document.querySelectorAll('.back, .top .back').forEach(function (b) {
       b.style.cursor = 'pointer';
