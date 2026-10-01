@@ -6,11 +6,17 @@
      device first, else the one on their account record. Resolved to an
      absolute URL, because the Studio renders the PDF on a different origin and
      a relative path there would resolve against the Studio, not the app. */
-  function companyLogo(p) {
-    var own = '';
-    try { own = localStorage.getItem('floco_logo') || ''; } catch (e) { own = ''; }
-    if (own) return own;
-    var fallback = (p && p.logo) || '';
+  function companyLogo(p, which) {
+    which = which || 'logo';
+    /* Only the PRIMARY mark can be overridden by an upload — the uploader
+       under Quotes stores exactly one logo, and treating it as both marks
+       would print the same image twice. */
+    if (which === 'logo') {
+      var own = '';
+      try { own = localStorage.getItem('floco_logo') || ''; } catch (e) { own = ''; }
+      if (own) return own;
+    }
+    var fallback = (p && p[which]) || '';
     if (!fallback) return '';
     if (/^(https?:|data:)/i.test(fallback)) return fallback;
     var base = location.origin + location.pathname.replace(/\/[^/]*$/, '/');
@@ -1012,7 +1018,8 @@
                       itself under Quotes always wins; the one on their account
                       record is only a starting point, so a rebrand never needs
                       us to ship a new file. */
-                   logo: companyLogo(p) },
+                   logo: companyLogo(p, 'logo'),
+                   secondaryLogo: companyLogo(p, 'logo2') },
           customer: { firstName: (nm || 'Your').split(' ')[0],
                       lastName: (nm || '').split(' ').slice(1).join(' '),
                       email: toCustomer ? cust : '' },

@@ -79,8 +79,13 @@ window.FLOCO_COMPANIES = {
     email:    "marshall@honeydosllc.com",
     /* Shipped so their first design board is already branded, instead of
        going out plain while they work out that a logo lives under Quotes.
-       A logo they upload themselves always wins over this one. */
-    logo:     "assets/img/partners/pro-surfacing.png"
+       A logo they upload themselves always wins over this one.
+       Both marks came from Marshall direct (2026-10-01): Pro Surfacing is the
+       surfacing brand the customer bought, Honey-Do's LLC is the entity they
+       contract with, so one leads the board and the other sits with the
+       contact details. */
+    logo:     "assets/img/partners/pro-surfacing.png",
+    logo2:    "assets/img/partners/honey-dos.png"
   }
 };
 
