@@ -958,6 +958,22 @@
         + 'subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(body);
 
+      /* The board as structured data, so the Studio can render a real PDF.
+         Images go absolute: the PDF is built on the Studio's server and a
+         relative path there resolves against the wrong origin.
+         Our own types map onto the Studio's room vocabulary; anything new
+         lands in gallery rather than being dropped. */
+      var ROOM = { vibe:'style-finder', photo:'gallery', inlay:'custom-inlays',
+                   light:'led-lighting', coping:'coping-options',
+                   cut:'coping-options', mosaic:'custom-inlays' };
+      var ORIGIN = location.origin + location.pathname.replace(/\/[^/]*$/, '/');
+      var boardItems = board().map(function (it, i) {
+        var img = it.img || '';
+        if (img && !/^https?:/i.test(img)) img = ORIGIN + img.replace(/^\.?\//, '');
+        return { id: it.id, room: ROOM[it.type] || 'gallery',
+                 title: it.title || '', img: img, addedAt: i };
+      });
+
       var label = sendLabel();
       var lab = send.querySelector('span');
 
@@ -972,7 +988,16 @@
           subject: subject,
           body: body,
           company: (p && p.company) || '',
-          repName: (p && p.repName) || '' },
+          repName: (p && p.repName) || '',
+          /* What the Studio's PDF renderer needs. */
+          brand: { company: (p && p.company) || 'FLOCO',
+                   phone: (p && p.phone) || '',
+                   email: (p && p.email) || '' },
+          customer: { firstName: (nm || 'Your').split(' ')[0],
+                      lastName: (nm || '').split(' ').slice(1).join(' '),
+                      email: toCustomer ? cust : '' },
+          installer: { email: inst },
+          items: boardItems },
         url,
         function (how) {
           if (how === 'relay') {

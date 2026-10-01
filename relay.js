@@ -17,7 +17,11 @@
   'use strict';
 
   /* Paste the Zapier Catch Hook URL here. Empty = mailto, exactly as before. */
-  var RELAY_URL = '';
+  /* The Studio renders the board as a real PDF and emails it. The Certified
+     app is static with no server of its own, and a mailto: cannot carry an
+     attachment — which is why boards used to go out as plain text with
+     everything written down the page. */
+  var RELAY_URL = 'https://studio.flocodeckingsystems.com/api/partner-board';
 
   /* Job sites have terrible signal. Six seconds, then stop waiting and open
    * their mail app instead of leaving them staring at a spinner. */
