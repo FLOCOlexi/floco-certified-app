@@ -76,7 +76,11 @@ window.FLOCO_COMPANIES = {
     repName:  "Marshall E. Johnson Sr.",
     location: "Central Florida",
     phone:    "",
-    email:    "marshall@honeydosllc.com"
+    email:    "marshall@honeydosllc.com",
+    /* Shipped so their first design board is already branded, instead of
+       going out plain while they work out that a logo lives under Quotes.
+       A logo they upload themselves always wins over this one. */
+    logo:     "assets/img/partners/pro-surfacing.png"
   }
 };
 

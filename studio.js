@@ -2,6 +2,21 @@
 (function () {
   var G = 'assets/photos/gallery/', I = 'assets/photos/inlays/';
 
+  /* The company's logo for a design board: whatever they uploaded on THIS
+     device first, else the one on their account record. Resolved to an
+     absolute URL, because the Studio renders the PDF on a different origin and
+     a relative path there would resolve against the Studio, not the app. */
+  function companyLogo(p) {
+    var own = '';
+    try { own = localStorage.getItem('floco_logo') || ''; } catch (e) { own = ''; }
+    if (own) return own;
+    var fallback = (p && p.logo) || '';
+    if (!fallback) return '';
+    if (/^(https?:|data:)/i.test(fallback)) return fallback;
+    var base = location.origin + location.pathname.replace(/\/[^/]*$/, '/');
+    return base + fallback.replace(/^\.?\//, '');
+  }
+
   var VIBES = [
     { key: 'warm-tans',      name: 'Warm Tans',     desc: 'Warm, earthy, sandy',   hero: 'warm-tans-02-lakefront-pool.jpg' },
     { key: 'cool-greys',     name: 'Cool Greys',    desc: 'Clean & modern',        hero: 'cool-greys-03-curved-pool.jpg' },
@@ -992,7 +1007,12 @@
           /* What the Studio's PDF renderer needs. */
           brand: { company: (p && p.company) || 'FLOCO',
                    phone: (p && p.phone) || '',
-                   email: (p && p.email) || '' },
+                   email: (p && p.email) || '',
+                   /* Their mark leads the board. A logo the company uploaded
+                      itself under Quotes always wins; the one on their account
+                      record is only a starting point, so a rebrand never needs
+                      us to ship a new file. */
+                   logo: companyLogo(p) },
           customer: { firstName: (nm || 'Your').split(' ')[0],
                       lastName: (nm || '').split(' ').slice(1).join(' '),
                       email: toCustomer ? cust : '' },
