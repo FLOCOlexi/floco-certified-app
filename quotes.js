@@ -139,7 +139,10 @@
     blends().filter(function(b){ return b.sqft>0; }).forEach(function(b){
       L.push('   ' + (b.name||'Area') + ': ' + b.sqft.toLocaleString() + ' sq ft');
     });
-    if(q.qPerim) L.push('Pool perimeter: ' + q.qPerim + ' linear feet');
+    /* Captured to work out coping area. Shown as the square footage it
+       produces, never as a linear figure — FLOCO prices by the square foot,
+       always. */
+    if(q.qPerim) L.push('Pool perimeter: ' + q.qPerim + ' ft around');
     L.push('');
     if(price > 0){ L.push('YOUR PRICE: ' + money(price)); L.push(''); }
     L.push('This includes existing surface prep, installation of the rubber surface, and full site');

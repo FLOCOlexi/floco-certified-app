@@ -380,7 +380,7 @@
 
   function jdSummaryText(){
     var d = jobDetails(), bits = [];
-    if (d.jdCopeLf && d.jdCopeW) bits.push('coping ' + d.jdCopeLf + 'ft × ' + d.jdCopeW + 'in');
+    if (d.jdCopeLf && d.jdCopeW) bits.push('coping ' + Math.round(d.jdCopeLf * d.jdCopeW / 12) + ' sq ft');
     else if (d.jdCut) bits.push('coping cut ' + d.jdCut);
     if (d.jdStepW && d.jdStepH) bits.push((d.jdStepN || 1) + ' step' + ((d.jdStepN||1) == 1 ? '' : 's'));
     if (d.jdGlitter) bits.push('glitter');
@@ -589,7 +589,7 @@
   /* Pre-Mark 80 is the BINDER, not a primer. 150 sq ft per 5-gallon pail —
    * Brett confirmed this on 2026-09-04 over the ~124 the old design sheets
    * implied, so those sheets were padding. */
-  var SQFT_PER_BAG = 20, SQFT_PER_BUCKET = 150;
+  var SQFT_PER_BAG = 25, SQFT_PER_BUCKET = 150;
   /* Glitter: 1 oz per mixing bucket, and a bag of granule makes two buckets,
    * so 2 oz per bag. Checks against Lexi's own example — 40 bags → 80 oz. */
   var GLITTER_OZ_PER_BAG = 2;
@@ -894,7 +894,8 @@
       var jdl = [];
       if (jd.jdCopeLf || jd.jdCopeW || jd.jdCut || jd.jdSchluter || jd.jdFaux || jd.jdEdge){
         jdl.push('— COPING & EDGES —');
-        if (jd.jdCopeLf || jd.jdCopeW) jdl.push('Measurements: ' + (jd.jdCopeLf||'?') + ' linear ft × ' + (jd.jdCopeW||'?') + ' in wide');
+        if (jd.jdCopeLf || jd.jdCopeW) jdl.push('Measurements: ' + (jd.jdCopeLf||'?') + ' ft around × ' + (jd.jdCopeW||'?') + ' in wide'
+            + (jd.jdCopeLf && jd.jdCopeW ? '  (' + Math.round(jd.jdCopeLf * jd.jdCopeW / 12) + ' sq ft)' : ''));
         if (jd.jdCut) jdl.push('Coping cut #' + jd.jdCut);
         if (jd.jdFaux) jdl.push('Faux coping: ' + jd.jdFaux + (jd.jdEdge ? ', ' + jd.jdEdge + ' in from the edge' : ''));
         else if (jd.jdEdge) jdl.push('Distance from edge: ' + jd.jdEdge + ' in');

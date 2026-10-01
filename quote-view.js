@@ -86,7 +86,7 @@
     }).join('');
     rows += '<div class="tot"><span>Total</span><span>' + sq.toLocaleString() + ' sq ft</span></div>';
     if(q.qPerim) rows += '<div class="r" style="border-bottom:0"><span class="n">Pool perimeter</span>'
-                       + '<span class="q">' + esc(q.qPerim) + ' linear ft</span></div>';
+                       + '<span class="q">' + esc(q.qPerim) + ' ft around</span></div>';
     set('vAreas', rows);
   } else hide('secAreas');
 
