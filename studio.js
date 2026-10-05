@@ -16,7 +16,22 @@
       try { own = localStorage.getItem('floco_logo') || ''; } catch (e) { own = ''; }
       if (own) return own;
     }
+    /* 🐛 FIXED 2026-10-05: this used to read p[which] off the signed-in
+       profile, and FLOCOauth.login() does not copy `logo`/`logo2` into what it
+       stores — it saves company, location, role, family, title, email, phone,
+       repName and nothing else. So the shipped partner logos were ALWAYS
+       undefined and only an uploaded logo ever reached a board.
+       Reading the directory by email fixes it for everyone immediately,
+       including people already signed in, which persisting it at login would
+       not have done. The profile is still checked first so a value stored
+       there later still wins. */
     var fallback = (p && p[which]) || '';
+    if (!fallback) {
+      try {
+        var rec = (window.FLOCO_COMPANIES || {})[((p && p.email) || '').toLowerCase()] || {};
+        fallback = rec[which] || '';
+      } catch (e) { fallback = ''; }
+    }
     if (!fallback) return '';
     if (/^(https?:|data:)/i.test(fallback)) return fallback;
     var base = location.origin + location.pathname.replace(/\/[^/]*$/, '/');
