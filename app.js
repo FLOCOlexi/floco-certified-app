@@ -207,7 +207,7 @@
   /* Glitter has its own supplier. Mike buys direct from Meadowbrook in New
    * Jersey, and a certified company can open its own account with a card on
    * file — so this is the partner's order to place, not FLOCO's. */
-  var GLIT_EMAIL = 'joecolleran@meadowbrookinventions.com';
+  var GLIT_EMAIL = 'sales@meadowbrookinventions.com';   // Carol Franks, GM, took over Joe Colleran's accounts (Mike, 10/19/26)
   var GLIT_TEL   = '+19087660606';
   var OZ_PER_LB  = 16;
   var GLIT_BOX_LB = 40;          // the biggest box that still ships UPS standard rate
@@ -504,7 +504,7 @@
       var need = glitNeed();
       var lb = need ? need.lb : 0;
       var body = [
-        'Joe,',
+        'Hi Carol,',
         '',
         'I am a FLOCO Certified installer and I would like to place an order.',
         '',
